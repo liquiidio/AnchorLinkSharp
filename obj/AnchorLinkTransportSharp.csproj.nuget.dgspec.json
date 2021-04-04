@@ -1,0 +1,325 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\madh-\\source\\repos\\AnchorLinkTransportSharp\\AnchorLinkTransportSharp.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\madh-\\source\\repos\\Anchor-Link-Sharp\\AnchorLinkSharp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\madh-\\source\\repos\\Anchor-Link-Sharp\\AnchorLinkSharp.csproj",
+        "projectName": "AnchorLinkSharp",
+        "projectPath": "C:\\Users\\madh-\\source\\repos\\Anchor-Link-Sharp\\AnchorLinkSharp.csproj",
+        "packagesPath": "C:\\Users\\madh-\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\madh-\\source\\repos\\Anchor-Link-Sharp\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\madh-\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "C:\\Users\\madh-\\source\\repos\\EosioSigningRequest\\EosioSigningRequest.csproj": {
+                "projectPath": "C:\\Users\\madh-\\source\\repos\\EosioSigningRequest\\EosioSigningRequest.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\madh-\\source\\repos\\AnchorLinkTransportSharp\\AnchorLinkTransportSharp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\madh-\\source\\repos\\AnchorLinkTransportSharp\\AnchorLinkTransportSharp.csproj",
+        "projectName": "AnchorLinkUnityTransportSharp",
+        "projectPath": "C:\\Users\\madh-\\source\\repos\\AnchorLinkTransportSharp\\AnchorLinkTransportSharp.csproj",
+        "packagesPath": "C:\\Users\\madh-\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\madh-\\source\\repos\\AnchorLinkTransportSharp\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\madh-\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "C:\\Users\\madh-\\source\\repos\\Anchor-Link-Sharp\\AnchorLinkSharp.csproj": {
+                "projectPath": "C:\\Users\\madh-\\source\\repos\\Anchor-Link-Sharp\\AnchorLinkSharp.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\EosSharp.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\EosSharp.Core.csproj",
+        "projectName": "EosSharp.Core",
+        "projectPath": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\EosSharp.Core.csproj",
+        "packagesPath": "C:\\Users\\madh-\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\madh-\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "Cryptography.ECDSA.Secp256K1": {
+              "target": "Package",
+              "version": "[1.1.2, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp\\EosSharp.csproj": {
+      "version": "2.2.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp\\EosSharp.csproj",
+        "projectName": "eos-sharp",
+        "projectPath": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp\\EosSharp.csproj",
+        "packagesPath": "C:\\Users\\madh-\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\madh-\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\EosSharp.Core.csproj": {
+                "projectPath": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\EosSharp.Core.csproj",
+                "privateAssets": "all"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "Cryptography.ECDSA.Secp256K1": {
+              "target": "Package",
+              "version": "[1.1.2, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\madh-\\source\\repos\\EosioSigningRequest\\EosioSigningRequest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\madh-\\source\\repos\\EosioSigningRequest\\EosioSigningRequest.csproj",
+        "projectName": "EosioSigningRequestSharp",
+        "projectPath": "C:\\Users\\madh-\\source\\repos\\EosioSigningRequest\\EosioSigningRequest.csproj",
+        "packagesPath": "C:\\Users\\madh-\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\madh-\\source\\repos\\EosioSigningRequest\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\madh-\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\EosSharp.Core.csproj": {
+                "projectPath": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp.Core\\EosSharp.Core.csproj"
+              },
+              "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp\\EosSharp.csproj": {
+                "projectPath": "C:\\Users\\madh-\\source\\repos\\eos-sharp\\EosSharp\\EosSharp\\EosSharp.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

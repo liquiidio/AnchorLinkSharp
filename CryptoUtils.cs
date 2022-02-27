@@ -1,0 +1,6 @@
+﻿namespace AnchorLinkSharp
+{
+    class CryptoUtils
+    {
+    }
+}

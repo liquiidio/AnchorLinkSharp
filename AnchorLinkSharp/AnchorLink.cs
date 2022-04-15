@@ -2,33 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using EosioSigningRequest;
 using EosSharp.Core;
 using EosSharp.Core.Api.v1;
 using EosSharp.Core.Helpers;
-using WebSocketState = HybridWebSocket.WebSocketState;
-using WebSocket = HybridWebSocket.WebSocket;
 using EosSharp.Core.Providers;
-using Transaction = System.Transactions.Transaction;
 using EosSharp;
+using EosSharp.Core.Interfaces;
 using Newtonsoft.Json;
 
 namespace AnchorLinkSharp
 {
     public static class LinkConstants
     {
-        /**
-         * Exponential backoff function that caps off at 10s after 10 tries.
-         * https://i.imgur.com/IrUDcJp.png
-         * @internal
-         */
-        public static double backoff(int tries) // TODO double or int?
-        {
-            return Math.Min(Math.Pow(tries * 10, 2), 10 * 1000);
-        }
-
         /**
          * Format a EOSIO permission level in the format `actor@permission` taking placeholders into consideration.
          * @internal
@@ -52,7 +43,7 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * Payload accepted by the [[Link.transact]] method.
+     * Payload accepted by the [[AnchorLink.transact]] method.
      * Note that one of `action`, `actions` or `transaction` must be set.
      */
     public class TransactArgs
@@ -68,7 +59,7 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * Options for the [[Link.transact]] method.
+     * Options for the [[AnchorLink.transact]] method.
      */
     public class TransactOptions
     {
@@ -80,7 +71,7 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * The result of a [[Link.transact]] call.
+     * The result of a [[AnchorLink.transact]] call.
      */
     public class TransactResult
     {
@@ -107,7 +98,7 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * The result of a [[Link.identify]] call.
+     * The result of a [[AnchorLink.identify]] call.
      */
     public class IdentifyResult : TransactResult {
         /** The identified account. */
@@ -118,7 +109,7 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * The result of a [[Link.login]] call.
+     * The result of a [[AnchorLink.login]] call.
      */
     public class LoginResult : IdentifyResult
     {
@@ -132,17 +123,17 @@ namespace AnchorLinkSharp
      * Example:
      *
      * ```ts
-     * import AnchorLink from 'anchor-link'
-     * import ConsoleTransport from 'anchor-link-console-transport'
+     * import AnchorLink from 'anchor-anchorLink'
+     * import ConsoleTransport from 'anchor-anchorLink-console-transport'
      *
-     * const link = new AnchorLink({
+     * const anchorLink = new AnchorLink({
      *     transport: new ConsoleTransport()
      * })
      *
-     * const result = await link.transact({actions: myActions})
+     * const result = await anchorLink.transact({actions: myActions})
      * ```
      */
-    public class Link : IAbiProvider
+    public class AnchorLink : IAbiProvider
     {
         /** The eosjs RPC instance used to communicate with the EOSIO node. */
         public readonly EosApi rpc;
@@ -153,7 +144,7 @@ namespace AnchorLinkSharp
         /** EOSIO ChainID for which requests are valid. */
         public readonly string chainId;
 
-        /** Storage adapter used to persist sessions. */
+        /** PlayerPrefsStorage adapter used to persist sessions. */
         public readonly ILinkStorage storage;
 
         private string serviceAddress;
@@ -162,13 +153,13 @@ namespace AnchorLinkSharp
         private Dictionary<string, Abi> abiCache = new Dictionary<string, Abi>();
         private Dictionary<string, Task<GetAbiResponse>> pendingAbis = new Dictionary<string, Task<GetAbiResponse>>();
 
-        /** Create a new link instance. */
-        public Link(ILinkOptions options)
+        /** Create a new anchorLink instance. */
+        public AnchorLink(ILinkOptions options)
         {
 
             if (options.transport == null)
             {
-                throw new Exception("options.transport is required, see https://github.com/greymass/anchor-link#transports");
+                throw new Exception("options.transport is required, see https://github.com/greymass/anchor-anchorLink#transports");
             }
 
             if (options.chainId != null)
@@ -206,6 +197,7 @@ namespace AnchorLinkSharp
             this.requestOptions = new SigningRequestEncodingOptions()
             {
                 abiProvider = this,
+                signatureProvider = new DefaultSignProvider(),
                 zlib = null // TODO
             };
         }
@@ -248,7 +240,7 @@ namespace AnchorLinkSharp
         }
 
         /**
-         * Create a SigningRequest instance configured for this link.
+         * Create a SigningRequest instance configured for this anchorLink.
          * @internal
          */
         public async Task<SigningRequest> createRequest(SigningRequestCreateArguments args, ILinkTransport transport = null)
@@ -266,7 +258,8 @@ namespace AnchorLinkSharp
                     {
                         url = this.createCallbackUrl(),
                         background = true
-                    }
+                    },
+                    Identity = args.Identity
                 },
                 this.requestOptions
             );
@@ -276,7 +269,7 @@ namespace AnchorLinkSharp
         }
 
         /**
-         * Send a SigningRequest instance using this link.
+         * Send a SigningRequest instance using this anchorLink.
          * @internal
          */
         public async Task<TransactResult> sendRequest(SigningRequest request, ILinkTransport transport,
@@ -288,7 +281,7 @@ namespace AnchorLinkSharp
                 var linkUrl = request.data.callback;
                 if (!linkUrl.StartsWith(this.serviceAddress))
                 {
-                    throw new Exception("Request must have a link callback");
+                    throw new Exception("Request must have a anchor.link callback");
                 }
 
                 if (request.data.flags != 2)
@@ -298,40 +291,42 @@ namespace AnchorLinkSharp
 
                 // wait for callback or user cancel
                 var cts = new CancellationTokenSource();
-                var socket = await waitForCallback(linkUrl, cts).ContinueWith((data) =>
-                {
-                    if (data.IsCanceled)
-                    {
-                        throw new CancelException($"Task cancelled");
-                    }
+                var socket = waitForCallback(linkUrl, cts);
+                //    .ContinueWith((data) =>
+                //{
+                //    if (data.IsCanceled)
+                //    {
+                //        throw new CancelException($"Task cancelled");
+                //    }
 
-                    if (data.Exception != null)
-                    {
-                        throw new CancelException($"Rejected by wallet: {data.Exception.Message}");
-                    }
+                //    if (data.Exception != null)
+                //    {
+                //        throw new CancelException($"Rejected by wallet: {data.Exception.Message}");
+                //    }
 
-                    return data;
-                }, cts.Token);
+                //    return data;
+                //}, cts.Token);
                 var token = cts.Token;
 
-                var cancel = new Task(() =>
+                //var cancel = Task.Run(() =>
+                //{
+                t.onRequest(request, (reason) =>
                 {
-                    t.onRequest(request, (reason) =>
+                    if(!cts.IsCancellationRequested)
+                        cts.Cancel();
+
+                    if (reason is string sreason)
                     {
-                        if(!cts.IsCancellationRequested)
-                            cts.Cancel();
+                        // TODO, hm
+                        cts.Cancel();
+                        throw new CancelException(sreason);
+                    }
+                });
+                //}, token);
 
-                        if (reason is string sreason)
-                        {
-                            // TODO, hm
-                            cts.Cancel();
-                            throw new CancelException(sreason);
-                        }
-                    });
-                }, token);
-
-                Task.WaitAny(new[] {socket, cancel});
-                CallbackPayload payload = new CallbackPayload(); // Todo -> socket.Result ?
+                //var poll = pollForCallback(linkUrl, token);
+                await socket;
+                CallbackPayload payload = socket.Result;
                 PermissionLevel signer = new PermissionLevel()
                 {
                     actor = payload.sa,
@@ -369,7 +364,7 @@ namespace AnchorLinkSharp
                     {
                         signatures = result.signatures,
                         transaction = transaction,
-                        compression = 0, // TOOD ?
+                        compression = 0, // TODO ?
                         // TODO ! pass other properties
                     });
                     result.processed = res.processed;
@@ -440,19 +435,21 @@ namespace AnchorLinkSharp
          * Send an identity request and verify the identity proof.
          * @param requestPermission Optional request permission if the request is for a specific account or permission.
          * @param info Metadata to add to the request.
-         * @note This is for advanced use-cases, you probably want to use [[Link.login]] instead.
+         * @note This is for advanced use-cases, you probably want to use [[AnchorLink.login]] instead.
          */
-        public async Task<IdentifyResult> identify(PermissionLevel requestPermission, object info /*, info?: {[key: string]: string | Uint8Array}*/)
+        public async Task<IdentifyResult> identify(/*TODO Scope */PermissionLevel requestPermission, object info /*, info?: {[key: string]: string | Uint8Array}*/)
         {
             var request = await this.createRequest(new SigningRequestCreateArguments()
             {
-                identity = new Identity()
+                Identity = new IdentityV2()
                 {
                     permission = requestPermission,
                 },
-                info = info
+                info = info,
             });
 
+            /*string test = "";
+            pollForCallback(request.data.callback, CancellationToken.None);*/
             var res = await this.sendRequest(request, null); // TODO
             if (!res.request.isIdentity())
             {
@@ -535,7 +532,9 @@ namespace AnchorLinkSharp
                 session_name = identifier,
                 request_key = requestKey,
             };
-            var res = await this.identify(null, LinkUtils.abiEncode(createInfo, "link_create"));
+            this.requestOptions.signatureProvider = new DefaultSignProvider(privateKey);
+
+            var res = await this.identify(Constants.PlaceholderAuth, LinkUtils.abiEncode(createInfo, "link_create"));
             var metadata = new Dictionary<string, object>() {{"sameDevice", res.request.getRawInfo()["return_path"]}};
             LinkSession session;
             if (res.payload.data.ContainsKey("link_ch") && res.payload.data.ContainsKey("link_key") &&
@@ -595,8 +594,8 @@ namespace AnchorLinkSharp
         }
 
         /**
-         * Restore previous session, see [[Link.login]] to create a new session.
-         * @param identifier The session identifier, should be same as what was used when creating the session with [[Link.login]].
+         * Restore previous session, see [[AnchorLink.login]] to create a new session.
+         * @param identifier The session identifier, should be same as what was used when creating the session with [[AnchorLink.login]].
          * @param auth A specific session auth to restore, if omitted the most recently used session will be restored.
          * @returns A [[LinkSession]] instance or null if no session can be found.
          * @throws If no [[LinkStorage]] adapter is configured or there was an error retrieving the session data.
@@ -710,11 +709,11 @@ namespace AnchorLinkSharp
         }
 
         /**
-         * Create an eosjs compatible signature provider using this link.
+         * Create an eosjs compatible signature provider using this anchorLink.
          * @param availableKeys Keys the created provider will claim to be able to sign for.
          * @param transport (internal) Transport override for this call.
          * @note We don't know what keys are available so those have to be provided,
-         *       to avoid this use [[LinkSession.makeSignatureProvider]] instead. Sessions can be created with [[Link.login]].
+         *       to avoid this use [[LinkSession.makeSignatureProvider]] instead. Sessions can be created with [[AnchorLink.login]].
          */
         public LinkSignatureProvider makeSignatureProvider(string[] availableKeys, ILinkTransport transport)
         {
@@ -764,23 +763,26 @@ namespace AnchorLinkSharp
          * Connect to a WebSocket channel and wait for a message.
          * @internal
          */
-        public async Task<CallbackPayload> waitForCallback(string url, CancellationTokenSource cts)
+        public Task<CallbackPayload> waitForCallback(string url, CancellationTokenSource cts)
         {
-            return await new Task<CallbackPayload>(() =>
+            return Task.Run(async () =>
             {
                 var active = true;
                 var retries = 0;
                 string socketUrl = url.Replace("http", "ws");
+                
+                Console.WriteLine(socketUrl);
 
                 CallbackPayload cbp = null;
 
-                WebSocket socket = new WebSocket(socketUrl);
-                socket.OnMessage += (data) =>
+                var socket = WebSocketWrapper.Create(socketUrl);
+ 
+                socket.OnMessage += async (data) =>
                 {
                     active = false;
-                    if (socket.GetState() == WebSocketState.Open)
+                    if (socket.State == WebSocketState.Open)
                     {
-                        socket.Close();
+                        await socket.CloseAsync(WebSocketCloseStatus.Empty,"", cts.Token);
                     }
 
                     try
@@ -789,30 +791,78 @@ namespace AnchorLinkSharp
                     }
                     catch (Exception ex)
                     {
-                        ex = new Exception("Unable to parse callback JSON: " + ex.Message);
                         cts.Cancel();
+                        Console.WriteLine(data.ToString());
+                        throw new Exception("Unable to parse callback JSON: " + ex.Message);
                     }
                 };
-                socket.OnOpen += () => { retries = 0; };
-                socket.OnError += msg => { };
-                socket.OnClose += (code) =>
+                socket.OnOpen += () =>
                 {
+                    Console.WriteLine($"connected");
+                    retries = 0;
+                };
+                //socket.OnError += Console.WriteLine;
+                socket.OnClose += async (code, closeReason) =>
+                {
+                    Console.WriteLine($"closed {code} {closeReason}");
                     if (active)
                     {
                         // I have no idea if this backoff-thing makes sense :D
-                        LinkConstants.backoff(retries++);
-                        Task.Delay(100);
-                        socket.Connect();
+                        await Task.Delay(100);
+                        await socket.ConnectAsync();
                     }
                 };
 
-                while (cbp == null && !cts.IsCancellationRequested)
+                await socket.ConnectAsync();
+                while (cbp == null && !cts.IsCancellationRequested && retries < 100)
                 {
-                    Task.Delay(100, cts.Token);
+                    var test = socket.State;
+                    Console.WriteLine(socket.State);
+
+                    await Task.Delay(100, cts.Token);
                 }
+
+                active = false;
                 return cbp;
 
             }, cts.Token);
+        }
+
+        public void pollForCallback(string url, CancellationToken ctl)
+        {
+            Task.Run(async () =>
+            {
+                var active = true;
+                while (active)
+                {
+                    try
+                    {
+                        using (var httpClient = new HttpClient())
+                        {
+                            var response = await httpClient.GetAsync(new Uri(url), ctl);
+                            if (response.StatusCode == HttpStatusCode.RequestTimeout)
+                            {
+                                continue;
+                            }
+                            else if (response.StatusCode == HttpStatusCode.OK)
+                            {
+                                /*return */
+                                Console.WriteLine(await response.Content.ReadAsStringAsync());
+                            }
+                            else
+                            {
+                                throw new Exception($"HTTP {response.StatusCode}: {response.ReasonPhrase}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Unexpected hyperbuoy error {ex.Message}");
+                    }
+
+                    await Task.Delay(1000, ctl);
+                }
+            }, ctl);
         }
     }
 }

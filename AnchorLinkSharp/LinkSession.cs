@@ -28,13 +28,13 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * Type describing a link session that can create a eosjs compatible
+     * Type describing a anchorLink session that can create a eosjs compatible
      * signature provider and transact for a specific auth.
      */
     public abstract class LinkSession
     {
-        /** The underlying link instance used by the session. */
-        public abstract Link link { get; set; }
+        /** The underlying anchorLink instance used by the session. */
+        public abstract AnchorLink AnchorLink { get; set; }
 
         /** App identifier that owns the session. */
         public abstract string identifier { get; set; }
@@ -55,7 +55,7 @@ namespace AnchorLinkSharp
         public abstract LinkSignatureProvider makeSignatureProvider();
 
         /**
-         * Transact using this session. See [[Link.transact]].
+         * Transact using this session. See [[AnchorLink.transact]].
          */
         public abstract Task<TransactResult> transact(TransactArgs args, TransactOptions options);
 
@@ -63,27 +63,27 @@ namespace AnchorLinkSharp
         public extern SerializedLinkSession serialize();
 
         /**
-         * Convenience, remove this session from associated [[Link]] storage if set.
+         * Convenience, remove this session from associated [[AnchorLink]] storage if set.
          * Equivalent to:
          * ```ts
-         * session.link.removeSession(session.identifier, session.auth)
+         * session.anchorLink.removeSession(session.identifier, session.auth)
          * ```
          */
         async void remove()
         {
-            if (this.link.storage != null)
+            if (this.AnchorLink.storage != null)
             {
-                await this.link.removeSession(this.identifier, this.auth);
+                await this.AnchorLink.removeSession(this.identifier, this.auth);
             }
         }
 
         /** Restore a previously serialized session. */
-        public static LinkSession restore(Link link, SerializedLinkSession data)
+        public static LinkSession restore(AnchorLink anchorLink, SerializedLinkSession data)
         {
             if(data.data is LinkChannelSessionData channelSessionData)
-                return new LinkChannelSession(link, channelSessionData, data.metadata);
+                return new LinkChannelSession(anchorLink, channelSessionData, data.metadata);
             else if(data.data is LinkFallbackSessionData fallbackSessionData)
-                    return new LinkFallbackSession(link, fallbackSessionData, data.metadata);
+                    return new LinkFallbackSession(anchorLink, fallbackSessionData, data.metadata);
             else
                 throw new Exception("Unable to restore, session data invalid");
         }
@@ -121,13 +121,13 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * Link session that pushes requests over a channel.
+     * AnchorLink session that pushes requests over a channel.
      * @internal
      */
     public class LinkChannelSession : LinkSession, ILinkTransport
     {
         readonly Timer timeoutTimer = new Timer(); // Timer anlegen
-        public override Link link { get; set; }
+        public override AnchorLink AnchorLink { get; set; }
         public override string identifier { get; set; }
         public override string publicKey { get; set; }
         public override PermissionLevel auth { get; set; }
@@ -139,9 +139,9 @@ namespace AnchorLinkSharp
         private int timeout = 2 * 60 * 1000; // ms
         Func<SigningRequest, byte[]> encrypt;
 
-        public LinkChannelSession(Link link, LinkChannelSessionData data , Dictionary<string, object> metadata) : base()
+        public LinkChannelSession(AnchorLink anchorLink, LinkChannelSessionData data , Dictionary<string, object> metadata) : base()
         {
-            this.link = link;
+            this.AnchorLink = anchorLink;
             this.auth = data.auth;
             this.publicKey = data.publicKey;
             this.channel = data.channel;
@@ -163,12 +163,12 @@ namespace AnchorLinkSharp
 
         public void onSuccess(SigningRequest request, TransactResult result)
         {
-            this.link.transport.onSuccess(request, result);
+            this.AnchorLink.transport.onSuccess(request, result);
         }
 
         public void onFailure(SigningRequest request, Exception exception)
         {
-            this.link.transport.onFailure(request, exception);
+            this.AnchorLink.transport.onFailure(request, exception);
         }
 
         public async void onRequest(SigningRequest request, Action<object> cancel)
@@ -178,7 +178,7 @@ namespace AnchorLinkSharp
                 expiration = DateTime.Now.AddSeconds(this.timeout)
             };
 
-            this.link.transport.onSessionRequest(this, request, cancel);
+            this.AnchorLink.transport.onSessionRequest(this, request, cancel);
 
             timeoutTimer.Interval = timeout + 500;    // in ms
             timeoutTimer.Elapsed += (source, e) =>
@@ -187,7 +187,7 @@ namespace AnchorLinkSharp
             };
             timeoutTimer.Start(); // start Timer
 
-            request.data.info.Add(new InfoPair() {key = "link", value = new Object()}); /*value =abiEncode(info, "link_info") TODO */ //)};
+            request.data.info.Add(new InfoPair() {key = "anchorLink", value = new Object()}); /*value =abiEncode(info, "link_info") TODO */ //)};
 
             try
             {
@@ -204,29 +204,29 @@ namespace AnchorLinkSharp
             }
             catch (Exception ex)
             {
-                cancel(new SessionException($"Unable to reach link service ({ex.Message ?? ex.ToString()})", LinkErrorCode.E_DELIVERY));
+                cancel(new SessionException($"Unable to reach anchorLink service ({ex.Message ?? ex.ToString()})", LinkErrorCode.E_DELIVERY));
 
             }
         }
 
         public async Task<SigningRequest> prepare(SigningRequest request, LinkSession session = null)
         {
-            return await this.link.transport.prepare(request, this);
+            return await this.AnchorLink.transport.prepare(request, this);
 //            return Promise.resolve(request); TODO hm?
         }
 
         public void showLoading()
         {
-            this.link.transport.showLoading();
+            this.AnchorLink.transport.showLoading();
         }
 
         public override LinkSignatureProvider makeSignatureProvider()
         {
-            return this.link.makeSignatureProvider(new []{this.publicKey }, this);
+            return this.AnchorLink.makeSignatureProvider(new []{this.publicKey }, this);
         }
 
         public override async Task<TransactResult> transact(TransactArgs args, TransactOptions options) {
-            return await this.link.transact(args, options, this);
+            return await this.AnchorLink.transact(args, options, this);
         }
         public void onSessionRequest(LinkSession session, SigningRequest request, object cancel)
         {
@@ -241,12 +241,12 @@ namespace AnchorLinkSharp
     }
 
     /**
-     * Link session that sends every request over the transport.
+     * AnchorLink session that sends every request over the transport.
      * @internal
      */
     public class LinkFallbackSession : LinkSession, ILinkTransport
     {
-        public override Link link { get; set; }
+        public override AnchorLink AnchorLink { get; set; }
         public override string identifier { get; set; }
         public override string publicKey { get; set; }
         public override PermissionLevel auth { get; set; }
@@ -256,9 +256,9 @@ namespace AnchorLinkSharp
 
         private new Func<SerializedLinkSession> serialize;
 
-        public LinkFallbackSession(Link link, LinkFallbackSessionData data, Dictionary<string,object> metadata /*, metadata: any*/) : base()
+        public LinkFallbackSession(AnchorLink anchorLink, LinkFallbackSessionData data, Dictionary<string,object> metadata /*, metadata: any*/) : base()
         {
-            this.link = link;
+            this.AnchorLink = anchorLink;
             this.auth = data.auth;
             this.publicKey = data.publicKey;
             this.metadata = metadata ?? new Dictionary<string, object>();
@@ -273,39 +273,39 @@ namespace AnchorLinkSharp
 
         public void onSuccess(SigningRequest request, TransactResult result)
         {
-            this.link.transport.onSuccess(request, result);
+            this.AnchorLink.transport.onSuccess(request, result);
         }
 
         public void onFailure(SigningRequest request, Exception exception)
         {
-            this.link.transport.onFailure(request, exception);
+            this.AnchorLink.transport.onFailure(request, exception);
         }
 
         public void onRequest(SigningRequest request, Action<object> cancel)
         {
-            this.link.transport.onSessionRequest(this, request, cancel);
-            this.link.transport.onRequest(request, cancel);
+            this.AnchorLink.transport.onSessionRequest(this, request, cancel);
+            this.AnchorLink.transport.onRequest(request, cancel);
         }
 
         public Task<SigningRequest> prepare(SigningRequest request, LinkSession session = null)
         {
-            return this.link.transport.prepare(request, this);
+            return this.AnchorLink.transport.prepare(request, this);
          // TODO hm   return Promise.resolve(request);
         }
 
         public void showLoading()
         {
-            this.link.transport.showLoading();
+            this.AnchorLink.transport.showLoading();
         }
 
         public override LinkSignatureProvider makeSignatureProvider()
         {
-            return this.link.makeSignatureProvider(new []{this.publicKey }, this);
+            return this.AnchorLink.makeSignatureProvider(new []{this.publicKey }, this);
         }
 
         public override async Task<TransactResult> transact(TransactArgs args, TransactOptions options)
         {
-            return await this.link.transact(args, options, this);
+            return await this.AnchorLink.transact(args, options, this);
         }
 
         public void onSessionRequest(LinkSession session, SigningRequest request, object cancel)

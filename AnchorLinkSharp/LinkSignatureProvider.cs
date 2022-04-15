@@ -7,7 +7,7 @@ namespace AnchorLinkSharp
 {
     public class LinkSignatureProvider
     {
-        public Link link;
+        public AnchorLink anchorLink;
         public ILinkTransport transport;
         public string[] availableKeys;
         public SigningRequestEncodingOptions encodingOptions;
@@ -25,11 +25,11 @@ namespace AnchorLinkSharp
                 encodingOptions
             );
 
-            request.setCallback(link.createCallbackUrl(), true);
+            request.setCallback(anchorLink.createCallbackUrl(), true);
             request.setBroadcast(false);
             request = await transport.prepare(request);
 
-            var result = await link.sendRequest(request, transport);
+            var result = await anchorLink.sendRequest(request, transport);
 
             return new TransactResult()
             {

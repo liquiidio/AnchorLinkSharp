@@ -5,8 +5,8 @@ namespace AnchorLinkSharp
     /**
      * Interface storage adapters should implement.
      *
-     * Storage adapters are responsible for persisting [[LinkSession]]'s and can optionally be
-     * passed to the [[Link]] constructor to auto-persist sessions.
+     * PlayerPrefsStorage adapters are responsible for persisting [[LinkSession]]'s and can optionally be
+     * passed to the [[AnchorLink]] constructor to auto-persist sessions.
      */
     public interface ILinkStorage
     {

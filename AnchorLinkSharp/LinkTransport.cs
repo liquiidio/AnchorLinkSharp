@@ -5,7 +5,7 @@ using EosioSigningRequest;
 namespace AnchorLinkSharp
 {
     /**
-     * Protocol link transports need to implement.
+     * Protocol anchorLink transports need to implement.
      * A transport is responsible for getting the request to the
      * user, e.g. by opening request URIs or displaying QR codes.
      */

@@ -1,17 +1,17 @@
 namespace AnchorLinkSharp
 {
     /**
-     * Available options when creating a new [[Link]] instance.
+     * Available options when creating a new [[AnchorLink]] instance.
      */
     public interface ILinkOptions
     {
         /**
-         * Link transport responsible for presenting signing requests to user, required.
+         * AnchorLink transport responsible for presenting signing requests to user, required.
          */
         ILinkTransport transport { get; set; }
 
         /**
-         * ChainID or esr chain name alias for which the link is valid.
+         * ChainID or esr chain name alias for which the anchorLink is valid.
          * Defaults to EOS (aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906).
          */
         object chainId { get; set; }
@@ -23,7 +23,7 @@ namespace AnchorLinkSharp
         object rpc { get; set; }
 
         /**
-         * URL to link callback service.
+         * URL to anchorLink callback service.
          * Defaults to https://cb.anchor.link.
          */
         string service { get; set; }

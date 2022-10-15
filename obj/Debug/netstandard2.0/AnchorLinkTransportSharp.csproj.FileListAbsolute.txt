@@ -1,4 +1,0 @@
-C:\Users\madh-\source\repos\AnchorLinkTransportSharp\obj\Debug\netstandard2.0\AnchorLinkTransportSharp.csprojAssemblyReference.cache
-C:\Users\madh-\source\repos\AnchorLinkTransportSharp\obj\Debug\netstandard2.0\AnchorLinkTransportSharp.AssemblyInfoInputs.cache
-C:\Users\madh-\source\repos\AnchorLinkTransportSharp\obj\Debug\netstandard2.0\AnchorLinkTransportSharp.AssemblyInfo.cs
-C:\Users\madh-\source\repos\AnchorLinkTransportSharp\obj\Debug\netstandard2.0\AnchorLinkTransportSharp.csproj.CoreCompileInputs.cache

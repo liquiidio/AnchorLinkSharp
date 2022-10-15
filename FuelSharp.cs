@@ -6,7 +6,6 @@ using AnchorLinkSharp;
 using EosioSigningRequestSharp;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json;
-using UnityEditor.PackageManager;
 
 namespace AnchorLinkUnityTransportSharp
 {
@@ -19,7 +18,7 @@ namespace AnchorLinkUnityTransportSharp
     public class FuelResponste
     {
         public List<string> signatures;
-        public Tuple<string, object> request;  // TODO
+        public KeyValuePair<string, object> request;  // TODO
     }
 
     public static class FuelSharp

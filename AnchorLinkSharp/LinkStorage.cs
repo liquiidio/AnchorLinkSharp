@@ -11,12 +11,12 @@ namespace AnchorLinkSharp
     public interface ILinkStorage
     {
         /** Write string to storage at key. Should overwrite existing values without error. */
-        Task write(string key, string data);
+        void write(string key, string data);
 
         /** Read key from storage. Should return `null` if key can not be found. */
-        Task<string> read(string key);
+        string read(string key);
 
         /** Delete key from storage. Should not error if deleting non-existing key. */
-        Task remove(string key);
+        void remove(string key);
     }
 }

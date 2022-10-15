@@ -10,7 +10,7 @@ namespace AnchorLinkSharp
         public static byte[] abiEncode(object value, string typeName)
         {
             AbiSerializationProvider a = new AbiSerializationProvider();
-            return a.SerializeTypeData(typeName, value, LinkAbiData.Types);
+            return a.SerializeStructData(value, typeName, LinkAbiData.Types);
         }
 
         /**

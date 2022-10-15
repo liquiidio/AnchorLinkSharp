@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using AnchorLinkUnityTransportSharp;
-using EosioSigningRequest;
+using EosioSigningRequestSharp;
 using EosSharp;
 using EosSharp.Core;
 using EosSharp.Core.Api.v1;
@@ -19,7 +17,7 @@ namespace AnchorLinkSharp.UnitTests
 {
 
     [TestClass]
-    public class UnitTest1
+    public class UnitTests
     {
         private readonly DateTime _timestamp = new DateTime(2018, 02, 15, 00, 00, 00);
 
@@ -792,7 +790,7 @@ namespace AnchorLinkSharp.UnitTests
         [TestMethod]
         public void ShouldHandleScopedIdRequests()
         {
-            var scope = SerializationHelper.ConvertLongToName(18446744073709551615);
+            var scope = SerializationHelper.ConvertULongToName(18446744073709551615);
             var req = SigningRequest.create(new SigningRequestCreateArguments()
                 {
                     Identity = new IdentityV3() { scope = scope },

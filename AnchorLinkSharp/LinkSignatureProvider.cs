@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using EosioSigningRequest;
+using EosioSigningRequestSharp;
 using EosSharp.Core.Api.v1;
 
 namespace AnchorLinkSharp

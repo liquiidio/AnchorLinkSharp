@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
-using EosioSigningRequest;
+using EosioSigningRequestSharp;
 using EosSharp.Core.Api.v1;
 
 namespace AnchorLinkSharp

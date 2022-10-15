@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using EosioSigningRequest;
 using EosSharp.Core;
 using EosSharp.Core.Api.v1;
 using EosSharp.Core.Helpers;
@@ -15,6 +14,7 @@ using EosSharp.Core.Providers;
 using EosSharp;
 using EosSharp.Core.Interfaces;
 using Newtonsoft.Json;
+using EosioSigningRequestSharp;
 
 namespace AnchorLinkSharp
 {
@@ -197,7 +197,7 @@ namespace AnchorLinkSharp
             this.requestOptions = new SigningRequestEncodingOptions()
             {
                 abiProvider = this,
-                signatureProvider = new DefaultSignProvider(),
+                signatureProvider = new DefaultSignProvider(""),
                 zlib = null // TODO
             };
         }
@@ -259,7 +259,7 @@ namespace AnchorLinkSharp
                         url = this.createCallbackUrl(),
                         background = true
                     },
-                    Identity = args.Identity
+                    // TODO Identity = args.Identity
                 },
                 this.requestOptions
             );
@@ -456,7 +456,7 @@ namespace AnchorLinkSharp
                 throw new IdentityException("Unexpected response");
             }
 
-            MemoryStream memStream = new MemoryStream();
+            var memStream = new MemoryStream();
 
             var chainIdBuff = SerializationHelper.HexStringToByteArray(request.getChainId());
             memStream.Write(chainIdBuff, 0, chainIdBuff.Length);
@@ -623,7 +623,7 @@ namespace AnchorLinkSharp
                 key = this.sessionKey(identifier, LinkConstants.formatAuth(latest));
             }
 
-            var data = await this.storage.read(key);
+            var data = this.storage.read(key);
             if (data == null)
             {
                 return null;
@@ -665,7 +665,7 @@ namespace AnchorLinkSharp
             var list = new List<PermissionLevel>();
             try
             {
-                list = JsonConvert.DeserializeObject<List<PermissionLevel>>((await this.storage.read(key)) ?? "{}");
+                list = JsonConvert.DeserializeObject<List<PermissionLevel>>((this.storage.read(key)) ?? "{}");
             }
             catch (Exception ex)
             {
@@ -687,7 +687,7 @@ namespace AnchorLinkSharp
             }
 
             var key = this.sessionKey(identifier, LinkConstants.formatAuth(auth));
-            await this.storage.remove(key);
+            this.storage.remove(key);
             await this.touchSession(identifier, auth, true);
         }
 
@@ -741,7 +741,7 @@ namespace AnchorLinkSharp
             }
 
             var key = this.sessionKey(identifier, "list");
-            await this.storage.write(key, JsonConvert.SerializeObject(auths));
+            this.storage.write(key, JsonConvert.SerializeObject(auths));
         }
 
         /** Makes sure session is in storage list of sessions and moves it to top (most recently used). */
@@ -749,7 +749,7 @@ namespace AnchorLinkSharp
         {
             var key = this.sessionKey(identifier, LinkConstants.formatAuth(session.auth));
             var data = JsonConvert.SerializeObject(session.serialize());
-            await this.storage.write(key, data);
+            this.storage.write(key, data);
             await this.touchSession(identifier, session.auth);
         }
 

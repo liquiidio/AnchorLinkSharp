@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using EosioSigningRequest;
+using EosioSigningRequestSharp;
 
 namespace AnchorLinkSharp
 {

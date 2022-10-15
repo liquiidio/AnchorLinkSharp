@@ -1,10 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AnchorLinkTransportSharp\AnchorLinkTransportSharp.csproj" />
-    <ProjectReference Include="..\EosioSigningRequest\EosioSigningRequest.csproj" />
+    <ProjectReference Include="..\..\EosioSigningRequestSharp\EosioSigningRequestSharp.csproj" />
+    <ProjectReference Include="..\..\eosiosigningrequest\EosioSigningRequestSharp.csproj" />
   </ItemGroup>
 
 </Project>

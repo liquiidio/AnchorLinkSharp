@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using EosioSigningRequest;
 using EosSharp.Core;
 using EosSharp.Core.Api.v1;
 using EosSharp.Core.Helpers;
@@ -14,7 +15,6 @@ using EosSharp.Core.Providers;
 using EosSharp;
 using EosSharp.Core.Interfaces;
 using Newtonsoft.Json;
-using EosioSigningRequestSharp;
 
 namespace AnchorLinkSharp
 {
@@ -133,10 +133,10 @@ namespace AnchorLinkSharp
      * const result = await anchorLink.transact({actions: myActions})
      * ```
      */
-    public class AnchorLink : IAbiProvider
+    public class AnchorLink : AbiSerializationProvider
     {
         /** The eosjs RPC instance used to communicate with the EOSIO node. */
-        public readonly EosApi rpc;
+        //public readonly EosApi rpc;
 
         /** Transport used to deliver requests to the user wallet. */
         public readonly ILinkTransport transport;
@@ -156,16 +156,21 @@ namespace AnchorLinkSharp
         /** Create a new anchorLink instance. */
         public AnchorLink(ILinkOptions options)
         {
-
+            
             if (options.transport == null)
             {
                 throw new Exception("options.transport is required, see https://github.com/greymass/anchor-anchorLink#transports");
             }
 
+            if (options.ZlibProvider == null)
+            {
+                throw new Exception("options.ZlibProvider is required");
+            }
+
             if (options.chainId != null)
             {
-                this.chainId = options.chainId is long
-                    ? Constants.nameToId((long) options.chainId)
+                this.chainId = options.chainId is long chainIdLong
+                    ? Constants.nameToId(chainIdLong)
                     : (string) options.chainId;
             }
             else
@@ -175,16 +180,16 @@ namespace AnchorLinkSharp
 
             if (options.rpc is string && !string.IsNullOrEmpty((string) options.rpc))
             {
-                this.rpc = new EosApi(new EosConfigurator()
+                this.Api = new EosApi(new EosConfigurator()
                 {
                     ChainId = this.chainId,
                     ExpireSeconds = 10,
                     HttpEndpoint = (string) options.rpc,
                 }, new HttpHandler());
             }
-            else
+            else if(options.rpc is EosApi eosApi)
             {
-                this.rpc = (EosApi) options.rpc;
+                this.Api = eosApi;
             }
 
             this.serviceAddress = (options.service ?? Defaults.service).Trim(); //.replace(/\/$/, '') TODO
@@ -196,9 +201,9 @@ namespace AnchorLinkSharp
 
             this.requestOptions = new SigningRequestEncodingOptions()
             {
-                abiProvider = this,
-                signatureProvider = new DefaultSignProvider(""),
-                zlib = null // TODO
+                abiSerializationProvider = this,
+                signatureProvider = new DefaultSignProvider(),
+                zlib = options.ZlibProvider
             };
         }
 
@@ -215,7 +220,7 @@ namespace AnchorLinkSharp
                 var getAbi = this.pendingAbis[account];
                 if (getAbi == null)
                 {
-                    getAbi = this.rpc.GetAbi(new GetAbiRequest() {account_name = account});
+                    getAbi = this.Api.GetAbi(new GetAbiRequest() {account_name = account});
                     this.pendingAbis.Add(account, getAbi);
                 }
 
@@ -254,12 +259,12 @@ namespace AnchorLinkSharp
                     transaction = args.transaction,
                     chainId = this.chainId,
                     broadcast = false,
-                    callback = new LinkCallback()
+                    callback = new Dictionary<string, object>()
                     {
-                        url = this.createCallbackUrl(),
-                        background = true
+                        {"url", this.createCallbackUrl()},
+                        {"background", true},
                     },
-                    // TODO Identity = args.Identity
+                    Identity = args.Identity
                 },
                 this.requestOptions
             );
@@ -333,7 +338,7 @@ namespace AnchorLinkSharp
                     permission = payload.sp,
                 };
 
-                List<string> signatures = payload.sigs.Values.ToList(); // TODO, this is not part of the original object
+                List<string> signatures = new List<string>(){ payload.sig }; // TODO, multiple sigs?
 
                 // recreate transaction from request response
                 var resolved = await ResolvedSigningRequest.fromPayload(
@@ -341,7 +346,7 @@ namespace AnchorLinkSharp
                     this.requestOptions,
                     this
                 );
-                var info = resolved.request.getInfo();
+                var info = resolved.request.getInfos();
                 if (info.ContainsKey("fuel_sig"))
                 {
                     signatures.Insert(0, info["fuel_sig"]);
@@ -360,7 +365,7 @@ namespace AnchorLinkSharp
                 };
                 if (broadcast)
                 {
-                    var res = await this.rpc.PushTransaction(new PushTransactionRequest()
+                    var res = await this.Api.PushTransaction(new PushTransactionRequest()
                     {
                         signatures = result.signatures,
                         transaction = transaction,
@@ -394,7 +399,7 @@ namespace AnchorLinkSharp
          * @param options Options for this transact call.
          * @param transport Transport override, for internal use.
          */
-        public async Task<TransactResult> transact(TransactArgs args, TransactOptions options, ILinkTransport transport)
+        public async Task<TransactResult> transact(TransactArgs args, TransactOptions options = null, ILinkTransport transport = null)
         {
             var t = transport ?? this.transport;
             var broadcast = options == null || options.broadcast;
@@ -403,20 +408,20 @@ namespace AnchorLinkSharp
 
             // eosjs transact compat: upgrade to transaction if args have any header field
             // TODO
-            if (args.action != null || args.actions != null)
-            {
-                args.transaction = new EosSharp.Core.Api.v1.Transaction()
-                {
-                    expiration = new DateTime(1970, 1, 1),
-                    ref_block_num = 0,
-                    ref_block_prefix = 0,
-                    max_net_usage_words = 0,
-                    max_cpu_usage_ms = 0,
-                    delay_sec = 0
-                };
-            }
+            //if (args.action != null || args.actions != null)
+            //{
+            //    args.transaction = new EosSharp.Core.Api.v1.Transaction()
+            //    {
+            //        expiration = new DateTime(1970, 1, 1),
+            //        ref_block_num = 0,
+            //        ref_block_prefix = 0,
+            //        max_net_usage_words = 0,
+            //        max_cpu_usage_ms = 0,
+            //        delay_sec = 0
+            //    };
+            //}
 
-            SigningRequestCreateArguments signingRequestCreateArguments = new SigningRequestCreateArguments()
+            var signingRequestCreateArguments = new SigningRequestCreateArguments()
             {
                 transaction = args.transaction,
                 action = args.action,
@@ -445,28 +450,29 @@ namespace AnchorLinkSharp
                 {
                     permission = requestPermission,
                 },
-                info = info,
+                info = info// (List<InfoPair>)info,
             });
 
             /*string test = "";
             pollForCallback(request.data.callback, CancellationToken.None);*/
+            //pollForCallback(request.data.callback, CancellationToken.None);
             var res = await this.sendRequest(request, null); // TODO
             if (!res.request.isIdentity())
             {
                 throw new IdentityException("Unexpected response");
             }
 
-            var memStream = new MemoryStream();
+            //var memStream = new MemoryStream();
 
-            var chainIdBuff = SerializationHelper.HexStringToByteArray(request.getChainId());
-            memStream.Write(chainIdBuff, 0, chainIdBuff.Length);
-            memStream.Write(res.serializedTransaction, chainIdBuff.Length, res.serializedTransaction.Length);
-            memStream.Write(new byte[32], chainIdBuff.Length + res.serializedTransaction.Length, 32);
-            var message = memStream.ToArray();  // TODO
+            //var chainIdBuff = SerializationHelper.HexStringToByteArray(request.getChainId());
+            //memStream.Write(chainIdBuff, 0, chainIdBuff.Length);
+            //memStream.Write(res.serializedTransaction, 0, res.serializedTransaction.Length);
+            //memStream.Write(new byte[32], 0, 32);
+            //var message = memStream.ToArray();  // TODO
 
             var signer = res.signer;
-            string signerKey = ""; //  ecc.recover(res.signatures[0], message)   // TODO
-            var account = await this.rpc.GetAccount(new GetAccountRequest() {account_name = signer.actor});
+            //string signerKey = ""; //  ecc.recover(res.signatures[0], message)   // TODO
+            var account = await this.Api.GetAccount(new GetAccountRequest() {account_name = signer.actor});
             if (account == null)
             {
                 throw new IdentityException($"Signature from unknown account: {signer.actor}");
@@ -478,18 +484,18 @@ namespace AnchorLinkSharp
                 throw new IdentityException($"{signer.actor} signed for unknown permission: {signer.permission}");
             }
 
-            var auth = permission.required_auth;
-            var keyAuth = auth.keys.SingleOrDefault(key => key.key == signerKey); // TODO key-equal-func
-            if (keyAuth == null)
-            {
-                throw new IdentityException($"{LinkConstants.formatAuth(signer)} has no key matching id signature");
-            }
+            //var auth = permission.required_auth;
+            //var keyAuth = auth.keys.SingleOrDefault(key => key.key == signerKey); // TODO key-equal-func
+            //if (keyAuth == null)
+            //{
+            //    throw new IdentityException($"{LinkConstants.formatAuth(signer)} has no key matching id signature");
+            //}
 
-            if (auth.threshold > keyAuth.weight)
-            {
-                throw new IdentityException(
-                    $"{LinkConstants.formatAuth(signer)} signature does not reach auth threshold");
-            }
+            //if (auth.threshold > keyAuth.weight)
+            //{
+            //    throw new IdentityException(
+            //        $"{LinkConstants.formatAuth(signer)} signature does not reach auth threshold");
+            //}
 
             if (requestPermission != null)
             {
@@ -513,7 +519,7 @@ namespace AnchorLinkSharp
                 transaction = res.transaction,
                 serializedTransaction = res.serializedTransaction,
                 account = account,
-                signerKey = signerKey
+                //signerKey = signerKey
             };
         }
 
@@ -535,7 +541,10 @@ namespace AnchorLinkSharp
             this.requestOptions.signatureProvider = new DefaultSignProvider(privateKey);
 
             var res = await this.identify(Constants.PlaceholderAuth, LinkUtils.abiEncode(createInfo, "link_create"));
-            var metadata = new Dictionary<string, object>() {{"sameDevice", res.request.getRawInfo()["return_path"]}};
+            var metadata = new Dictionary<string, object>();
+            var rawInfo = res.request.getRawInfo();
+            if(rawInfo.ContainsKey("return_path"))
+                metadata.Add("sameDevice", rawInfo["return_path"]);
             LinkSession session;
             if (res.payload.data.ContainsKey("link_ch") && res.payload.data.ContainsKey("link_key") &&
                 res.payload.data.ContainsKey("link_name"))
@@ -600,30 +609,34 @@ namespace AnchorLinkSharp
          * @returns A [[LinkSession]] instance or null if no session can be found.
          * @throws If no [[LinkStorage]] adapter is configured or there was an error retrieving the session data.
          **/
-        public async Task<LinkSession> restoreSession(string identifier, PermissionLevel auth)
+        public async Task<LinkSession> restoreSession(string identifier, PermissionLevel auth = null)
         {
             if (this.storage == null)
             {
                 throw new Exception("Unable to restore session: No storage adapter configured");
             }
 
-            string key;
+            string key = "";
             if (auth != null)
             {
                 key = this.sessionKey(identifier, LinkConstants.formatAuth(auth));
             }
             else
             {
-                var latest = (await this.listSessions(identifier))[0];
-                if (latest == null)
+                var latestPermissions = (await this.listSessions(identifier));
+                if (latestPermissions.Count > 0)
                 {
-                    return null;
-                }
+                    var latest = latestPermissions[0];
+                    if (latest == null)
+                    {
+                        return null;
+                    }
 
-                key = this.sessionKey(identifier, LinkConstants.formatAuth(latest));
+                    key = this.sessionKey(identifier, LinkConstants.formatAuth(latest));
+                }
             }
 
-            var data = this.storage.read(key);
+            var data = await this.storage.read(key);
             if (data == null)
             {
                 return null;
@@ -662,10 +675,10 @@ namespace AnchorLinkSharp
             }
 
             var key = this.sessionKey(identifier, "list");
-            var list = new List<PermissionLevel>();
+            List<PermissionLevel> list;
             try
             {
-                list = JsonConvert.DeserializeObject<List<PermissionLevel>>((this.storage.read(key)) ?? "{}");
+                list = JsonConvert.DeserializeObject<List<PermissionLevel>>((await this.storage.read(key)) ?? "{}") ?? new List<PermissionLevel>();
             }
             catch (Exception ex)
             {
@@ -687,7 +700,7 @@ namespace AnchorLinkSharp
             }
 
             var key = this.sessionKey(identifier, LinkConstants.formatAuth(auth));
-            this.storage.remove(key);
+            await this.storage.remove(key);
             await this.touchSession(identifier, auth, true);
         }
 
@@ -741,7 +754,7 @@ namespace AnchorLinkSharp
             }
 
             var key = this.sessionKey(identifier, "list");
-            this.storage.write(key, JsonConvert.SerializeObject(auths));
+            await this.storage.write(key, JsonConvert.SerializeObject(auths));
         }
 
         /** Makes sure session is in storage list of sessions and moves it to top (most recently used). */
@@ -749,7 +762,7 @@ namespace AnchorLinkSharp
         {
             var key = this.sessionKey(identifier, LinkConstants.formatAuth(session.auth));
             var data = JsonConvert.SerializeObject(session.serialize());
-            this.storage.write(key, data);
+            await this.storage.write(key, data);
             await this.touchSession(identifier, session.auth);
         }
 
@@ -779,15 +792,17 @@ namespace AnchorLinkSharp
  
                 socket.OnMessage += async (data) =>
                 {
-                    active = false;
-                    if (socket.State == WebSocketState.Open)
-                    {
-                        await socket.CloseAsync(WebSocketCloseStatus.Empty,"", cts.Token);
-                    }
-
                     try
                     {
-                        cbp = JsonConvert.DeserializeObject<CallbackPayload>(data.ToString());
+                        active = false;
+                        if (socket.State == WebSocketState.Open)
+                        {
+                            //await socket.CloseAsync(WebSocketCloseStatus.Empty, "", cts.Token);
+                        }
+
+                        cbp = JsonConvert.DeserializeObject<CallbackPayload>(data);
+                        if (cbp.data == null)
+                            cbp.data = new Dictionary<string, string>();
                     }
                     catch (Exception ex)
                     {

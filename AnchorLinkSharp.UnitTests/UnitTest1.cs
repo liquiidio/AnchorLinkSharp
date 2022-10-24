@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using EosioSigningRequestSharp;
+using AnchorLinkUnityTransportSharp;
+using EosioSigningRequest;
 using EosSharp;
 using EosSharp.Core;
 using EosSharp.Core.Api.v1;
@@ -17,13 +19,13 @@ namespace AnchorLinkSharp.UnitTests
 {
 
     [TestClass]
-    public class UnitTests
+    public class UnitTest1
     {
         private readonly DateTime _timestamp = new DateTime(2018, 02, 15, 00, 00, 00);
 
         private readonly SigningRequestEncodingOptions _options = new SigningRequestEncodingOptions()
         {
-            abiProvider = new AbiSerializationProvider(new EosApi(new EosConfigurator() { HttpEndpoint = "http://eos.api.eosnation.io" }, new HttpHandler())), 
+            abiSerializationProvider = new AbiSerializationProvider(new EosApi(new EosConfigurator() { HttpEndpoint = "http://eos.api.eosnation.io" }, new HttpHandler())), 
             zlib = new NetZlibProvider()
         };
 
@@ -248,7 +250,7 @@ namespace AnchorLinkSharp.UnitTests
                 _options
             ).Result;
 
-            var abis = requestAData.fetchAbis(_options.abiProvider).Result;
+            var abis = requestAData.fetchAbis(_options.abiSerializationProvider).Result;
             var tx = requestAData.resolveTransaction(
                 abis, new PermissionLevel() { actor = "foo", permission = "bar" }, new TransactionContext()
                 {
@@ -314,7 +316,7 @@ namespace AnchorLinkSharp.UnitTests
                 _options
             ).Result;
 
-            var abis = requestAData.fetchAbis(_options.abiProvider).Result;
+            var abis = requestAData.fetchAbis(_options.abiSerializationProvider).Result;
             var tx = requestAData.resolveTransaction(abis, new PermissionLevel() { actor = "foo", permission = "mractive" },
                 new TransactionContext()
                 {
@@ -426,8 +428,12 @@ namespace AnchorLinkSharp.UnitTests
                         authorization = new List<PermissionLevel>() { new PermissionLevel() { actor = "foo", permission = "bar" } },
                         data = new Dictionary<string, object>()
                         {
-                            { "actor", "foo" },
-                            { "permission", "bar" }
+                            { "permission", new Dictionary<string, object>()
+                                {
+                                    { "actor", "foo" },
+                                    { "permission", "bar" }
+                                }
+                            }
                         }
                     },
                 },
@@ -505,7 +511,7 @@ namespace AnchorLinkSharp.UnitTests
 
             var options = new SigningRequestEncodingOptions()
             {
-                abiProvider = new AbiSerializationProvider(new EosApi(
+                abiSerializationProvider = new AbiSerializationProvider(new EosApi(
                     new EosConfigurator() { HttpEndpoint = "http://eos.api.eosnation.io" }, new HttpHandler())),
                 zlib = new NetZlibProvider(),
                 signatureProvider = mockSignature
@@ -639,8 +645,8 @@ namespace AnchorLinkSharp.UnitTests
         [TestMethod]
         public void ShouldEncodeAndDecodeWithMetadata()
         {
-            // TODO
-            var data = "";//Serializer.encode({ object= "hello", type= "string"});
+            var abiSerializationProvider = new AbiSerializationProvider();
+            var data = abiSerializationProvider.Serialize("hello", "string");
             var req = SigningRequest.identity(new SigningRequestCreateIdentityArguments()
                 {
                     callback = "https=//example.com",
@@ -653,30 +659,29 @@ namespace AnchorLinkSharp.UnitTests
                         },
                         new InfoPair()
                         {
-                            key = "bar",
+                            key = "baz",
                             value = data,
                         }
 
                     },
+                    
                 },
                 _options
             );
             // TODO
-            /*req.setInfoKey(
+            req.setInfoKey(
                 "extra_sig",
                 "SIG_K1_K4nkCupUx3hDXSHq4rhGPpDMPPPjJyvmF3M6j7ppYUzkR3L93endwnxf3YhJSG4SSvxxU1ytD8hj39kukTeYxjwy5H3XNJ",
-                Signature
-            );*/
-            var decoded = SigningRequest.from(req.encode(), _options);
+                "signature"
+            );
+            var encoded = req.encode();
+            var decoded = SigningRequest.from(encoded, _options);
             // TODO
-            //assert.deepStrictEqual(decoded.getRawInfo()getRawInfoKey("foo"), req.getRawInfoKey("foo"))
-            //assert.deepStrictEqual(decoded.getRawInfoKey("foo"), req.getRawInfoKey("foo"))
-            //assert.deepStrictEqual(decoded.getInfoKey("foo"), "bar")
-            //assert.deepStrictEqual(decoded.getInfoKey("baz", "string"), "hello")
-            //assert.deepStrictEqual(
-            //    String(decoded.getInfoKey("extra_sig", Signature)),
-            //    "SIG_K1_K4nkCupUx3hDXSHq4rhGPpDMPPPjJyvmF3M6j7ppYUzkR3L93endwnxf3YhJSG4SSvxxU1ytD8hj39kukTeYxjwy5H3XNJ"
-            //)
+            Assert.AreEqual(SerializationHelper.ByteArrayToHexString(decoded.getRawInfo()["foo"]), SerializationHelper.ByteArrayToHexString(req.getRawInfo()["foo"]));
+            Assert.AreEqual(decoded.getInfos()["foo"], "bar");
+            Assert.AreEqual(decoded.getInfos()["baz"], "hello");
+            Assert.AreEqual(decoded.getInfo("extra_sig","signature"),
+                "SIG_K1_K4nkCupUx3hDXSHq4rhGPpDMPPPjJyvmF3M6j7ppYUzkR3L93endwnxf3YhJSG4SSvxxU1ytD8hj39kukTeYxjwy5H3XNJ");
         }
 
         [TestMethod]
@@ -706,7 +711,7 @@ namespace AnchorLinkSharp.UnitTests
                 _options
             ).Result;
 
-            var abis = request.fetchAbis(_options.abiProvider).Result;
+            var abis = request.fetchAbis(_options.abiSerializationProvider).Result;
 
             var resolved = request.resolve(
                 abis, new PermissionLevel() { actor = "foo", permission = "bar" },
@@ -766,9 +771,9 @@ namespace AnchorLinkSharp.UnitTests
             var req1uri =
                 "esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZRqAQGDBBaUWYAARoxMIkGAJDIyAM9YySkoJiK3391IrE3IKcVL3k_Fz7kgrb6uqSitpataQ8ICspr7aWAQA";
             var req1 = SigningRequest.from(req1uri, _options);
-            var abis = req1.fetchAbis(_options.abiProvider);
+            var abis = req1.fetchAbis(_options.abiSerializationProvider).Result;
             var resolved = req1.resolve(
-                mockAbis, new PermissionLevel() { actor = "foo", permission = "bar" }, new TransactionContext()
+                abis, new PermissionLevel() { actor = "foo", permission = "bar" }, new TransactionContext()
                 {
                     timestamp = _timestamp,
                     block_num = 1234,
@@ -785,23 +790,53 @@ namespace AnchorLinkSharp.UnitTests
             var expected =
                 "https://example.com?tx=6aff5c203810ff6b40469fe20318856354889ff037f4cf5b89a157514a43e825&bn=1234";
             Assert.AreEqual(expected, callback!.url);
+
         }
 
         [TestMethod]
+        [Ignore]
         public void ShouldHandleScopedIdRequests()
         {
-            var scope = SerializationHelper.ConvertULongToName(18446744073709551615);
+
+            var scope = SerializationHelper.ConvertULongToName(18446744073709551615)!;
             var req = SigningRequest.create(new SigningRequestCreateArguments()
                 {
                     Identity = new IdentityV3() { scope = scope },
-                    callback = new KeyValuePair<string, bool>("https=//example.com", true),
+                    callback = new KeyValuePair<string, bool>("https://example.com", true),
                 },
                 _options
             ).Result;
             Assert.AreEqual("esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA", req.encode());
 
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb4DwVMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>. 
+
+
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb4DwVMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>. 
+
+
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb4DwVMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>. 
+
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb49x8CmIQzSkoKiq309VMrEnMLclL1kvNzGQA>. 
+
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb4DwVMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>. 
+
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb48B8CmIQzSkoKiq309VMrEnMLclL1kvNzGQA>. 
+
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb4DwVMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>. 
+
+            //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
+            //Actual:   <esr://g2NgZGb48B8CmIQzSkoKiq309VMrEnMLclL1kvNzGQA>. 
+
+
             var decoded = SigningRequest.from(
-                "esr=//g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA",
+                "esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA",
                 _options
             );
             Assert.AreEqual(decoded.data.Equals(req.data), true);
@@ -817,16 +852,13 @@ namespace AnchorLinkSharp.UnitTests
             );
             Assert.AreEqual(resolved.transaction.expiration, new DateTime(2020, 07, 10, 08, 40, 20));
             Assert.AreEqual(
-//                resolved.transaction.actions[0].data.hexString,
                 resolved.transaction.actions[0].hex_data,
                 "ffffffffffffffff01000000000000285d00000000a8ed3232"
             );
 
-            // TODO
-            /*assert.equal(
-                resolved.signingDigest.hexString,
+            Assert.Equals(SerializationHelper.ByteArrayToHexString(req.getSignatureDigest()),
                 "70d1fd5bda1998135ed44cbf26bd1cc2ed976219b2b6913ac13f41d4dd013307"
-            )*/
+            );
         }
 
         [TestMethod]

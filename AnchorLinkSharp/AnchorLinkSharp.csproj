@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>AnchorLinkSharp</RootNamespace>
     <AssemblyName>AnchorLinkSharp</AssemblyName>
     <LangVersion>8.0</LangVersion>
+	<DebugType>Portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,15 +26,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\EosioSigningRequestSharp\EosioSigningRequestSharp.csproj" />
-    <ProjectReference Include="..\..\eosiosigningrequest\EosioSigningRequestSharp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="UnityEditor">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.21f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
-    </Reference>
+    <Folder Include="Example\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.21f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.41f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
 

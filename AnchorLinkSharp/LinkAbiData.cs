@@ -25,7 +25,7 @@ namespace AnchorLinkSharp
                         new AbiField()
                         {
                             name = "nonce",
-                            type = "uint64_t"
+                            type = "uint64"
                         },
                         new AbiField()
                         {

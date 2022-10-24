@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
-using EosioSigningRequestSharp;
+using EosioSigningRequest;
 using EosSharp.Core.Api.v1;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UnityEngine.Scripting;
 
 namespace AnchorLinkSharp
 {
@@ -57,10 +61,10 @@ namespace AnchorLinkSharp
         /**
          * Transact using this session. See [[AnchorLink.transact]].
          */
-        public abstract Task<TransactResult> transact(TransactArgs args, TransactOptions options);
+        public abstract Task<TransactResult> transact(TransactArgs args, TransactOptions options = null);
 
         /** Returns a JSON-encodable object that can be used recreate the session. */
-        public extern SerializedLinkSession serialize();
+        public abstract SerializedLinkSession serialize();
 
         /**
          * Convenience, remove this session from associated [[AnchorLink]] storage if set.
@@ -69,7 +73,7 @@ namespace AnchorLinkSharp
          * session.anchorLink.removeSession(session.identifier, session.auth)
          * ```
          */
-        async void remove()
+        public async Task remove()
         {
             if (this.AnchorLink.storage != null)
             {
@@ -94,7 +98,50 @@ namespace AnchorLinkSharp
     {
         public string type { get ; set; }
         public Dictionary<string, object> metadata { get; set; }//: {[key: string]: any}
+
+        [JsonConverter(typeof(LinkSessionDataConverter))]
         public LinkSessionDataBase data { get; set; } //data: any
+    }
+
+    public class LinkSessionDataConverter : JsonConverter<LinkSessionDataBase>
+    {
+        class SerializableLinkSessionWrapper
+        {
+            [JsonProperty("type")]
+            public string Type;
+
+            [JsonProperty("data")]
+            public string Data;
+
+#if Unity
+            [Preserve]
+#endif
+            public SerializableLinkSessionWrapper()
+            {
+
+            }
+
+            public SerializableLinkSessionWrapper(LinkSessionDataBase data)
+            {
+                Type = data.GetType().Name;
+                this.Data = JsonConvert.SerializeObject(data);
+            }
+        }
+        public override void WriteJson(JsonWriter writer, LinkSessionDataBase value, JsonSerializer serializer)
+        {
+            writer.WriteValue(JsonConvert.SerializeObject(new SerializableLinkSessionWrapper(value)));
+        }
+
+        public override LinkSessionDataBase ReadJson(JsonReader reader, Type objectType, LinkSessionDataBase existingValue,
+            bool hasExistingValue, JsonSerializer serializer)
+        {
+            var serializableLinkSessionWrapper = JsonConvert.DeserializeObject<SerializableLinkSessionWrapper>(reader.Value.ToString());
+            if (serializableLinkSessionWrapper.Type == "LinkChannelSessionData")
+                return JsonConvert.DeserializeObject<LinkChannelSessionData>(serializableLinkSessionWrapper.Data);
+            if(serializableLinkSessionWrapper.Type == "LinkFallbackSessionData")
+                return JsonConvert.DeserializeObject<LinkFallbackSessionData>(serializableLinkSessionWrapper.Data);
+            throw new InvalidDataException($"Unknown SerializableLinkSessionWrapper.Data of type {serializableLinkSessionWrapper.Type}");
+        }
     }
 
     /** @internal */
@@ -134,10 +181,11 @@ namespace AnchorLinkSharp
         public override string type { get; set; }   // TODO remove here and from base
         public override Dictionary<string, object> metadata { get; set; }
         public ILinkStorage storage { get; }
-        private new Func<SerializedLinkSession> serialize;
         private ChannelInfo channel;
         private int timeout = 2 * 60 * 1000; // ms
         Func<SigningRequest, byte[]> encrypt;
+
+        private LinkChannelSessionData _data;
 
         public LinkChannelSession(AnchorLink anchorLink, LinkChannelSessionData data , Dictionary<string, object> metadata) : base()
         {
@@ -147,18 +195,11 @@ namespace AnchorLinkSharp
             this.channel = data.channel;
             this.identifier = data.identifier;
             this.encrypt = (request) =>
-            {
-                return LinkUtils.sealMessage(request.encode(true, false), data.requestKey, data.channel.key);
-            };
+                LinkUtils.sealMessage(request.encode(true, false), data.requestKey, data.channel.key);
             this.metadata = metadata ?? new Dictionary<string, object>();
             this.metadata.Add("timeout", this.timeout);
             this.metadata.Add("name", this.channel.name);
-            this.serialize = () => new SerializedLinkSession()
-            {
-                type = "channel",
-                data = data,
-                metadata = this.metadata,
-            };
+            this._data = data;
         }
 
         public void onSuccess(SigningRequest request, TransactResult result)
@@ -187,7 +228,7 @@ namespace AnchorLinkSharp
             };
             timeoutTimer.Start(); // start Timer
 
-            request.data.info.Add(new InfoPair() {key = "anchorLink", value = new Object()}); /*value =abiEncode(info, "link_info") TODO */ //)};
+            request.data.info.Add(new InfoPair() {key = "anchorLink", value = new object()}); /*value =abiEncode(info, "link_info") TODO */ //)};
 
             try
             {
@@ -225,13 +266,25 @@ namespace AnchorLinkSharp
             return this.AnchorLink.makeSignatureProvider(new []{this.publicKey }, this);
         }
 
-        public override async Task<TransactResult> transact(TransactArgs args, TransactOptions options) {
+        public override async Task<TransactResult> transact(TransactArgs args, TransactOptions options = null) {
             return await this.AnchorLink.transact(args, options, this);
         }
+
+        public override SerializedLinkSession serialize()
+        {
+            return new SerializedLinkSession()
+            {
+                type = "channel",
+                data = _data,
+                metadata = this.metadata
+            };
+        }
+
         public void onSessionRequest(LinkSession session, SigningRequest request, object cancel)
         {
             throw new NotImplementedException();
         }
+
     }
 
     /** @internal */
@@ -254,7 +307,7 @@ namespace AnchorLinkSharp
         public override Dictionary<string, object> metadata { get; set; }
         public ILinkStorage storage => throw new NotImplementedException();
 
-        private new Func<SerializedLinkSession> serialize;
+        private LinkFallbackSessionData _data;
 
         public LinkFallbackSession(AnchorLink anchorLink, LinkFallbackSessionData data, Dictionary<string,object> metadata /*, metadata: any*/) : base()
         {
@@ -263,12 +316,7 @@ namespace AnchorLinkSharp
             this.publicKey = data.publicKey;
             this.metadata = metadata ?? new Dictionary<string, object>();
             this.identifier = data.identifier;
-            this.serialize = () => new SerializedLinkSession()
-            {
-                type = this.type,
-                data = data,
-                metadata = this.metadata,
-            };
+            this._data = data;
         }
 
         public void onSuccess(SigningRequest request, TransactResult result)
@@ -306,6 +354,16 @@ namespace AnchorLinkSharp
         public override async Task<TransactResult> transact(TransactArgs args, TransactOptions options)
         {
             return await this.AnchorLink.transact(args, options, this);
+        }
+
+        public override SerializedLinkSession serialize()
+        {
+            return new SerializedLinkSession()
+            {
+                type = this.type,
+                data = _data,
+                metadata = this.metadata,
+            };
         }
 
         public void onSessionRequest(LinkSession session, SigningRequest request, object cancel)

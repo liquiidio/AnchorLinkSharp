@@ -1,3 +1,5 @@
+using EosioSigningRequest;
+
 namespace AnchorLinkSharp
 {
     /**
@@ -34,6 +36,18 @@ namespace AnchorLinkSharp
          * Explicitly set this to `null` to force no storage.
          */
         ILinkStorage storage { get; set; }
+
+        IZlibProvider ZlibProvider { get; set; }
+    }
+
+    public class LinkOptions : ILinkOptions
+    {
+        public ILinkTransport transport { get; set; }
+        public object chainId { get; set; }
+        public object rpc { get; set; }
+        public string service { get; set; } = "https://cb.anchor.link";
+        public ILinkStorage storage { get; set; }
+        public IZlibProvider ZlibProvider { get; set; }
     }
 
     public static class Defaults

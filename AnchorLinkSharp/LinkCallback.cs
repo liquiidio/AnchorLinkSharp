@@ -1,6 +1,6 @@
 ﻿namespace AnchorLinkSharp
 {
-    class LinkCallback
+    public class LinkCallback
     {
         public string url;
         public bool background;

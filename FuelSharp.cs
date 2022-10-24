@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
-using EosioSigningRequestSharp;
+using EosioSigningRequest;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json;
 
@@ -15,7 +15,7 @@ namespace AnchorLinkUnityTransportSharp
         public PermissionLevel signer;
     }
 
-    public class FuelResponste
+    public class FuelResponse
     {
         public List<string> signatures;
         public KeyValuePair<string, object> request;  // TODO
@@ -30,12 +30,12 @@ namespace AnchorLinkUnityTransportSharp
             {"4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11", "https://telos.greymass.com"},
         };
 
-        public static async Task<FuelResponste> apiCall(string url, object body)
+        public static async Task<FuelResponse> apiCall(string url, object body)
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 var response = await httpClient.PostAsync(url, new StringContent(JsonConvert.SerializeObject(body)));
-                return JsonConvert.DeserializeObject<FuelResponste>(await response.Content.ReadAsStringAsync());
+                return JsonConvert.DeserializeObject<FuelResponse>(await response.Content.ReadAsStringAsync());
             }
         }
 

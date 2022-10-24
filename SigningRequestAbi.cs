@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using EosSharp.Core.Api.v1;
 
-namespace EosioSigningRequestSharp
+namespace EosioSigningRequest
 {
     public static class SigningRequestAbi
     {
@@ -217,19 +217,73 @@ namespace EosioSigningRequestSharp
                 },
                 new AbiStruct()
                 {
+                    name = "signing_request_identity_v3",
+                    fields = new List<AbiField>()
+                    {
+                        new AbiField()
+                        {
+                            name = "chain_id",
+                            type = "variant_id",
+                        },
+                        new AbiField()
+                        {
+                            name = "req",
+                            type = "variant_req_identity_v3",
+                        },
+                        new AbiField()
+                        {
+                            name = "flags",
+                            type = "request_flags",
+                        },
+                        new AbiField()
+                        {
+                            name = "callback",
+                            type = "string",
+                        },
+                        new AbiField()
+                        {
+                            name = "info",
+                            type = "info_pair[]",
+                        },
+                    }
+                },
+                new AbiStruct()
+                {
                     name = "identity",
                     fields = new List<AbiField>
                     {
                         new AbiField()
                         {
                             name = "permission",
-                            type = "permission_level"
+                            type = "permission_level?"
                         }
                         //new AbiField()
                         //{
                         //    name = "account",
                         //    type = "name",
                         //},
+                        //new AbiField()
+                        //{
+                        //    name = "request_key",
+                        //    type = "public_key?",
+                        //}
+                    }
+                },
+                new AbiStruct()
+                {
+                    name = "identity_v3",
+                    fields = new List<AbiField>
+                    {
+                        new AbiField()
+                        {
+                            name = "permission",
+                            type = "permission_level?"
+                        },
+                        new AbiField()
+                        {
+                            name = "scope",
+                            type = "name",
+                        },
                         //new AbiField()
                         //{
                         //    name = "request_key",
@@ -266,6 +320,12 @@ namespace EosioSigningRequestSharp
                 {
                     name = "variant_req",
                     types = new List<string>() {"action", "action[]", "transaction", "identity"},
+                }
+                ,
+                new Variant()
+                {
+                    name = "variant_req_identity_v3",
+                    types = new List<string>() {"action", "action[]", "transaction", "identity_v3"},
                 }
             },
             actions = new List<AbiAction>()

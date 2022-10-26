@@ -2,7 +2,7 @@
 {
     public class LinkCallback
     {
-        public string url;
-        public bool background;
+        public string Url;
+        public bool Background;
     }
 }

@@ -1,52 +1,40 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EosioSigningRequest;
-using EosSharp.Core.Api.v1;
 
 namespace AnchorLinkSharp
 {
     public class LinkSignatureProvider
     {
-        public AnchorLink anchorLink;
-        public ILinkTransport transport;
-        public string[] availableKeys;
-        public SigningRequestEncodingOptions encodingOptions;
+        public AnchorLink AnchorLink;
+        public ILinkTransport Transport;
+        public string[] AvailableKeys;
+        public SigningRequestEncodingOptions EncodingOptions;
 
-        private async Task<string[]> getAvailableKeys()
+        private async Task<string[]> GetAvailableKeys()
         {
-            return availableKeys;
+            return AvailableKeys;
         }
 
         private async Task<TransactResult> Sign(LinkSignatureProviderArgs args)
         {
-            SigningRequest request = SigningRequest.fromTransaction(
-                args.chainId,
-                args.serializedTransaction,
-                encodingOptions
+            SigningRequest request = SigningRequest.FromTransaction(
+                args.ChainId,
+                args.SerializedTransaction,
+                EncodingOptions
             );
 
-            request.setCallback(anchorLink.createCallbackUrl(), true);
-            request.setBroadcast(false);
-            request = await transport.prepare(request);
+            request.SetCallback(AnchorLink.CreateCallbackUrl(), true);
+            request.SetBroadcast(false);
+            request = await Transport.Prepare(request);
 
-            var result = await anchorLink.sendRequest(request, transport);
+            var result = await AnchorLink.SendRequest(request, Transport);
 
             return new TransactResult()
             {
-                request = request,
-                serializedTransaction = result.serializedTransaction,
-                signatures = result.signatures,
+                Request = request,
+                SerializedTransaction = result.SerializedTransaction,
+                Signatures = result.Signatures,
             };
         }
-    }
-
-    public class LinkSignatureProviderArgs
-    {
-        // TODO
-        public Dictionary<string, Abi> abis;
-        public string chainId;
-        public string[] requiredKeys;
-        public byte[] serializedContextFreeData;
-        public byte[] serializedTransaction;
     }
 }

@@ -7,9 +7,9 @@ namespace AnchorLinkSharp
 {
     public static class LinkUtils
     {
-        public static byte[] abiEncode(object value, string typeName)
+        public static byte[] AbiEncode(object value, string typeName)
         {
-            AbiSerializationProvider a = new AbiSerializationProvider();
+            var a = new AbiSerializationProvider();
             return a.SerializeTypeData(typeName, value, LinkAbiData.Types);
         }
 
@@ -17,46 +17,46 @@ namespace AnchorLinkSharp
          * Helper to ABI decode data.
          * @internal
          */
-        public static TResultType abiDecode<TResultType>(byte[] Bytes, string typeName, TResultType data)
+        public static TResultType AbiDecode<TResultType>(byte[] bytes, string typeName, TResultType result)
         {
-            string _data = null;
+            string data = null;
             var type = LinkAbiData.Types.types.SingleOrDefault(t => t.type == typeName);
             if (type == null)
             {
                 throw new Exception($"No such type: { typeName }");
             }
 
-            if (data is string stringData)
+            if (result is string stringData)
             {
-                _data = stringData;
-            } else if (!(data is byte[])) {
-                _data = "";    // TODO Convert to byte-array and then to hex-string?
+                data = stringData;
+            } else if (!(result is byte[])) {
+                data = "";    // TODO Convert to byte-array and then to hex-string?
             }
-            AbiSerializationProvider a = new AbiSerializationProvider();
-            return a.DeserializeStructData<TResultType>(typeName, _data, LinkAbiData.Types);
+            var a = new AbiSerializationProvider();
+            return a.DeserializeStructData<TResultType>(typeName, data, LinkAbiData.Types);
         }
 
         /**
          * Encrypt a message using AES and shared secret derived from given keys.
          * @internal
          */
-        public static byte[] sealMessage(string message, string privateKey, string publicKey) {
+        public static byte[] SealMessage(string message, string privateKey, string publicKey) {
             var res  = CryptoHelper.AesEncrypt(CryptoHelper.PubKeyStringToBytes(privateKey), message); // TOOD is that right ?
             var data = new SealedMessage()
             {
-                from = publicKey,
-                nonce = 0,
-                ciphertext = message,
-                checksum = 0,
+                From = publicKey,
+                Nonce = 0,
+                Ciphertext = message,
+                Checksum = 0,
             };
-            return abiEncode(data, "sealed_message");
+            return AbiEncode(data, "sealed_message");
         }
 
         /**
          * Ensure public key is in new PUB_ format.
          * @internal
          */
-        public static string normalizePublicKey(string key)
+        public static string NormalizePublicKey(string key)
         {
             if (key.StartsWith("PUB_"))
             {
@@ -71,9 +71,9 @@ namespace AnchorLinkSharp
          * Return true if given public keys are equal.
          * @internal
          */
-        public static bool publicKeyEqual(string keyA, string keyB)
+        public static bool PublicKeyEqual(string keyA, string keyB)
         {
-            return normalizePublicKey(keyA) == normalizePublicKey(keyB);
+            return NormalizePublicKey(keyA) == NormalizePublicKey(keyB);
         }
 
         /**
@@ -81,7 +81,7 @@ namespace AnchorLinkSharp
          * Uses browser crypto if available, otherwise falls back to slow eosjs-ecc.
          * @internal
          */
-        public static string generatePrivateKey()
+        public static string GeneratePrivateKey()
         {
             return CryptoHelper.GenerateKeyPair().PrivateKey;
 /*            if (typeof window != = 'undefined' && window.crypto) {

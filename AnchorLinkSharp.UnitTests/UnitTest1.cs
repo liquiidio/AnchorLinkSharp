@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using AnchorLinkUnityTransportSharp;
 using EosioSigningRequest;
@@ -25,25 +24,25 @@ namespace AnchorLinkSharp.UnitTests
 
         private readonly SigningRequestEncodingOptions _options = new SigningRequestEncodingOptions()
         {
-            abiSerializationProvider = new AbiSerializationProvider(new EosApi(new EosConfigurator() { HttpEndpoint = "http://eos.api.eosnation.io" }, new HttpHandler())), 
-            zlib = new NetZlibProvider()
+            AbiSerializationProvider = new AbiSerializationProvider(new EosApi(new EosConfigurator() { HttpEndpoint = "http://eos.api.eosnation.io" }, new HttpHandler())), 
+            Zlib = new NetZlibProvider()
         };
 
-        private Dictionary<string, Abi> mockAbis;
+        private Dictionary<string, Abi> _mockAbis;
 
         [TestInitialize]
         public void Initialize()
         {
-            mockAbis = new Dictionary<string, Abi>();
-            mockAbis.Add("eosio.token", JsonConvert.DeserializeObject<Abi>("{\r\n  \"version\": \"eosio::abi/1.1\",\r\n  \"types\": [],\r\n  \"structs\": [{\r\n      \"name\": \"account\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"balance\",\r\n          \"type\": \"asset\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"close\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"owner\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"symbol\",\r\n          \"type\": \"symbol\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"create\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"issuer\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"maximum_supply\",\r\n          \"type\": \"asset\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"currency_stats\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"supply\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"max_supply\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"issuer\",\r\n          \"type\": \"name\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"issue\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"to\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"quantity\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"memo\",\r\n          \"type\": \"string\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"open\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"owner\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"symbol\",\r\n          \"type\": \"symbol\"\r\n        },{\r\n          \"name\": \"ram_payer\",\r\n          \"type\": \"name\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"retire\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"quantity\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"memo\",\r\n          \"type\": \"string\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"transfer\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"from\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"to\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"quantity\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"memo\",\r\n          \"type\": \"string\"\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"actions\": [{\r\n      \"name\": \"close\",\r\n      \"type\": \"close\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"create\",\r\n      \"type\": \"create\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"issue\",\r\n      \"type\": \"issue\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"open\",\r\n      \"type\": \"open\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"retire\",\r\n      \"type\": \"retire\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"transfer\",\r\n      \"type\": \"transfer\",\r\n      \"ricardian_contract\": \"## Transfer Terms & Conditions\\n\\nI, {{from}}, certify the following to be true to the best of my knowledge:\\n\\n1. I certify that {{quantity}} is not the proceeds of fraudulent or violent activities.\\n2. I certify that, to the best of my knowledge, {{to}} is not supporting initiation of violence against others.\\n3. I have disclosed any contractual terms & conditions with respect to {{quantity}} to {{to}}.\\n\\nI understand that funds transfers are not reversible after the {{transaction.delay}} seconds or other delay as configured by {{from}}'s permissions.\\n\\nIf this action fails to be irreversibly confirmed after receiving goods or services from '{{to}}', I agree to either return the goods or services or resend {{quantity}} in a timely manner.\\n\"\r\n    }\r\n  ],\r\n  \"tables\": [{\r\n      \"name\": \"accounts\",\r\n      \"index_type\": \"i64\",\r\n      \"key_names\": [],\r\n      \"key_types\": [],\r\n      \"type\": \"account\"\r\n    },{\r\n      \"name\": \"stat\",\r\n      \"index_type\": \"i64\",\r\n      \"key_names\": [],\r\n      \"key_types\": [],\r\n      \"type\": \"currency_stats\"\r\n    }\r\n  ],\r\n  \"ricardian_clauses\": [],\r\n  \"error_messages\": [],\r\n  \"abi_extensions\": [],\r\n  \"variants\": []\r\n}"));
+            _mockAbis = new Dictionary<string, Abi>();
+            _mockAbis.Add("eosio.token", JsonConvert.DeserializeObject<Abi>("{\r\n  \"version\": \"eosio::abi/1.1\",\r\n  \"types\": [],\r\n  \"structs\": [{\r\n      \"name\": \"account\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"balance\",\r\n          \"type\": \"asset\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"close\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"owner\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"symbol\",\r\n          \"type\": \"symbol\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"create\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"issuer\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"maximum_supply\",\r\n          \"type\": \"asset\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"currency_stats\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"supply\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"max_supply\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"issuer\",\r\n          \"type\": \"name\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"issue\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"to\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"quantity\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"memo\",\r\n          \"type\": \"string\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"open\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"owner\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"symbol\",\r\n          \"type\": \"symbol\"\r\n        },{\r\n          \"name\": \"ram_payer\",\r\n          \"type\": \"name\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"retire\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"quantity\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"memo\",\r\n          \"type\": \"string\"\r\n        }\r\n      ]\r\n    },{\r\n      \"name\": \"transfer\",\r\n      \"base\": \"\",\r\n      \"fields\": [{\r\n          \"name\": \"from\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"to\",\r\n          \"type\": \"name\"\r\n        },{\r\n          \"name\": \"quantity\",\r\n          \"type\": \"asset\"\r\n        },{\r\n          \"name\": \"memo\",\r\n          \"type\": \"string\"\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"actions\": [{\r\n      \"name\": \"close\",\r\n      \"type\": \"close\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"create\",\r\n      \"type\": \"create\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"issue\",\r\n      \"type\": \"issue\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"open\",\r\n      \"type\": \"open\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"retire\",\r\n      \"type\": \"retire\",\r\n      \"ricardian_contract\": \"\"\r\n    },{\r\n      \"name\": \"transfer\",\r\n      \"type\": \"transfer\",\r\n      \"ricardian_contract\": \"## Transfer Terms & Conditions\\n\\nI, {{from}}, certify the following to be true to the best of my knowledge:\\n\\n1. I certify that {{quantity}} is not the proceeds of fraudulent or violent activities.\\n2. I certify that, to the best of my knowledge, {{to}} is not supporting initiation of violence against others.\\n3. I have disclosed any contractual terms & conditions with respect to {{quantity}} to {{to}}.\\n\\nI understand that funds transfers are not reversible after the {{transaction.delay}} seconds or other delay as configured by {{from}}'s permissions.\\n\\nIf this action fails to be irreversibly confirmed after receiving goods or services from '{{to}}', I agree to either return the goods or services or resend {{quantity}} in a timely manner.\\n\"\r\n    }\r\n  ],\r\n  \"tables\": [{\r\n      \"name\": \"accounts\",\r\n      \"index_type\": \"i64\",\r\n      \"key_names\": [],\r\n      \"key_types\": [],\r\n      \"type\": \"account\"\r\n    },{\r\n      \"name\": \"stat\",\r\n      \"index_type\": \"i64\",\r\n      \"key_names\": [],\r\n      \"key_types\": [],\r\n      \"type\": \"currency_stats\"\r\n    }\r\n  ],\r\n  \"ricardian_clauses\": [],\r\n  \"error_messages\": [],\r\n  \"abi_extensions\": [],\r\n  \"variants\": []\r\n}"));
         }
 
         [TestMethod]
         public void ShouldCreateFromAction()
         {
-            var requestAData = (SigningRequest.create(new SigningRequestCreateArguments()
+            var requestAData = (SigningRequest.Create(new SigningRequestCreateArguments()
             {
-                action = new Action()
+                Action = new Action()
                 {
                     account = "eosio.token",
                     name = "transfer",
@@ -52,12 +51,12 @@ namespace AnchorLinkSharp.UnitTests
                 },
             },
                 _options
-            ).Result).data;
+            ).Result).Data;
 
             var requestBData = new SigningRequestData()
             {
-                chain_id = new KeyValuePair<string, object>("chain_alias", 1),
-                req = new KeyValuePair<string, object>("action", new
+                ChainId = new KeyValuePair<string, object>("chain_alias", 1),
+                Req = new KeyValuePair<string, object>("action", new
                 {
                     account = "eosio.token",
                     name = "transfer",
@@ -65,9 +64,9 @@ namespace AnchorLinkSharp.UnitTests
                     data = new { from = "foo", to = "bar", quantity = "1.000 EOS", memo = "hello there" },
                     hex_data = "000000000000285d000000000000ae39e80300000000000003454f53000000000b68656c6c6f207468657265",
                 }),
-                callback = "",
-                flags = 1,
-                info = new List<object>(),
+                Callback = "",
+                Flags = 1,
+                Info = new List<object>(),
             };
 
             Console.WriteLine(JsonConvert.SerializeObject(requestAData));
@@ -80,10 +79,10 @@ namespace AnchorLinkSharp.UnitTests
         [TestMethod]
         public void ShouldCreateFromActions()
         {
-            var requestAData = (SigningRequest.create(new SigningRequestCreateArguments()
+            var requestAData = (SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    callback = new KeyValuePair<string,bool>("https=//example.com/?tx={{tx}}", true),
-                    actions = new Action[]
+                    Callback = new KeyValuePair<string,bool>("https=//example.com/?tx={{tx}}", true),
+                    Actions = new Action[]
                         {
                         new Action()
                         {
@@ -102,12 +101,12 @@ namespace AnchorLinkSharp.UnitTests
                         }
                 }, 
                 _options
-            ).Result).data;
+            ).Result).Data;
 
             var requestBData = new SigningRequestData()
             {
-                chain_id = new KeyValuePair<string, object>("chain_alias", 1),
-                req = new KeyValuePair<string, object>("action[]", new[]
+                ChainId = new KeyValuePair<string, object>("chain_alias", 1),
+                Req = new KeyValuePair<string, object>("action[]", new[]
                     {
                     new
                     {
@@ -127,9 +126,9 @@ namespace AnchorLinkSharp.UnitTests
                     }
                 }
                 ),
-                callback = "https=//example.com/?tx={{tx}}",
-                flags = 3,
-                info = new List<object>(),
+                Callback = "https=//example.com/?tx={{tx}}",
+                Flags = 3,
+                Info = new List<object>(),
             };
 
             Console.WriteLine(JsonConvert.SerializeObject(requestAData));
@@ -142,10 +141,10 @@ namespace AnchorLinkSharp.UnitTests
         public void ShouldCreateFromTransaction() {
 
 
-            var requestAData = (SigningRequest.create(new SigningRequestCreateArguments()
+            var requestAData = (SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    callback = "https=//example.com/?tx={{tx}}",
-                    transaction = new Transaction()
+                    Callback = "https=//example.com/?tx={{tx}}",
+                    Transaction = new Transaction()
                     {
                         delay_sec = 123,
                         expiration = _timestamp,
@@ -162,16 +161,16 @@ namespace AnchorLinkSharp.UnitTests
                             }
                         }
                     }, 
-                    broadcast = false
+                    Broadcast = false
                 },
                 _options
-            ).Result).data;
+            ).Result).Data;
 
 
             var requestBData = new SigningRequestData()
             {
-                chain_id = new KeyValuePair<string, object>("chain_alias", 1),
-                req = new KeyValuePair<string, object>("transaction", new 
+                ChainId = new KeyValuePair<string, object>("chain_alias", 1),
+                Req = new KeyValuePair<string, object>("transaction", new 
                     {
                         actions = new[]
                         {
@@ -193,9 +192,9 @@ namespace AnchorLinkSharp.UnitTests
                         transaction_extensions = new List<object>(),
                     }
                 ),
-                callback = "https=//example.com/?tx={{tx}}",
-                flags = 0,
-                info = new List<object>(),
+                Callback = "https=//example.com/?tx={{tx}}",
+                Flags = 0,
+                Info = new List<object>(),
             };
 
             Console.WriteLine(JsonConvert.SerializeObject(requestAData));
@@ -207,10 +206,10 @@ namespace AnchorLinkSharp.UnitTests
         [TestMethod]
         public void ShouldCreateFromUri()
         {
-            var requestAData = SigningRequest.from(
+            var requestAData = SigningRequest.From(
                 "esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZRqAQGMBoExgDAjRi4fwAVz93ICUckpGYl12skJZfpFCSkaqQllmcwczAAAA",
                 _options
-            ).data;
+            ).Data;
 
             var requestBData = new {
                 chain_id = new KeyValuePair<string, object>("chain_alias", 1),
@@ -236,9 +235,9 @@ namespace AnchorLinkSharp.UnitTests
         [TestMethod]
         public void ShouldResolveToTransaction()
         {
-            var requestAData = SigningRequest.create(new SigningRequestCreateArguments()
+            var requestAData = SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    action = new Action()
+                    Action = new Action()
                     {
                         account = "eosio.token",
                         name = "transfer",
@@ -250,14 +249,14 @@ namespace AnchorLinkSharp.UnitTests
                 _options
             ).Result;
 
-            var abis = requestAData.fetchAbis(_options.abiSerializationProvider).Result;
-            var tx = requestAData.resolveTransaction(
+            var abis = requestAData.FetchAbis(_options.AbiSerializationProvider).Result;
+            var tx = requestAData.ResolveTransaction(
                 abis, new PermissionLevel() { actor = "foo", permission = "bar" }, new TransactionContext()
                 {
-                    timestamp = _timestamp,
-                    block_num = 1234,
-                    expire_seconds = 0,
-                    ref_block_prefix = 56789,
+                    Timestamp = _timestamp,
+                    BlockNum = 1234,
+                    ExpireSeconds = 0,
+                    RefBlockPrefix = 56789,
                 }
             );
 
@@ -297,9 +296,9 @@ namespace AnchorLinkSharp.UnitTests
              * Automatic Placeholder Replacement only works if a Dictionary<string, object> is used for action.data
              */
 
-            var requestAData = SigningRequest.create(new SigningRequestCreateArguments()
+            var requestAData = SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    action = new Action()
+                    Action = new Action()
                     {
                         account = "eosio.token",
                         name = "transfer",
@@ -316,14 +315,14 @@ namespace AnchorLinkSharp.UnitTests
                 _options
             ).Result;
 
-            var abis = requestAData.fetchAbis(_options.abiSerializationProvider).Result;
-            var tx = requestAData.resolveTransaction(abis, new PermissionLevel() { actor = "foo", permission = "mractive" },
+            var abis = requestAData.FetchAbis(_options.AbiSerializationProvider).Result;
+            var tx = requestAData.ResolveTransaction(abis, new PermissionLevel() { actor = "foo", permission = "mractive" },
                 new TransactionContext()
                 {
-                    timestamp = _timestamp,
-                    block_num = 1234,
-                    expire_seconds = 0,
-                    ref_block_prefix = 56789,
+                    Timestamp = _timestamp,
+                    BlockNum = 1234,
+                    ExpireSeconds = 0,
+                    RefBlockPrefix = 56789,
                 }
             );
 
@@ -359,10 +358,10 @@ namespace AnchorLinkSharp.UnitTests
         [TestMethod]
         public void ShouldEncodeAndDecodeRequests()
         {
-            var req1 = SigningRequest.create(new SigningRequestCreateArguments()
+            var req1 = SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    callback = new KeyValuePair<string, bool>("", true),
-                    action = new Action()
+                    Callback = new KeyValuePair<string, bool>("", true),
+                    Action = new Action()
                     {
                         account = "eosio.token",
                         name = "transfer",
@@ -383,7 +382,7 @@ namespace AnchorLinkSharp.UnitTests
                 _options
             ).Result;
 
-            var encoded = req1.encode();
+            var encoded = req1.Encode();
 
             Console.WriteLine(encoded);
             Console.WriteLine("esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZRqAQGMBoExgDAjRi4fwAVz93ICUckpGYl12skJZfpFCSkaqQllmcwczAAAA");
@@ -391,27 +390,27 @@ namespace AnchorLinkSharp.UnitTests
 
             Assert.AreEqual(encoded, "esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZRqAQGMBoExgDAjRi4fwAVz93ICUckpGYl12skJZfpFCSkaqQllmcwczAAAA");
 
-            var req2 = SigningRequest.from(encoded, _options);
+            var req2 = SigningRequest.From(encoded, _options);
 
-            Console.WriteLine(JsonConvert.SerializeObject(req1.data));
-            Console.WriteLine(JsonConvert.SerializeObject(req2.data));
+            Console.WriteLine(JsonConvert.SerializeObject(req1.Data));
+            Console.WriteLine(JsonConvert.SerializeObject(req2.Data));
             Console.WriteLine(Environment.NewLine);
 
-            Assert.AreEqual(JsonConvert.SerializeObject(req1.data), JsonConvert.SerializeObject(req2.data));
+            Assert.AreEqual(JsonConvert.SerializeObject(req1.Data), JsonConvert.SerializeObject(req2.Data));
         }
 
 
         [TestMethod]
-        public void ShouldCreateIdentityTx()
+        public async Task ShouldCreateIdentityTx()
         {
-            var req = SigningRequest.identity(new SigningRequestCreateIdentityArguments()
+            var req = await SigningRequest.Identity(new SigningRequestCreateIdentityArguments()
                 {
-                    callback = new KeyValuePair<string, bool>("https=//example.com", true)
+                    Callback = new KeyValuePair<string, bool>("https=//example.com", true)
                 },
                 _options
             );
 
-            var resolvedTrx = req.resolveTransaction(mockAbis, new PermissionLevel()
+            var resolvedTrx = req.ResolveTransaction(_mockAbis, new PermissionLevel()
             {
                 actor = "foo",
                 permission = "bar",
@@ -453,7 +452,7 @@ namespace AnchorLinkSharp.UnitTests
 
             Assert.AreEqual(JsonConvert.SerializeObject(resolvedTrx), JsonConvert.SerializeObject(trx));
 
-            var resolvedTrx2 = req.resolveTransaction(mockAbis, new PermissionLevel()
+            var resolvedTrx2 = req.ResolveTransaction(_mockAbis, new PermissionLevel()
             {
                 actor = "other",
                 permission = "active",
@@ -511,15 +510,15 @@ namespace AnchorLinkSharp.UnitTests
 
             var options = new SigningRequestEncodingOptions()
             {
-                abiSerializationProvider = new AbiSerializationProvider(new EosApi(
+                AbiSerializationProvider = new AbiSerializationProvider(new EosApi(
                     new EosConfigurator() { HttpEndpoint = "http://eos.api.eosnation.io" }, new HttpHandler())),
-                zlib = new NetZlibProvider(),
-                signatureProvider = mockSignature
+                Zlib = new NetZlibProvider(),
+                SignatureProvider = mockSignature
             };
 
-            var req1 = SigningRequest.create(new SigningRequestCreateArguments()
+            var req1 = SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    action = new Action()
+                    Action = new Action()
                     {
                         account = "eosio.token",
                         name = "transfer",
@@ -532,7 +531,7 @@ namespace AnchorLinkSharp.UnitTests
             ).Result;
 
             // assert.deepStrictEqual(recode(req1.signature), mockSig)
-            var encoded = req1.encode();
+            var encoded = req1.Encode();
 
             Console.WriteLine(encoded);
             Console.WriteLine(
@@ -541,8 +540,8 @@ namespace AnchorLinkSharp.UnitTests
             Assert.AreEqual(encoded,
                 "esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZoAgIaMSCyBVvjYx0kAUYGNZZvmCGsJhd_YNBNHdGak5OvkJJRmpRKlQ3WLl8anjWFNWd23XWfvzTcy_qmtRx5mtMXlkSC23ZXle6K_NJFJ4SVTb4O026Wb1G5Wx0u1A3-_G4rAPsBp78z9lN7nddAQA");
 
-            var req2 = SigningRequest.from(encoded, _options);
-            Assert.AreEqual(JsonConvert.SerializeObject(req2.data), JsonConvert.SerializeObject(req1.data));
+            var req2 = SigningRequest.From(encoded, _options);
+            Assert.AreEqual(JsonConvert.SerializeObject(req2.Data), JsonConvert.SerializeObject(req1.Data));
 
 //            Assert.AreEqual(JsonConvert.SerializeObject(req2.signature), JsonConvert.SerializeObject(mockSignature.Sign()));}
         }
@@ -550,30 +549,30 @@ namespace AnchorLinkSharp.UnitTests
         [TestMethod]
         public void ShouldEncodeAndDecodeTestRequests()
         {
-            var req1uri =
+            var req1Uri =
                 "esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZRqAQGMBoExgDAjRi4fwAVz93ICUckpGYl12skJZfpFCSkaqQllmcwczAAAA";
-            var req2uri =
+            var req2Uri =
                 "esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZRqAQGMBoExgDAjRi4fwAVz93ICUckpGYl12skJZfpFCSkaqQllmcwQxREVOsEcsgX-9-jqsy1EhNQM_GM_FkQMIziUU1VU4PsmOn_3r5hUMumeN3PXvdSuWMm1o9u6-FmCwtPvR0haqt12fNKtlWzTuiNwA";
             
-            var req1 = SigningRequest.from(req1uri, _options);
-            var req2 = SigningRequest.from(req2uri, _options);
+            var req1 = SigningRequest.From(req1Uri, _options);
+            var req2 = SigningRequest.From(req2Uri, _options);
 
             Console.WriteLine(JsonConvert.SerializeObject(req1));
             Console.WriteLine(JsonConvert.SerializeObject(req2));
             Console.Write(Environment.NewLine);
 
-            var req1resolved = req1.resolveActions(mockAbis, null);
-            var req2resolved = req2.resolveActions(mockAbis, null);
-            Assert.AreEqual(JsonConvert.SerializeObject(req1resolved), JsonConvert.SerializeObject(req2resolved));
+            var req1Resolved = req1.ResolveActions(_mockAbis, null);
+            var req2Resolved = req2.ResolveActions(_mockAbis, null);
+            Assert.AreEqual(JsonConvert.SerializeObject(req1Resolved), JsonConvert.SerializeObject(req2Resolved));
 
-            var req1Sig = req1.signature;
+            var req1Sig = req1.Signature;
             Assert.IsNull(req1Sig);
 
-            var req2Sig = req2.signature;
+            var req2Sig = req2.Signature;
             var req3Sig = new RequestSignature()
             {
-                signer = "foobar",
-                signature =
+                Signer = "foobar",
+                Signature =
                     "SIG_K1_KBub1qmdiPpWA2XKKEZEG3EfKJBf38GETHzbd4t3CBdWLgdvFRLCqbcUsBbbYga6jmxfdSFfodMdhMYraKLhEzjSCsiuMs"
             };
             Console.WriteLine(JsonConvert.SerializeObject(req2Sig));
@@ -582,24 +581,24 @@ namespace AnchorLinkSharp.UnitTests
 
             Assert.AreEqual(JsonConvert.SerializeObject(req2Sig), JsonConvert.SerializeObject(req3Sig));
 
-            Assert.AreEqual(req1.encode(), req1uri);
-            Assert.AreEqual(req2.encode(), req2uri);
+            Assert.AreEqual(req1.Encode(), req1Uri);
+            Assert.AreEqual(req2.Encode(), req2Uri);
         }
 
         [TestMethod]
         public void ShouldGenerateCorrectIdentityRequests()
         {
             var reqUri = "esr://AgABAwACJWh0dHBzOi8vY2guYW5jaG9yLmxpbmsvMTIzNC00NTY3LTg5MDAA";
-            var req = SigningRequest.from(reqUri, _options);
-            Assert.AreEqual(req.isIdentity(), true);
-            Assert.AreEqual(req.getIdentity(), null);
-            Assert.AreEqual(req.getIdentityPermission(), null);
-            Assert.AreEqual(req.encode(), reqUri);
+            var req = SigningRequest.From(reqUri, _options);
+            Assert.AreEqual(req.IsIdentity(), true);
+            Assert.AreEqual(req.GetIdentity(), null);
+            Assert.AreEqual(req.GetIdentityPermission(), null);
+            Assert.AreEqual(req.Encode(), reqUri);
 
-            var resolved = req.resolve(new Dictionary<string, Abi>(),
+            var resolved = req.Resolve(new Dictionary<string, Abi>(),
                 new PermissionLevel() { actor = "foo", permission = "bar" }, null);
 
-            var resolvedTrx = resolved.transaction;
+            var resolvedTrx = resolved.Transaction;
 
             var trx2 = new Transaction()
             {
@@ -643,24 +642,24 @@ namespace AnchorLinkSharp.UnitTests
         }
 
         [TestMethod]
-        public void ShouldEncodeAndDecodeWithMetadata()
+        public async Task ShouldEncodeAndDecodeWithMetadata()
         {
             var abiSerializationProvider = new AbiSerializationProvider();
             var data = abiSerializationProvider.Serialize("hello", "string");
-            var req = SigningRequest.identity(new SigningRequestCreateIdentityArguments()
+            var req = await SigningRequest.Identity(new SigningRequestCreateIdentityArguments()
                 {
-                    callback = "https=//example.com",
-                    info = new List<InfoPair>()
+                    Callback = "https=//example.com",
+                    Info = new List<InfoPair>()
                     {
                         new InfoPair()
                         {
-                            key = "foo",
-                            value = "bar"
+                            Key = "foo",
+                            Value = "bar"
                         },
                         new InfoPair()
                         {
-                            key = "baz",
-                            value = data,
+                            Key = "baz",
+                            Value = data,
                         }
 
                     },
@@ -669,18 +668,18 @@ namespace AnchorLinkSharp.UnitTests
                 _options
             );
             // TODO
-            req.setInfoKey(
+            req.SetInfoKey(
                 "extra_sig",
                 "SIG_K1_K4nkCupUx3hDXSHq4rhGPpDMPPPjJyvmF3M6j7ppYUzkR3L93endwnxf3YhJSG4SSvxxU1ytD8hj39kukTeYxjwy5H3XNJ",
                 "signature"
             );
-            var encoded = req.encode();
-            var decoded = SigningRequest.from(encoded, _options);
+            var encoded = req.Encode();
+            var decoded = SigningRequest.From(encoded, _options);
             // TODO
-            Assert.AreEqual(SerializationHelper.ByteArrayToHexString(decoded.getRawInfo()["foo"]), SerializationHelper.ByteArrayToHexString(req.getRawInfo()["foo"]));
-            Assert.AreEqual(decoded.getInfos()["foo"], "bar");
-            Assert.AreEqual(decoded.getInfos()["baz"], "hello");
-            Assert.AreEqual(decoded.getInfo("extra_sig","signature"),
+            Assert.AreEqual(SerializationHelper.ByteArrayToHexString(decoded.GetRawInfo()["foo"]), SerializationHelper.ByteArrayToHexString(req.GetRawInfo()["foo"]));
+            Assert.AreEqual(decoded.GetInfos()["foo"], "bar");
+            Assert.AreEqual(decoded.GetInfos()["baz"], "hello");
+            Assert.AreEqual(decoded.GetInfo("extra_sig","signature"),
                 "SIG_K1_K4nkCupUx3hDXSHq4rhGPpDMPPPjJyvmF3M6j7ppYUzkR3L93endwnxf3YhJSG4SSvxxU1ytD8hj39kukTeYxjwy5H3XNJ");
         }
 
@@ -690,9 +689,9 @@ namespace AnchorLinkSharp.UnitTests
             var mockSig =
                 "SIG_K1_K8Wm5AXSQdKYVyYFPCYbMZurcJQXZaSgXoqXAKE6uxR6Jot7otVzS55JGRhixCwNGxaGezrVckDgh88xTsiu4wzzZuP9JE";
             var mockTx = "308d206c51c5dd6c02e0417e44560cdc2e76db7765cea19dfa8f9f94922f928a";
-            var request = SigningRequest.create(new SigningRequestCreateArguments()
+            var request = SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    action = new Action()
+                    Action = new Action()
                     {
                         account = "eosio.token",
                         name = "transfer",
@@ -706,38 +705,38 @@ namespace AnchorLinkSharp.UnitTests
                             { "memo", "hello there" }
                         },
                     },
-                    callback = "https://example.com/?sig={{sig}}&tx={{tx}}",
+                    Callback = "https://example.com/?sig={{sig}}&tx={{tx}}",
                 },
                 _options
             ).Result;
 
-            var abis = request.fetchAbis(_options.abiSerializationProvider).Result;
+            var abis = request.FetchAbis(_options.AbiSerializationProvider).Result;
 
-            var resolved = request.resolve(
+            var resolved = request.Resolve(
                 abis, new PermissionLevel() { actor = "foo", permission = "bar" },
                 new TransactionContext()
                 {
-                    timestamp = _timestamp,
-                    block_num = 1234,
-                    expire_seconds = 0,
-                    ref_block_prefix = 56789,
+                    Timestamp = _timestamp,
+                    BlockNum = 1234,
+                    ExpireSeconds = 0,
+                    RefBlockPrefix = 56789,
                 }
             );
 
-            var callback = resolved.getCallback(new[] { mockSig }, null);
+            var callback = resolved.GetCallback(new[] { mockSig }, null);
             var expected = $"https://example.com/?sig={mockSig}&tx={mockTx}";
 
-            Console.WriteLine(callback.url);
+            Console.WriteLine(callback.Url);
             Console.WriteLine(expected);
-            Assert.AreEqual(callback.url, expected);
+            Assert.AreEqual(callback.Url, expected);
         }
 
         [TestMethod]
         public void ShouldDeepClone()
         {
-            var request = SigningRequest.create(new SigningRequestCreateArguments()
+            var request = SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    action = new Action()
+                    Action = new Action()
                     {
                         account = "eosio.token",
                         name = "transfer",
@@ -754,42 +753,42 @@ namespace AnchorLinkSharp.UnitTests
                 },
                 _options
             ).Result;
-            var copy = request.clone();
+            var copy = request.Clone();
 
-            Assert.AreEqual(JsonConvert.SerializeObject(request.data), JsonConvert.SerializeObject(copy.data));
+            Assert.AreEqual(JsonConvert.SerializeObject(request.Data), JsonConvert.SerializeObject(copy.Data));
 
-            Assert.AreEqual(request.encode(), copy.encode());
+            Assert.AreEqual(request.Encode(), copy.Encode());
 
-            copy.setInfoKey("foo", true);
-            Assert.AreNotEqual(request.data, copy.data);
-            Assert.AreEqual(request.encode(), copy.encode());
+            copy.SetInfoKey("foo", true);
+            Assert.AreNotEqual(request.Data, copy.Data);
+            Assert.AreEqual(request.Encode(), copy.Encode());
         }
 
         [TestMethod]
         public void ShouldResolveTemplatedCallbackUrls()
         {
-            var req1uri =
+            var req1Uri =
                 "esr://gmNgZGBY1mTC_MoglIGBIVzX5uxZRqAQGDBBaUWYAARoxMIkGAJDIyAM9YySkoJiK3391IrE3IKcVL3k_Fz7kgrb6uqSitpataQ8ICspr7aWAQA";
-            var req1 = SigningRequest.from(req1uri, _options);
-            var abis = req1.fetchAbis(_options.abiSerializationProvider).Result;
-            var resolved = req1.resolve(
+            var req1 = SigningRequest.From(req1Uri, _options);
+            var abis = req1.FetchAbis(_options.AbiSerializationProvider).Result;
+            var resolved = req1.Resolve(
                 abis, new PermissionLevel() { actor = "foo", permission = "bar" }, new TransactionContext()
                 {
-                    timestamp = _timestamp,
-                    block_num = 1234,
-                    expire_seconds = 0,
-                    ref_block_prefix = 56789
+                    Timestamp = _timestamp,
+                    BlockNum = 1234,
+                    ExpireSeconds = 0,
+                    RefBlockPrefix = 56789
                 }
             );
             
-            var callback = resolved.getCallback(new[]
+            var callback = resolved.GetCallback(new[]
             {
                 "SIG_K1_KBub1qmdiPpWA2XKKEZEG3EfKJBf38GETHzbd4t3CBdWLgdvFRLCqbcUsBbbYga6jmxfdSFfodMdhMYraKLhEzjSCsiuMs",
             }, 1234);
 
             var expected =
                 "https://example.com?tx=6aff5c203810ff6b40469fe20318856354889ff037f4cf5b89a157514a43e825&bn=1234";
-            Assert.AreEqual(expected, callback!.url);
+            Assert.AreEqual(expected, callback!.Url);
 
         }
 
@@ -799,14 +798,14 @@ namespace AnchorLinkSharp.UnitTests
         {
 
             var scope = SerializationHelper.ConvertULongToName(18446744073709551615)!;
-            var req = SigningRequest.create(new SigningRequestCreateArguments()
+            var req = SigningRequest.Create(new SigningRequestCreateArguments()
                 {
-                    Identity = new IdentityV3() { scope = scope },
-                    callback = new KeyValuePair<string, bool>("https://example.com", true),
+                    Identity = new IdentityV3() { Scope = scope },
+                    Callback = new KeyValuePair<string, bool>("https://example.com", true),
                 },
                 _options
             ).Result;
-            Assert.AreEqual("esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA", req.encode());
+            Assert.AreEqual("esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA", req.Encode());
 
             //Expected: <esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>.
             //Actual:   <esr://g2NgZGb4DwVMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA>. 
@@ -835,28 +834,28 @@ namespace AnchorLinkSharp.UnitTests
             //Actual:   <esr://g2NgZGb48B8CmIQzSkoKiq309VMrEnMLclL1kvNzGQA>. 
 
 
-            var decoded = SigningRequest.from(
+            var decoded = SigningRequest.From(
                 "esr://g2NgZP4PBQxMwhklJQXFVvr6qRWJuQU5qXrJ-bkMAA",
                 _options
             );
-            Assert.AreEqual(decoded.data.Equals(req.data), true);
+            Assert.AreEqual(decoded.Data.Equals(req.Data), true);
 
-            Assert.AreEqual(decoded.getIdentityScope(), scope);
+            Assert.AreEqual(decoded.GetIdentityScope(), scope);
 
-            var resolved = req.resolve(
+            var resolved = req.Resolve(
                 new Dictionary<string, Abi>(), new PermissionLevel() { actor = "foo", permission = "active" },
                 new TransactionContext()
                 {
-                    expiration = new DateTime(2020, 07, 10, 08, 40, 20)
+                    Expiration = new DateTime(2020, 07, 10, 08, 40, 20)
                 }
             );
-            Assert.AreEqual(resolved.transaction.expiration, new DateTime(2020, 07, 10, 08, 40, 20));
+            Assert.AreEqual(resolved.Transaction.expiration, new DateTime(2020, 07, 10, 08, 40, 20));
             Assert.AreEqual(
-                resolved.transaction.actions[0].hex_data,
+                resolved.Transaction.actions[0].hex_data,
                 "ffffffffffffffff01000000000000285d00000000a8ed3232"
             );
 
-            Assert.Equals(SerializationHelper.ByteArrayToHexString(req.getSignatureDigest()),
+            Assert.Equals(SerializationHelper.ByteArrayToHexString(req.GetSignatureDigest()),
                 "70d1fd5bda1998135ed44cbf26bd1cc2ed976219b2b6913ac13f41d4dd013307"
             );
         }

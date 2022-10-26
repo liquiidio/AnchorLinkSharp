@@ -20,7 +20,7 @@ namespace AnchorLinkSharp
         public event Action OnOpen;
         public event Action<string> OnMessage;
         public event Action<WebSocketCloseStatus?, string> OnClose;
-        private event Action onError;
+        private event Action OnError;
 
         protected WebSocketWrapper(string uri)
         {

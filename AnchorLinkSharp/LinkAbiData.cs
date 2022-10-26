@@ -3,7 +3,7 @@ using EosSharp.Core.Api.v1;
 
 namespace AnchorLinkSharp
 {
-    static class LinkAbiData
+    internal static class LinkAbiData
     {
         public static readonly Abi Types = new Abi()
         {

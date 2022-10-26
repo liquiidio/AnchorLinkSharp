@@ -24,7 +24,7 @@ namespace EosioSigningRequest
         /// <returns>Returns the decoded binary data</returns>
         public static byte[] FromBase64UrlSafe(string base54Text)
         {
-            string incoming = base54Text.Replace('_', '/').Replace('-', '+');
+            var incoming = base54Text.Replace('_', '/').Replace('-', '+');
             switch (base54Text.Length % 4)
             {
                 case 2: incoming += "=="; break;

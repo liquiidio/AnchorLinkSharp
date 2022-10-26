@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using AnchorLinkSharp;
 using Newtonsoft.Json;
 
@@ -11,12 +9,10 @@ namespace AnchorLinkUnityTransportSharp
 {
     public class JsonLocalStorage : ILinkStorage
     {
-        private string _prefix;
-        private string _filePath;
+        private readonly string _filePath;
         public JsonLocalStorage(string prefix = "default-prefix")
         {
-            this._prefix = prefix;
-            _filePath = $"{Environment.CurrentDirectory}/{_prefix}_{Environment.UserName}.json";
+            _filePath = $"{Environment.CurrentDirectory}/{prefix}_{Environment.UserName}.json";
         }
 
         private async Task<Dictionary<string, string>> ReadStorage()
@@ -32,20 +28,20 @@ namespace AnchorLinkUnityTransportSharp
             await File.WriteAllTextAsync(_filePath, JsonConvert.SerializeObject(storage));
         }
 
-        public async Task write(string key, string data)
+        public async Task Write(string key, string data)
         {
             var storage = await ReadStorage();
             storage[key] = data;
             await WriteStorage(storage);
         }
 
-        public async Task<string> read(string key)
+        public async Task<string> Read(string key)
         {
             var storage = await ReadStorage();
             return storage.TryGetValue(key, out var value) ? value : string.Empty;
         }
 
-        public async Task remove(string key)
+        public async Task Remove(string key)
         {
             var storage = await ReadStorage();
             if (storage.ContainsKey(key))

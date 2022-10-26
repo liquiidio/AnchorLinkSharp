@@ -1,80 +1,34 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using EosioSigningRequest;
-using UnityEngine;
 
 namespace AnchorLinkUnityTransportSharp
 {
-    public class TransportOptions
-    {
-        /** Whether to display request success and error messages, defaults to true */
-        public bool requestStatus;
-        /** Local storage prefix, defaults to `anchor-anchorLink`. */
-        public string storagePrefix;
-
-        /**
-         * Whether to use Greymass Fuel for low resource accounts, defaults to false.
-         * Note that this service is not available on all networks.
-         * Visit https://greymass.com/en/fuel for more information.
-         */
-        public bool disableGreymassFuel;
-    }
-
-    public class PlayerPrefsStorage : ILinkStorage
-    {
-        private string keyPrefix;
-        public PlayerPrefsStorage(string keyPrefix = "default-prefix")
-        {
-            this.keyPrefix = keyPrefix;
-        }
-
-        string storageKey(string key)
-        {
-            return $"{this.keyPrefix}{key}";
-        }
-
-        public async Task write(string key, string data)
-        {
-            await Task.Run(() => { }); // PlayerPrefs.SetString(this.storageKey(key), data.ToString()); });
-        }
-
-        public async Task<string> read(string key)
-        {
-            return await Task.Run(() => { return "";/*PlayerPrefs.GetString(this.storageKey(key))*/; });
-        }
-
-        public async Task remove(string key)
-        {
-            await Task.Run(() => { /*PlayerPrefs.DeleteKey(this.storageKey(key));*/ });
-        }
-    }
-
     public class UnityTransport : ILinkTransport
     {
-        private bool requestStatus;
-        private bool fuelEnabled;
-        private SigningRequest activeRequest;
-        private object activeCancel; //?: (reason: string | Error) => void
-        private Timer countdownTimer;
-        private Timer closeTimer;
-        public ILinkStorage storage { get; }
+        private readonly bool _requestStatus;
+        private readonly bool _fuelEnabled;
+        private SigningRequest _activeRequest;
+        private object _activeCancel; //?: (reason: string | Error) => void
+        private Timer _countdownTimer;
+        private Timer _closeTimer;
+        public ILinkStorage Storage { get; }
 
         public UnityTransport(TransportOptions options)
         {
-            this.requestStatus = options.requestStatus != false;
-            this.fuelEnabled = options.disableGreymassFuel != true;
-            this.storage = new PlayerPrefsStorage(options.storagePrefix);
+            this._requestStatus = options.RequestStatus != false;
+            this._fuelEnabled = options.DisableGreymassFuel != true;
+            this.Storage = new PlayerPrefsStorage(options.StoragePrefix);
         }
 
-        public void onRequest(SigningRequest request, Action<object> cancel)
+        public void OnRequest(SigningRequest request, Action<object> cancel)
         {
-            this.activeRequest = request;
-            this.activeCancel = cancel;
-            var uri = request.encode(false, true);
+            this._activeRequest = request;
+            this._activeCancel = cancel;
+            var uri = request.Encode(false, true);
             Console.WriteLine(uri);
 
             var ps = new ProcessStartInfo(uri)
@@ -87,81 +41,51 @@ namespace AnchorLinkUnityTransportSharp
 //            this.displayRequest(request).catch (cancel)
         }
 
-        public void onSuccess(SigningRequest request, TransactResult result)
+        public void OnSuccess(SigningRequest request, TransactResult result)
         {
-            if (request == this.activeRequest)
+            if (request == this._activeRequest)
             {
-//                this.clearTimers()
-                if (this.requestStatus)
+                if (this._requestStatus)
                 {
-//                    this.setupElements()
-/*                    const infoEl  = this.createEl({class: 'info'
-                    })
-                    const logoEl  = this.createEl({class: 'logo'
-                    })
-                    logoEl.classList.add('success')
-                    const infoTitle  = this.createEl({class: 'title', tag:
-                        'span', text:
-                        'Success!'
-                    })
-                    const subtitle  = request.isIdentity() ? 'Identity signed.' : 'Transaction signed.'
-                    const infoSubtitle  = this.createEl({class: 'subtitle', tag:
-                        'span', text:
-                        subtitle
-                    })
-                    infoEl.appendChild(infoTitle)
-                    infoEl.appendChild(infoSubtitle)
-                    emptyElement(this.requestEl)
-                    this.requestEl.appendChild(logoEl)
-                    this.requestEl.appendChild(infoEl)
-                    this.show()
-                    this.closeTimer = setTimeout(() =>
-                    {
-                        this.hide()
-                    }, 1.5 * 1000)
-                }
-                else
-                {
-                    this.hide()
-                }*/
+                    // TODO Timer, Visualization
                 }
             }
         }
 
-        public void onFailure(SigningRequest request, Exception exception)
+        public void OnFailure(SigningRequest request, Exception exception)
         {
-            if (request == this.activeRequest && exception is LinkException linkException && linkException.code != LinkErrorCode.E_CANCEL)
+            if (request == this._activeRequest && exception is LinkException linkException && linkException.Code != LinkErrorCode.ECancel)
             {
-//              this.clearTimers()
-                if (this.requestStatus)
-                {
+                if (this._requestStatus)
+                { 
+                    // TODO Timer, Visualization
                 }
             }
         }
 
-        public void onSessionRequest(LinkSession session, SigningRequest request, object cancel)
+        public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
         {
-            if (session.type == "fallback")
+            if (session is LinkFallbackSession)
             {
-                this.onRequest(request, null);  // TODO CancellationToken?
+                this.OnRequest(request, null);  // TODO CancellationToken?
                 return;
             }
 
-            this.activeRequest = request;
-            this.activeCancel = cancel;
+            this._activeRequest = request;
+            this._activeCancel = cancel;
         }
 
-        public async Task<SigningRequest> prepare(SigningRequest request, LinkSession session = null)
+        public async Task<SigningRequest> Prepare(SigningRequest request, LinkSession session = null)
         {
             //    this.showLoading()
-            if (!this.fuelEnabled || session == null || request.isIdentity())
+            if (!this._fuelEnabled || session == null || request.IsIdentity())
             {
                 // don't attempt to cosign id request or if we don't have a session attached
                 return request;
             }
             try
             {
-                var result = FuelSharp.fuel(request, session /*, this.updatePrepareStatus.bind(this)*/);
+                var result = FuelSharp.Fuel(request, session /*, this.updatePrepareStatus.bind(this)*/);
                 if (await Task.WhenAny(result, Task.Delay(3500)) != result)
                 {
                     throw new Exception("Fuel API timeout after 3500ms");
@@ -176,7 +100,7 @@ namespace AnchorLinkUnityTransportSharp
             return request;
         }
 
-        public void showLoading()
+        public void ShowLoading()
         {
             Console.WriteLine("loading ...");
         }

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
-using System.Text;
 using EosioSigningRequest;
 
 namespace AnchorLinkUnityTransportSharp
 {
     public class NetZlibProvider : IZlibProvider
     {
-        public byte[] deflateRaw(byte[] data)
+        public byte[] DeflateRaw(byte[] data)
         {
             using (var inputStream = new MemoryStream(data))
             {
@@ -26,7 +23,7 @@ namespace AnchorLinkUnityTransportSharp
 
         }
 
-        public byte[] inflateRaw(byte[] data)
+        public byte[] InflateRaw(byte[] data)
         {
             using (var inputStream = new MemoryStream(data))
             {

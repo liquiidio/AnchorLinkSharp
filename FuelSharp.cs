@@ -6,7 +6,7 @@ using AnchorLinkSharp;
 using EosioSigningRequest;
 using Newtonsoft.Json;
 
-namespace AnchorLinkUnityTransportSharp
+namespace Assets.Packages.AnchorLinkTransportSharp
 {
     public static class FuelSharp
     {

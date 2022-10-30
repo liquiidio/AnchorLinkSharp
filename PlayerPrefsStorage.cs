@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using AnchorLinkSharp;
+using UnityEngine;
 
-namespace AnchorLinkUnityTransportSharp
+namespace Assets.Packages.AnchorLinkTransportSharp
 {
     public class PlayerPrefsStorage : ILinkStorage
     {
@@ -11,24 +12,27 @@ namespace AnchorLinkUnityTransportSharp
             this._keyPrefix = keyPrefix;
         }
 
-        string StorageKey(string key)
+        private string StorageKey(string key)
         {
             return $"{this._keyPrefix}{key}";
         }
 
         public async Task Write(string key, string data)
         {
-            await Task.Run(() => { }); // PlayerPrefs.SetString(this.storageKey(key), data.ToString()); });
+            await Task.Run(() => { PlayerPrefs.SetString(this.StorageKey(key), data); });
         }
 
         public async Task<string> Read(string key)
         {
-            return await Task.Run(() => { return "";/*PlayerPrefs.GetString(this.storageKey(key))*/; });
+            return await Task.Run(() => PlayerPrefs.HasKey(this.StorageKey(key))
+                ? PlayerPrefs.GetString(this.StorageKey(key))
+                : null);
         }
 
         public async Task Remove(string key)
         {
-            await Task.Run(() => { /*PlayerPrefs.DeleteKey(this.storageKey(key));*/ });
+            if(PlayerPrefs.HasKey(this.StorageKey(key)))
+                await Task.Run(() => { PlayerPrefs.DeleteKey(this.StorageKey(key)); });
         }
     }
 }

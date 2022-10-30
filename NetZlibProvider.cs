@@ -2,7 +2,7 @@
 using System.IO.Compression;
 using EosioSigningRequest;
 
-namespace AnchorLinkUnityTransportSharp
+namespace Assets.Packages.AnchorLinkTransportSharp
 {
     public class NetZlibProvider : IZlibProvider
     {

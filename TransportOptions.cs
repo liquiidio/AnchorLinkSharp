@@ -1,4 +1,4 @@
-﻿namespace AnchorLinkUnityTransportSharp
+﻿namespace Assets.Packages.AnchorLinkTransportSharp
 {
     public class TransportOptions
     {

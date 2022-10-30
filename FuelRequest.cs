@@ -1,7 +1,7 @@
 ﻿using EosioSigningRequest;
 using EosSharp.Core.Api.v1;
 
-namespace AnchorLinkUnityTransportSharp
+namespace Assets.Packages.AnchorLinkTransportSharp
 {
     public class FuelRequest
     {

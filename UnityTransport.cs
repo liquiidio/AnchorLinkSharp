@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using AnchorLinkSharp;
 using EosioSigningRequest;
 
-namespace AnchorLinkUnityTransportSharp
+namespace Assets.Packages.AnchorLinkTransportSharp
 {
-    public class UnityTransport : ILinkTransport
+    public abstract class UnityTransport : ILinkTransport
     {
         private readonly bool _requestStatus;
         private readonly bool _fuelEnabled;
@@ -24,6 +24,8 @@ namespace AnchorLinkUnityTransportSharp
             this.Storage = new PlayerPrefsStorage(options.StoragePrefix);
         }
 
+        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L374
+        // and https://github.com/greymass/anchor-link-console-transport/blob/master/src/index.ts#L10
         public void OnRequest(SigningRequest request, Action<object> cancel)
         {
             this._activeRequest = request;
@@ -31,36 +33,16 @@ namespace AnchorLinkUnityTransportSharp
             var uri = request.Encode(false, true);
             Console.WriteLine(uri);
 
+            // possible that this doesn't work in Unity and
+            // Application.OpenURL(uri); has to be called instead
+
             var ps = new ProcessStartInfo(uri)
             {
                 UseShellExecute = true,
             };
             Process.Start(ps);
 
-            //Application.OpenURL(uri);
-//            this.displayRequest(request).catch (cancel)
-        }
-
-        public void OnSuccess(SigningRequest request, TransactResult result)
-        {
-            if (request == this._activeRequest)
-            {
-                if (this._requestStatus)
-                {
-                    // TODO Timer, Visualization
-                }
-            }
-        }
-
-        public void OnFailure(SigningRequest request, Exception exception)
-        {
-            if (request == this._activeRequest && exception is LinkException linkException && linkException.Code != LinkErrorCode.ECancel)
-            {
-                if (this._requestStatus)
-                { 
-                    // TODO Timer, Visualization
-                }
-            }
+            DisplayRequest(request);
         }
 
         public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
@@ -73,6 +55,12 @@ namespace AnchorLinkUnityTransportSharp
 
             this._activeRequest = request;
             this._activeCancel = cancel;
+
+            var subTitle = session.Metadata.ContainsKey("name")
+                ? $"Please open Anchor Wallet on “${session.Metadata["name"]}” to review and sign the transaction."
+                : "Please review and sign the transaction in the linked wallet.";
+            var title = "Sign";
+            this.ShowDialog(title, subTitle);
         }
 
         public async Task<SigningRequest> Prepare(SigningRequest request, LinkSession session = null)
@@ -100,23 +88,14 @@ namespace AnchorLinkUnityTransportSharp
             return request;
         }
 
-        public void ShowLoading()
-        {
-            Console.WriteLine("loading ...");
-        }
+        public abstract void ShowLoading();
 
+        public abstract void OnSuccess(SigningRequest request, TransactResult result);
 
-/*    private clearTimers()
-{
-    if (this.closeTimer)
-    {
-        clearTimeout(this.closeTimer)
-            this.closeTimer = undefined
-        }
-    if (this.countdownTimer)
-    {
-        clearTimeout(this.countdownTimer)
-            this.countdownTimer = undefined
-        }*/
+        public abstract void OnFailure(SigningRequest request, Exception exception);
+
+        public abstract void DisplayRequest(SigningRequest request);
+
+        public abstract void ShowDialog(string title = null, string subtitle = null, string type = null, Action action = null, object content = null);
     }
 }

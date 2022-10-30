@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AnchorLinkUnityTransportSharp
+namespace Assets.Packages.AnchorLinkTransportSharp
 {
     public class FuelResponse
     {

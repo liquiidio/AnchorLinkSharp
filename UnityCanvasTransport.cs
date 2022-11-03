@@ -36,6 +36,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
         #endregion
 
+        #region Other panels
+        [Header("Other panels")]
+        public GameObject LoadingPanel;
+        public GameObject SignPanel;
+        public GameObject SuccessPanel;
+        public GameObject FailurePanel;
+        #endregion
+
         public UnityCanvasTransport(TransportOptions options) : base(options)
         {
 
@@ -44,25 +52,27 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         public override void ShowLoading()
         {
-            throw new NotImplementedException();
+            LoadingPanel.SetActive(true);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
         public override void OnSuccess(SigningRequest request, TransactResult result)
         {
-            throw new NotImplementedException();
+            SuccessPanel.SetActive(true);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
         public override void OnFailure(SigningRequest request, Exception exception)
         {
-            throw new NotImplementedException();
+           FailurePanel.SetActive(true);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
-            throw new NotImplementedException();
+            LoginPanel.SetActive(true);
+            
+            ESRLink = request.Signature.Signature;  // Find out if this is the correct ESR link
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
@@ -74,6 +84,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
 
         #region Canvas function-calls
+
         public void OnLoginPanelCloseButtonPressed()
         {
             Debug.LogWarning("Close the login panel");
@@ -97,7 +108,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         {
             yield return new WaitForSeconds(0.1f);
 
-            yield return new WaitUntil(() => resizableQRCodePanel.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).FirstOrDefault().clip.name == "NormalState");
+            yield return new WaitUntil(() => resizableQRCodePanel.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).FirstOrDefault().clip?.name == "NormalState");
 
             resizableQRCodePanel.gameObject.SetActive(false);
         }
@@ -124,6 +135,26 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         public void OnLaunchAnchorButtonPressed()
         {
             Debug.LogWarning("Call open Anchor function in UnityTransport.cs");
+        }
+
+        public void OnCloseLoadingScreenButtonPressed()
+        {
+            Debug.LogWarning("Close loading screen button has been pressed!");
+        }
+
+        public void OnCloseSignScreenButtonPressed()
+        {
+            Debug.LogWarning("Close sign screen button has been pressed!");
+        }
+
+        public void OnCloseSuccessScreenButtonPressed()
+        {
+            Debug.LogWarning("Close success screen button has been pressed!");
+        }
+
+        public void OnCloseFailureScreenButtonPressed()
+        {
+            Debug.LogWarning("Close failure screen button has been pressed!");
         }
         #endregion
     }

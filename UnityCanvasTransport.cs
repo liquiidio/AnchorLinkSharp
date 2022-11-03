@@ -1,8 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AnchorLinkSharp;
 using EosioSigningRequest;
+using EosSharp.Core.Api.v1;
+using HyperionApiClient.Models;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +24,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         //private Timer _closeTimer;
 
 
+        AnchorLink _anchorLink;
+
+        LinkSession _linkSession;
+
+        private const string Identifier = "example";
 
         #region Login-Screen
         [Header("Login Screen Panel Components")]
@@ -49,6 +59,74 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
         }
 
+        public async void StartSession()
+        {
+            _anchorLink = new AnchorLink(new LinkOptions()
+            {
+                Transport = this,
+                ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+                Rpc = "https://eos.greymass.com",
+                ZlibProvider = new NetZlibProvider(),
+                Storage = new JsonLocalStorage()
+            });
+
+            try
+            {
+                await CreateSession();
+            }
+
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
+        }
+
+        public async Task CreateSession()
+        {
+            try
+            {
+                var loginResult = await _anchorLink.Login(Identifier);
+
+                _linkSession = loginResult.Session;
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError(ex);
+            }
+
+        }
+
+        // tries to restore session, called when document is loaded
+        public async Task RestoreSession()
+        {
+            var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
+            _linkSession = restoreSessionResult;
+            
+            if (_linkSession != null)
+                Debug.Log($"{_linkSession.Auth.actor} logged-in");
+        }
+
+        // transfer tokens using a session
+        public async Task Transfer()
+        {
+            var action = new EosSharp.Core.Api.v1.Action()
+            {
+                account = "eosio.token",
+                name = "transfer",
+                authorization = new List<PermissionLevel>() { _linkSession.Auth },
+                data = new Dictionary<string, object>()
+                {
+                    { "from", _linkSession.Auth.actor },
+                    { "to", "teamgreymass" },
+                    { "quantity", "0.0001 EOS" },
+                    { "memo", "Anchor is the best! Thank you <3" }
+                }
+            };
+
+            var transactResult = await _linkSession.Transact(new TransactArgs() { Action = action });
+            Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+        }
+
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         public override void ShowLoading()
         {
@@ -64,6 +142,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
         public override void OnFailure(SigningRequest request, Exception exception)
         {
+            Debug.LogWarning($"FailurePanel's name is { FailurePanel.name}");
+
            FailurePanel.SetActive(true);
         }
 
@@ -76,7 +156,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
-        public override void ShowDialog(string title = null, string subtitle = null, string type = null, Action action = null,
+        public override void ShowDialog(string title = null, string subtitle = null, string type = null, System.Action action = null,
             object content = null)
         {
             throw new NotImplementedException();
@@ -135,6 +215,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         public void OnLaunchAnchorButtonPressed()
         {
             Debug.LogWarning("Call open Anchor function in UnityTransport.cs");
+
+
         }
 
         public void OnCloseLoadingScreenButtonPressed()
@@ -150,11 +232,15 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         public void OnCloseSuccessScreenButtonPressed()
         {
             Debug.LogWarning("Close success screen button has been pressed!");
+            
+            SuccessPanel.SetActive(false);
         }
 
         public void OnCloseFailureScreenButtonPressed()
         {
             Debug.LogWarning("Close failure screen button has been pressed!");
+
+            FailurePanel.SetActive(false);
         }
         #endregion
     }

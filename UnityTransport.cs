@@ -89,6 +89,15 @@ namespace Assets.Packages.AnchorLinkTransportSharp
             return request;
         }
 
+        /// <summary>
+        /// Puts the passed string into the clipboard buffer to be pasted elsewhere.
+        /// </summary>
+        /// <param name="targetString">Text to be copied to the buffer</param>
+        public void CopyToClipboard(string targetString)
+        {
+            GUIUtility.systemCopyBuffer = targetString;
+        }
+
         public abstract void ShowLoading();
 
         public abstract void OnSuccess(SigningRequest request, TransactResult result);

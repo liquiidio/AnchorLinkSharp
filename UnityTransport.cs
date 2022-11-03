@@ -4,10 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using EosioSigningRequest;
+using UnityEngine;
 
 namespace Assets.Packages.AnchorLinkTransportSharp
 {
-    public abstract class UnityTransport : ILinkTransport
+    public abstract class UnityTransport : MonoBehaviour, ILinkTransport
     {
         private readonly bool _requestStatus;
         private readonly bool _fuelEnabled;

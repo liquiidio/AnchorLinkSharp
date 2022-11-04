@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using AnchorLinkSharp;
 using EosioSigningRequest;
 using EosSharp.Core.Api.v1;
@@ -24,15 +26,21 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         //private Timer _closeTimer;
 
 
-        AnchorLink _anchorLink;
+        private AnchorLink _anchorLink;
+        private LinkSession _linkSession;
+        private Coroutine _countdownTimerRoutine;
 
-        LinkSession _linkSession;
+        private int invokeCount = 0;
+        private const int maxCount = 10;
 
         private const string Identifier = "example";
 
         #region Login-Screen
         [Header("Login Screen Panel Components")]
-        public string ESRLink = ""; // Linke that will be converted to a QR code and can be copy from
+        public string ESRLink = ""; // Link that will be converted to a QR code and can be copy from
+        public TextMeshPro versionNumberText;
+        public string VersionURL = "https://www.github.com/greymass/anchor-link"; // Link that will show the url for the version
+        public string DownloadURL = "https://www.greymass.com/en/anchor/download"; // Link that will go to the download page for anchor
 
         public GameObject LoginPanel;   // The holding panel for the login details
         public GameObject HyperlinkCopiedNotificationPanel; // Confirmation panel for when the link has been successfully copied
@@ -46,10 +54,17 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
         #endregion
 
+        #region Sign and countdown timer
+        [Header("Countdown timer")]
+        public GameObject SignPanel;
+        public TextMeshProUGUI CountdownText;
+        //public Text countdownText;
+
+        #endregion
+
         #region Other panels
         [Header("Other panels")]
         public GameObject LoadingPanel;
-        public GameObject SignPanel;
         public GameObject SuccessPanel;
         public GameObject FailurePanel;
         #endregion
@@ -61,6 +76,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
         public async void StartSession()
         {
+            return;
             _anchorLink = new AnchorLink(new LinkOptions()
             {
                 Transport = this,
@@ -164,6 +180,16 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
 
         #region Canvas function-calls
+        public void OnVersionButtonPressed()
+        {
+            Application.OpenURL(VersionURL);
+        }
+
+        public void OnDownloadAnchorButtonPressed()
+        {
+            Application.OpenURL(DownloadURL);
+        }
+
 
         public void OnLoginPanelCloseButtonPressed()
         {
@@ -222,6 +248,65 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         public void OnCloseLoadingScreenButtonPressed()
         {
             Debug.LogWarning("Close loading screen button has been pressed!");
+        }
+
+        public void OnCloseTimeoutScreenButtonPressed()
+        {
+            Debug.LogWarning("Close timeout screen button has been pressed!");
+        }
+
+        public void StartTimer()
+        {
+            if (_countdownTimer != null)
+                _countdownTimer.Dispose();
+
+            SignPanel.SetActive(true);
+            CountdownText.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
+
+            // Create an AutoResetEvent to signal the timeout threshold in the
+            // timer callback has been reached.
+            var autoEvent = new AutoResetEvent(false);
+            
+            var outText = ("{0:h:mm:ss.fff} Creating timer.\n", @DateTime.Now);
+
+            Debug.LogWarning(outText);
+
+            _countdownTimer = new Timer(Checkstatus, autoEvent, 1000, 1000);
+            //_countdownTimer.Change(0, 1000);
+        }
+
+        private void Checkstatus(object stateInfo)
+        {
+            //AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+
+            //var outText = ("{0} Checking status {1,2}.",
+            //    DateTime.Now.ToString("h:mm:ss.fff"),
+            //(invokeCount).ToString());
+
+            //Debug.LogWarning(outText);
+
+            CountdownText.text = ($"Sign - {TimeSpan.FromSeconds(120 - invokeCount++):mm\\:ss}");
+
+
+            if (invokeCount >= maxCount)
+            {
+                Debug.Log($"Timer has maxed out. Max count is {maxCount}");
+                // Reset the counter and signal the waiting thread.
+                invokeCount = 0;
+                //autoEvent.Set();
+                _countdownTimer.Dispose();
+            }
+
+            //invokeCount++;
+        }
+        //public IEnumerator CountdownTimer()
+        //{
+        //    yield return new WaitForSeconds(0f);
+        //}
+
+        public void OnSignManuallyButtonPressed()
+        {
+            Debug.LogWarning("Sign manually button has been pressed!");
         }
 
         public void OnCloseSignScreenButtonPressed()

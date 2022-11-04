@@ -14,8 +14,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         private readonly bool _fuelEnabled;
         private SigningRequest _activeRequest;
         private object _activeCancel; //?: (reason: string | Error) => void
-        private Timer _countdownTimer;
-        private Timer _closeTimer;
+        internal Timer _countdownTimer;
+        internal Timer _closeTimer;
         public ILinkStorage Storage { get; }
 
         public UnityTransport(TransportOptions options)

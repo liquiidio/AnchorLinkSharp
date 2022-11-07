@@ -57,8 +57,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         #region Sign and countdown timer
         [Header("Countdown timer")]
         public GameObject SignPanel;
-        public TextMeshProUGUI CountdownText;
-        //public Text countdownText;
+        public TextMeshProUGUI CountdownTextGUI;
+        public string countdownText
+        {
+            get
+            {
+                return CountdownTextGUI.text;
+            }
+
+            set
+            {
+                CountdownTextGUI.text = value;
+            }
+        }
 
         #endregion
 
@@ -76,7 +87,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
         public async void StartSession()
         {
-            return;
+            //return;
             _anchorLink = new AnchorLink(new LinkOptions()
             {
                 Transport = this,
@@ -109,7 +120,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp
             {
                 Debug.LogError(ex);
             }
-
         }
 
         // tries to restore session, called when document is loaded
@@ -122,7 +132,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
                 Debug.Log($"{_linkSession.Auth.actor} logged-in");
         }
 
-        // transfer tokens using a session
+        // transfer tokens using a session  // For testing
         public async Task Transfer()
         {
             var action = new EosSharp.Core.Api.v1.Action()
@@ -168,7 +178,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         {
             LoginPanel.SetActive(true);
             
-            ESRLink = request.Signature.Signature;  // Find out if this is the correct ESR link
+            ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
@@ -257,11 +267,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
         public void StartTimer()
         {
+            return;
+
             if (_countdownTimer != null)
                 _countdownTimer.Dispose();
 
             SignPanel.SetActive(true);
-            CountdownText.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
+            CountdownTextGUI.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
 
             // Create an AutoResetEvent to signal the timeout threshold in the
             // timer callback has been reached.
@@ -285,7 +297,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
             //Debug.LogWarning(outText);
 
-            CountdownText.text = ($"Sign - {TimeSpan.FromSeconds(120 - invokeCount++):mm\\:ss}");
+            /*CountdownTextGUI.text*/
+            countdownText = ($"Sign - {TimeSpan.FromSeconds(120 - invokeCount++):mm\\:ss}");
 
 
             if (invokeCount >= maxCount)

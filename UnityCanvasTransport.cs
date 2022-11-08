@@ -179,6 +179,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp
             LoginPanel.SetActive(true);
             
             ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
+
+            var _tex = StringToQRCodeTexture2D(ESRLink);
+            StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite = 
+                ResizableQRCodeHolderTargetButton.GetComponent<Image>().sprite = 
+                    Sprite.Create(_tex, new Rect(0.0f, 0.0f, _tex.width, _tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226

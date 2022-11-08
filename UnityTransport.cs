@@ -6,6 +6,9 @@ using AnchorLinkSharp;
 using EosioSigningRequest;
 using UnityEngine;
 
+using QRCoder;
+using QRCoder.Unity;
+
 namespace Assets.Packages.AnchorLinkTransportSharp
 {
     public abstract class UnityTransport : MonoBehaviour, ILinkTransport
@@ -96,6 +99,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         public void CopyToClipboard(string targetString)
         {
             GUIUtility.systemCopyBuffer = targetString;
+        }
+
+        /// <summary>
+        /// Converts a string into a UnityEngine.Texture2D
+        /// </summary>
+        /// <param name="targetString"></param>
+        /// <returns></returns>
+        internal Texture2D StringToQRCodeTexture2D (string targetString)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(targetString, QRCodeGenerator.ECCLevel.Q);
+            UnityQRCode qrCode = new UnityQRCode(qrCodeData);
+           return qrCode.GetGraphic(20, "#FFFFFF", "#131B33");
         }
 
         public abstract void ShowLoading();

@@ -181,6 +181,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
             ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
 
             var _tex = StringToQRCodeTexture2D(ESRLink);
+
             StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite = 
                 ResizableQRCodeHolderTargetButton.GetComponent<Image>().sprite = 
                     Sprite.Create(_tex, new Rect(0.0f, 0.0f, _tex.width, _tex.height), new Vector2(0.5f, 0.5f), 100.0f);
@@ -272,55 +273,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp
 
         public void StartTimer()
         {
-            return;
 
-            if (_countdownTimer != null)
-                _countdownTimer.Dispose();
+            if (counterCoroutine != null)
+                StopCoroutine(counterCoroutine);
 
             SignPanel.SetActive(true);
             CountdownTextGUI.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
-
-            // Create an AutoResetEvent to signal the timeout threshold in the
-            // timer callback has been reached.
-            var autoEvent = new AutoResetEvent(false);
-            
-            var outText = ("{0:h:mm:ss.fff} Creating timer.\n", @DateTime.Now);
-
-            Debug.LogWarning(outText);
-
-            _countdownTimer = new Timer(Checkstatus, autoEvent, 1000, 1000);
-            //_countdownTimer.Change(0, 1000);
+            counterCoroutine = StartCoroutine(CountdownTimer(this, 2));
         }
-
-        private void Checkstatus(object stateInfo)
-        {
-            //AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
-
-            //var outText = ("{0} Checking status {1,2}.",
-            //    DateTime.Now.ToString("h:mm:ss.fff"),
-            //(invokeCount).ToString());
-
-            //Debug.LogWarning(outText);
-
-            /*CountdownTextGUI.text*/
-            countdownText = ($"Sign - {TimeSpan.FromSeconds(120 - invokeCount++):mm\\:ss}");
-
-
-            if (invokeCount >= maxCount)
-            {
-                Debug.Log($"Timer has maxed out. Max count is {maxCount}");
-                // Reset the counter and signal the waiting thread.
-                invokeCount = 0;
-                //autoEvent.Set();
-                _countdownTimer.Dispose();
-            }
-
-            //invokeCount++;
-        }
-        //public IEnumerator CountdownTimer()
-        //{
-        //    yield return new WaitForSeconds(0f);
-        //}
 
         public void OnSignManuallyButtonPressed()
         {

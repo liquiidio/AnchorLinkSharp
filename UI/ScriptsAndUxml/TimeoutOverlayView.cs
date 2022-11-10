@@ -13,10 +13,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
          */
         public QrCodeOverlayView QrCodeOverlayView;
 
-        /*
-         * Cloneable Controls
-         */
-
 
         /*
          * Child-Controls
@@ -33,10 +29,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
          * Fields, Properties
          */
 
-        //public TimeoutOverlayView(TransportOptions options) : base(options)
-        //{
-        //}
-
 
         void Start()
         {
@@ -45,7 +37,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
 
             _versionLabel = Root.Q<Label>("version-label");
 
-            //_versionLabel.text = Version;
+            _versionLabel.text = Version;
 
             BindButtons();
         }
@@ -55,10 +47,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
 
         private void BindButtons()
         {
-            _closeViewButton.clickable.clicked += () =>
-            {
-                this.Hide();
-            };
+            _closeViewButton.clickable.clicked += Hide;
 
             _signManuallyButton.clickable.clicked += () =>
             {

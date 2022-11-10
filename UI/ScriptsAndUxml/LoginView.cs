@@ -43,8 +43,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
             _loginButton = Root.Q<Button>("login-button");
             _versionLabel = Root.Q<Label>("version-label");
 
-            //_versionLabel.text = Version;
-
             BindButtons();
             Show(); 
         }
@@ -71,6 +69,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
 
         public void Rebind()
         {
+            _versionLabel.text = Version;
         }
 
         #endregion

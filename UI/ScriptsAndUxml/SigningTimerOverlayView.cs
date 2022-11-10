@@ -43,11 +43,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
         private DateTime _pendingUntil;
         private TimeSpan _remainingTime;
 
-        //public SigningTimerOverlayView(TransportOptions options) : base(options)
-        //{
-        //}
-
-
         void Start()
         {
             _closeViewButton = Root.Q<Button>("close-view-button");
@@ -56,11 +51,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
             _singingTimerLabel = Root.Q<Label>("anchor-link-title-label");
             _signManualLabel = Root.Q<Label>("anchor-link-manual-label");
 
-            //_versionLabel.text = Version;
+            _versionLabel.text = Version;
 
             BindButtons();
         }
-
 
         #region Button Binding
 
@@ -87,7 +81,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
         #endregion
 
         #region other
-
 
         public void StartCountdownTimer()
         {

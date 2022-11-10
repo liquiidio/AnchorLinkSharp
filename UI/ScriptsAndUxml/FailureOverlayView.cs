@@ -15,12 +15,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
          * Connected Views
          */
 
-       
-        
-        /*
-         * Cloneable Controls
-         */
-
 
         /*
          * Child-Controls
@@ -33,15 +27,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
         /*
          * Fields, Properties
          */
-
-        private readonly bool _requestStatus;
-        private readonly bool _fuelEnabled;
-        private SigningRequest _activeRequest;
-
-        //public FailureOverlayView(TransportOptions options) : base(options)
-        //{
-        //    this._requestStatus = options.RequestStatus != false;
-        //}
 
         void Start()
         {
@@ -57,10 +42,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
 
         private void BindButtons()
         {
-            _closeViewButton.clickable.clicked += () =>
-            {
-                Hide();
-            };
+            _closeViewButton.clickable.clicked += Hide;
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
@@ -71,12 +53,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
 
         #region other
 
-        //public override void OnFailure(SigningRequest request, Exception exception) 
-        //{
-        //    //base.OnFailure(request, exception);
-        //    Show();
-        //    Debug.Log("########################################");
-        //}
         #endregion
 
     }

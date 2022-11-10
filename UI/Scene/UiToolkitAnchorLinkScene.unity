@@ -356,7 +356,7 @@ GameObject:
   m_Component:
   - component: {fileID: 825398227}
   m_Layer: 0
-  m_Name: ----- Custom Views -----------------------------------------------------------------------
+  m_Name: ----- Custom UI -----------------------------------------------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -553,14 +553,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e66fe7a51846b27449f9b77fa74319bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SuccessOverlayView: {fileID: 0}
+  SuccessOverlayView: {fileID: 290643064}
   FailureOverlayView: {fileID: 941645872}
-  TimeoutOverlayView: {fileID: 2012396865}
-  SigningTimerOverlayView: {fileID: 1976276267}
   QrCodeOverlayView: {fileID: 1929126770}
   LoadingOverlayView: {fileID: 1828030223}
-  VersionUrl: 
-  DownloadAnchorUrl: 
+  SigningTimerOverlayView: {fileID: 1976276267}
+  TimeoutOverlayView: {fileID: 2012396865}
 --- !u!4 &1105323567
 Transform:
   m_ObjectHideFlags: 0
@@ -586,7 +584,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1205273766}
   m_Layer: 0
-  m_Name: ----- Overlay Views -----------------------------------------------------------------------
+  m_Name: ----- Overlay UI -----------------------------------------------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -906,8 +904,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VersionUrl: 
   DownloadAnchorUrl: 
-  TimeoutOverlayView: {fileID: 0}
-  QrCodeOverlayView: {fileID: 0}
+  TimeoutOverlayView: {fileID: 2012396865}
+  QrCodeOverlayView: {fileID: 1929126770}
 --- !u!1 &2012396863
 GameObject:
   m_ObjectHideFlags: 0

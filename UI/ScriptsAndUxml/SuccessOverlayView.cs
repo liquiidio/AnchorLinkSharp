@@ -45,10 +45,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml
 
         private void BindButtons()
         {
-            _closeViewButton.clickable.clicked += () =>
-            {
-                Hide();
-            };
+            _closeViewButton.clickable.clicked += Hide;
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {

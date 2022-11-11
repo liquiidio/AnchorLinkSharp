@@ -19,6 +19,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         private readonly bool _fuelEnabled;
         private SigningRequest _activeRequest;
         private object _activeCancel; //?: (reason: string | Error) => void
+
+        internal ProcessStartInfo Ps;
         //internal Timer _countdownTimer;
         //internal Timer _closeTimer;
         public ILinkStorage Storage { get; }
@@ -44,11 +46,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp
             // possible that this doesn't work in Unity and
             // Application.OpenURL(uri); has to be called instead
 
-            var ps = new ProcessStartInfo(uri)
+            Ps = new ProcessStartInfo(uri)
             {
                 UseShellExecute = true,
             };
-            Process.Start(ps);
+            //Process.Start(ps);
 
             DisplayRequest(request);
         }
@@ -193,13 +195,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp
                 _newCounter += Time.deltaTime;
 
 
-                if (subClass is UnityCanvasTransport)
-                    (subClass as UnityCanvasTransport).countdownText = $"Sign - {TimeSpan.FromSeconds(120 - _newCounter):mm\\:ss}";
+                if (subClass is ExampleUnityCanvasTransport)
+                    (subClass as ExampleUnityCanvasTransport).CountdownText = $"Sign - {TimeSpan.FromSeconds((counterDuration * 60) - _newCounter):mm\\:ss}";
 
                 else if (subClass is UnityUiToolkitTransport)
                 {
                     // @Evans write to a variable string from the UnityUiToolkitTransport 
-                    // and assign string x =  $"Sign - {TimeSpan.FromSeconds(120 - _newCounter):mm\\:ss}";
+                    // and assign string x =  $"Sign - {TimeSpan.FromSeconds((counterDuration * 60)  - _newCounter):mm\\:ss}";
                 }
                 yield return null;
             }

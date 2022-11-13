@@ -1,7 +1,17 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 using AnchorLinkSharp;
 using EosioSigningRequest;
+using EosSharp.Core.Api.v1;
+using HyperionApiClient.Models;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Packages.AnchorLinkTransportSharp
 {
@@ -14,6 +24,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         //private object _activeCancel; //?: (reason: string | Error) => void
         //private Timer _countdownTimer;
         //private Timer _closeTimer;
+
         public UnityCanvasTransport(TransportOptions options) : base(options)
         {
 
@@ -22,29 +33,25 @@ namespace Assets.Packages.AnchorLinkTransportSharp
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         public override void ShowLoading()
         {
-            throw new NotImplementedException();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
         public override void OnSuccess(SigningRequest request, TransactResult result)
         {
-            throw new NotImplementedException();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
         public override void OnFailure(SigningRequest request, Exception exception)
         {
-            throw new NotImplementedException();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
-            throw new NotImplementedException();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
-        public override void ShowDialog(string title = null, string subtitle = null, string type = null, Action action = null,
+        public override void ShowDialog(string title = null, string subtitle = null, string type = null, System.Action action = null,
             object content = null)
         {
             throw new NotImplementedException();

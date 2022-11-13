@@ -1,0 +1,96 @@
+VisualElement {
+}
+
+.anchor-link-button {
+    width: 300px;
+    height: 59px;
+    opacity: 1;
+}
+
+.anchor-link-button :hover {
+    width: auto;
+    height: auto;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    background-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.anchor-link-button:active {
+}
+
+.anchor-link-button:focus {
+}
+
+.anchor-link-button:selected {
+}
+
+.anchor-link-button:checked {
+}
+
+.anchor-close-button {
+    background-image: none;
+    background-color: rgba(88, 88, 88, 0);
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    width: 40px;
+    height: 40px;
+}
+
+.anchor-close-button:hover {
+    background-color: rgb(0, 0, 0);
+    width: 40px;
+    height: 40px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.anchor-launch-button {
+    width: 300px;
+    height: 59px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/UI/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.anchor-launch-button:hover {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(255, 254, 255);
+    border-right-color: rgb(255, 254, 255);
+    border-top-color: rgb(255, 254, 255);
+    border-bottom-color: rgb(255, 254, 255);
+    width: 300px;
+    height: 59px;
+    flex-grow: 0;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/UI/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.version-visibility {
+    opacity: 1;
+    color: rgb(56, 60, 70);
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/UI/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.version-visibility:hover {
+    color: rgb(84, 106, 175);
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/UI/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}

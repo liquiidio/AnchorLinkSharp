@@ -48,6 +48,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             Debug.Log("OnSuccess");
             SuccessOverlayView.Show();
             QrCodeOverlayView.Hide();
+            // Any other View must be closed as well!
+            // Had a few cases where multiple Views where active and shown at the same time
+            // Add a Method that ensures that always only one View is shown!
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
@@ -73,6 +76,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             else
             {
                 Application.OpenURL(esrLinkUri);
+                // SigningOverlayView or however it's called is shown
+                // ( the one with the Timer)
             }
             Debug.Log("DisplayRequest");
         }

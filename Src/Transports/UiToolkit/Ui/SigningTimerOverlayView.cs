@@ -67,7 +67,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             {
                 Hide();
                 QrCodeOverlayView.Show();
-                QrCodeOverlayView.SignManual();
+                QrCodeOverlayView.SignManually();
             });
 
         }

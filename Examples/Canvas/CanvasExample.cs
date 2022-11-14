@@ -27,7 +27,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
         // the session instance, either restored using link.restoreSession() or created with link.login()
         private LinkSession _session;
 
-        public void Start()
+        public async void StartSession()
         {
             _link = new AnchorLink(new LinkOptions()
             {
@@ -41,6 +41,16 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 //    nodeUrl: 'https://eos.greymass.com',
                 //}]
             });
+
+            await Login();
+        }
+
+        // login and store session if sucessful
+        public async Task Login()
+        {
+            var loginResult = await _link.Login(Identifier);
+            _session = loginResult.Session;
+            DidLogin();
         }
 
         // tries to restore session, called when document is loaded
@@ -50,14 +60,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
             _session = restoreSessionResult;
             if (_session != null)
                 DidLogin();
-        }
-
-        // login and store session if sucessful
-        public async Task Login()
-        {
-            var loginResult = await _link.Login(Identifier);
-            _session = loginResult.Session;
-            DidLogin();
         }
 
         // logout and remove session from storage

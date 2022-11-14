@@ -11,21 +11,20 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 {
     public class UnityCanvasTransport : UnityTransport
     {
-        #region Login-Screen
-        [Header("Login Screen Panel Components")]
-        const string VersionURL = "https://www.github.com/greymass/anchor-link"; // Link that will show the url for the version
-        const string DownloadURL = "https://www.greymass.com/en/anchor/download"; // Link that will go to the download page for anchor
-
+        #region Login-Panel
+        [Header("Login Panel Panel Components")]
         public GameObject LoginPanel;   // The holding panel for the login details
         public GameObject HyperlinkCopiedNotificationPanel; // Confirmation panel for when the link has been successfully copied
 
         //Buttons
-        public Button CloseLoginScreenButton;
+        public Button CloseLoginPanelButton;
         public Button StaticQRCodeHolderTargetButton;
         public Button ResizableQRCodeHolderTargetButton;
         public Button HyperlinkCopyButton;
         public Button LaunchAnchorButton;
 
+        const string VersionURL = "https://www.github.com/greymass/anchor-link";    // Link that will show the url for the version
+        const string DownloadURL = "https://www.greymass.com/en/anchor/download";   // Link that will go to the download page for anchor
         #endregion
 
         #region Sign and countdown timer
@@ -52,6 +51,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         public GameObject LoadingPanel;
         public GameObject SuccessPanel;
         public GameObject FailurePanel;
+        public GameObject TimeoutPanel;
         #endregion
 
         public UnityCanvasTransport(TransportOptions options) : base(options)
@@ -166,6 +166,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             // TODO, pass this string from other View, don't work with class-level variable
             //CopyToClipboard(ESRLink);
 
+            StopCoroutine(nameof(ToggleHyperlinkCopyButton_Delayed));
             StartCoroutine(ToggleHyperlinkCopyButton_Delayed());
         }
 
@@ -183,14 +184,16 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             Application.OpenURL("");// TODO
         }
 
-        public void OnCloseLoadingScreenButtonPressed()
+        public void OnCloseLoadingPanelButtonPressed()
         {
-            Debug.LogWarning("Close loading screen button has been pressed!");
+            Debug.LogWarning("Close loading Panel button has been pressed!");
+            LoadingPanel.gameObject.SetActive(false);
         }
 
-        public void OnCloseTimeoutScreenButtonPressed()
+        public void OnCloseTimeoutPanelButtonPressed()
         {
-            Debug.LogWarning("Close timeout screen button has been pressed!");
+            Debug.LogWarning("Close timeout Panel button has been pressed!");
+            TimeoutPanel.gameObject.SetActive(false);
         }
 
         public void StartTimer()
@@ -209,23 +212,24 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             Debug.LogWarning("Sign manually button has been pressed!");
         }
 
-        public void OnCloseSignScreenButtonPressed()
+        public void OnCloseSignPanelButtonPressed()
         {
-            Debug.LogWarning("Close sign screen button has been pressed!");
+            Debug.LogWarning("Close sign Panel button has been pressed!");
+            SignPanel.gameObject.SetActive(false);
         }
 
-        public void OnCloseSuccessScreenButtonPressed()
+        public void OnCloseSuccessPanelButtonPressed()
         {
-            Debug.LogWarning("Close success screen button has been pressed!");
+            Debug.LogWarning("Close success Panel button has been pressed!");
 
             SuccessPanel.SetActive(false);
 
-            LoginPanel.SetActive(false);
+            //LoginPanel.SetActive(false);
         }
 
-        public void OnCloseFailureScreenButtonPressed()
+        public void OnCloseFailurePanelButtonPressed()
         {
-            Debug.LogWarning("Close failure screen button has been pressed!");
+            Debug.LogWarning("Close failure Panel button has been pressed!");
 
             FailurePanel.SetActive(false);
         }

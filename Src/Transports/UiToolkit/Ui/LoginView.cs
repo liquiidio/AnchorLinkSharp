@@ -49,10 +49,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _loginButton = Root.Q<Button>("login-button");
             _versionLabel = Root.Q<Label>("version-label");
 
-            _versionLabel.text = Version;
+            _versionLabel.text = UnityUiToolkitTransport.Version;
 
 
-            //Transport = UnityUiToolkitTransport;
+            //Transport = UiToolkitTransport;
 
             //_link = new AnchorLink(new LinkOptions()
             //{
@@ -94,7 +94,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(VersionUrl);
+                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
             });
         }
         #endregion

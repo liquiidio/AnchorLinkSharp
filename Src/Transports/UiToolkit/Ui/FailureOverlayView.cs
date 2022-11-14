@@ -32,7 +32,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _titleLabel = Root.Q<Label>("anchor-link-title-label");
             _subtitleLabel = Root.Q<Label>("anchor-link-subtitle-label");
 
-            _versionLabel.text = Version;
+            _versionLabel.text = UnityUiToolkitTransport.Version;
 
             BindButtons();
         }
@@ -45,7 +45,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(VersionUrl);
+                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
             });
         }
         #endregion

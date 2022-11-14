@@ -34,6 +34,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private Label _subtitleLabel;
 
 
+
         /*
          * Fields, Properties
          */
@@ -53,6 +54,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _alreadyCopied = Root.Q<VisualElement>("already-copied");
             _readyToCopy = Root.Q<VisualElement>("ready-to-copy");
 
+            _versionLabel.text = UnityUiToolkitTransport.Version;
+
             BindButtons();
         }
 
@@ -64,17 +67,29 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _downloadNowLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(DownloadAnchorUrl);
+                Application.OpenURL(url: UnityUiToolkitTransport.DownloadAnchorUrl);
             });
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(VersionUrl);
+                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
             });
 
             _copyLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                //UiToolkitTransport.CopyToClipboard(UiToolkitTransport.ESRLink);
+                UiToolkitTransport.CopyToClipboard(UiToolkitTransport.ESRLink);
+                StartCoroutine(SetText());
+            });
+
+            _qrCodeBox.RegisterCallback<ClickEvent>(evt =>
+            {
+                if (_qrCodeBox.style.scale.Equals(new StyleScale(new Scale(new Vector3(1, 1)))))
+                {
+                    //_qrCodeBox.style.transitionDuration = new StyleList<TimeValue>(new List<TimeValue>(2));
+                    _qrCodeBox.style.scale = new StyleScale(new Scale(new Vector3(2, 2)));
+                }
+                else _qrCodeBox.style.scale = new StyleScale(new Scale(new Vector3(1, 1)));
+
                 StartCoroutine(SetText());
             });
 
@@ -90,8 +105,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         public void Rebind(Texture2D qrCodeTexture2D, bool isLogin, bool isSignManually)
         {
-            _versionLabel.text = Version;
-
             _qrCodeBox.style.backgroundImage = qrCodeTexture2D;
 
             if (isLogin)
@@ -104,7 +117,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                 _loginTitleLabel.text = "Sign Manually";
                 _subtitleLabel.text = "Want to sign with another device or didn’t get the signing request in your wallet, scan this QR or copy request and paste in app.";
             }
-
         }
 
         #endregion

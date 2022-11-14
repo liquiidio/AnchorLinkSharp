@@ -8,8 +8,8 @@ using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using EosioSigningRequest;
 using UnityEngine;
-//using ZXing;
-//using ZXing.QrCode;
+using ZXing;
+using ZXing.QrCode;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Src
 {
@@ -123,19 +123,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
 
         private Color32[] StringEncoder(string textForEncoding, int width, int height)
         {
-            //var _barcodeWriter = new BarcodeWriter
-            //{
-            //    Format = BarcodeFormat.QR_CODE,
+            var _barcodeWriter = new BarcodeWriter
+            {
+                Format = BarcodeFormat.QR_CODE,
 
-            //    Options = new QrCodeEncodingOptions
-            //    {
-            //        Width = width,
-            //        Height = height
-            //    }
-            //};
+                Options = new QrCodeEncodingOptions
+                {
+                    Width = width,
+                    Height = height
+                }
+            };
 
-            //Color32[] _color32Array = _barcodeWriter.Write(textForEncoding);
-            Color32[] _color32Array = new Color32[0];
+            Color32[] _color32Array = _barcodeWriter.Write(textForEncoding);
+
 
 
             // Attempt to change the color of the QRCode will be done later...
@@ -200,7 +200,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
                         transport.CountdownText = $"Sign - {TimeSpan.FromSeconds((counterDuration * 60) - _newCounter):mm\\:ss}";
                         break;
                     case UnityUiToolkitTransport:
-                        // @Evans write to a variable string from the UnityUiToolkitTransport 
+                        // @Evans write to a variable string from the UiToolkitTransport 
                         // and assign string x =  $"Sign - {TimeSpan.FromSeconds((counterDuration * 60)  - _newCounter):mm\\:ss}";
                         break;
                 }

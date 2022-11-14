@@ -27,7 +27,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel = Root.Q<Label>("version-label");
 
-            _versionLabel.text = Version;
+            _versionLabel.text = UnityUiToolkitTransport.Version;
 
             BindButtons();
         }
@@ -40,7 +40,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(VersionUrl);
+                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
             });
 
         }

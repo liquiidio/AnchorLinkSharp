@@ -16,21 +16,21 @@ public class ScreenBase : MonoBehaviour
     internal UIDocument Screen;
     internal VisualElement Root;
 
-    public string VersionUrl;
-    public string DownloadAnchorUrl;
+    //public string VersionUrl;
+    //public string DownloadAnchorUrl;
 
     // the session instance, either restored using link.restoreSession() or created with link.login()
     public LinkSession Session;
 
-    public const string Version = "3.3.0 (3.4.1)";
+    //public const string Version = "3.3.0 (3.4.1)";
 
     void Awake()
     {
         Screen = GetComponent<UIDocument>();
         Root = Screen.rootVisualElement;
 
-        VersionUrl = "https://github.com/greymass/anchor-link";
-        DownloadAnchorUrl = "https://greymass.com/anchor/";
+        //VersionUrl = "https://github.com/greymass/anchor-link";
+        //DownloadAnchorUrl = "https://greymass.com/anchor/";
         
         Hide();
     }

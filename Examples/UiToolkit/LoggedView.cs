@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp;
+using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json;
@@ -39,7 +40,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
         /*
          * Fields, Properties
          */
-        [SerializeField] internal Src.Transports.UiToolkit.UnityUiToolkitTransport UnityUiToolkitTransport;
+        [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
 
 
         void Start()
@@ -54,7 +55,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
             _memoTextField = Root.Q<TextField>("memo-text-field");
             _quantityTextField = Root.Q<TextField>("quantity-text-field");
 
-            _versionLabel.text = Version;
+            _versionLabel.text = UnityUiToolkitTransport.Version;
 
             BindButtons();
             SetTransferAccountText();
@@ -66,36 +67,36 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
         {
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(VersionUrl);
+                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
             });
 
             _transferTokenButton.clickable.clicked += async () =>
             {
-                //var action = new EosSharp.Core.Api.v1.Action()
-                //{
-                //    account = "eosio.token",
-                //    name = "transfer",
-                //    authorization = new List<PermissionLevel>() { UnityUiToolkitTransport.LinkSession.Auth},
-                //    data = new Dictionary<string, object>()
-                //    {
-                //        { "from", UnityUiToolkitTransport.LinkSession.Auth.actor },
-                //        { "to", _toTextField.value },
-                //        { "quantity", _quantityTextField.value},
-                //        { "memo", _memoTextField.value }
-                //    }
-                //};
-                //try
-                //{
-                //    print("#########################################");
-                //    await UnityUiToolkitTransport.Transfer(action);
-                    
-                //    //UnityUiToolkitTransport.StartAnchorDesktop();
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine(e);
-                //    throw;
-                //}
+                var action = new EosSharp.Core.Api.v1.Action()
+                {
+                    account = "eosio.token",
+                    name = "transfer",
+                    authorization = new List<PermissionLevel>() { UiToolkitTransport.LinkSession.Auth },
+                    data = new Dictionary<string, object>()
+                    {
+                        { "from", UiToolkitTransport.LinkSession.Auth.actor },
+                        { "to", _toTextField.value },
+                        { "quantity", _quantityTextField.value},
+                        { "memo", _memoTextField.value }
+                    }
+                };
+                try
+                {
+                    print("#########################################");
+                    await UiToolkitTransport.Transfer(action);
+
+                    //UiToolkitTransport.StartAnchorDesktop();
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                    throw;
+                }
             };
 
         }
@@ -105,8 +106,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
 
         public void Rebind()
         {
-            //_fromTextField.value = UnityUiToolkitTransport.LinkSession.Auth.actor;
-            //_accountLabel.text = UnityUiToolkitTransport.LinkSession.Auth.actor;
+            _fromTextField.value = UiToolkitTransport.LinkSession.Auth.actor;
+            _accountLabel.text = UiToolkitTransport.LinkSession.Auth.actor;
 
         }
 

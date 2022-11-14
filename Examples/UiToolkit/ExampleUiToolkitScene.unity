@@ -215,9 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f020345e0c7b74994fe857345e9065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VersionUrl: 
-  DownloadAnchorUrl: 
-  UnityUiToolkitTransport: {fileID: 1058237616}
+  UiToolkitTransport: {fileID: 1058237616}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,8 +616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07717490f219fa644ae31ca67a3432c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VersionUrl: 
-  DownloadAnchorUrl: 
   Transport: {fileID: 0}
   UnityUiToolkitTransport: {fileID: 1058237616}
   LoggedView: {fileID: 291586823}
@@ -683,6 +679,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1058237616}
     - target: {fileID: 2825780272849794676, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: UiToolkitTransport
+      value: 
+      objectReference: {fileID: 1058237616}
+    - target: {fileID: 2825780272934037575, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: UiToolkitTransport
+      value: 
+      objectReference: {fileID: 1058237616}
+    - target: {fileID: 2825780272970268717, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
       propertyPath: UiToolkitTransport
       value: 
       objectReference: {fileID: 1058237616}

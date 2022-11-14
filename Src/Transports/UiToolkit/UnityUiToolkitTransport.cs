@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
@@ -35,7 +36,12 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         // the session instance, either restored using link.restoreSession() or created with link.login()
         public LinkSession LinkSession;
 
+        public string ESRLink = ""; // Link that will be converted to a QR code and can be copy from
+
         public const string Version = "3.3.0 (3.4.1)";
+
+        public ScreenBase ActiveScreen;
+        private bool _transitioningScreens;
 
         public UnityUiToolkitTransport(TransportOptions options) : base(options)
         {
@@ -72,6 +78,33 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             }
         }
 
+        public IEnumerator<float> TransitionScreens(ScreenBase to)
+        {
+            if (ActiveScreen == to)
+                yield break;
+
+            var i = 0;
+            while (_transitioningScreens && i < 100)
+            {
+                yield return(0.1f);
+                i++;
+            }
+
+            _transitioningScreens = true;
+
+            ActiveScreen?.Hide();
+            to?.Show();
+
+            ActiveScreen = to;
+            _transitioningScreens = false;
+
+            if (to == null)
+            {
+                Debug.Log("missing the screen");
+            }
+
+        }
+
         // tries to restore session, called when document is loaded
         public async Task RestoreSession()
         {
@@ -97,18 +130,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         public override void ShowLoading()
         {
             Debug.Log("ShowLoading");
-            LoadingOverlayView.Show();
+
+            StartCoroutine(TransitionScreens(LoadingOverlayView));
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
         public override void OnSuccess(SigningRequest request, TransactResult result)
         {
-            SuccessOverlayView.Show();
+            Debug.Log("OnSuccess");
+
+            StartCoroutine(TransitionScreens(SuccessOverlayView));
             SuccessOverlayView.CloseTimer();
 
-            Debug.Log("OnSuccess");
-            SuccessOverlayView.Show();
-            QrCodeOverlayView.Hide();
+            //QrCodeOverlayView.Hide();
             // Any other View must be closed as well!
             // Had a few cases where multiple Views where active and shown at the same time
             // Add a Method that ensures that always only one View is shown!
@@ -118,7 +152,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         public override void OnFailure(SigningRequest request, Exception exception)
         {
             Debug.Log("OnFailure");
-            FailureOverlayView.Show();
+
+            StartCoroutine(TransitionScreens(FailureOverlayView));
+            FailureOverlayView.ExceptionHandler(exception);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
@@ -131,20 +167,23 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
             if (request.IsIdentity())
             {
-                //ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
-                //var qrCodeTexture = StringToQRCodeTexture2D(ESRLink);
-
-                QrCodeOverlayView.Show();
-                //QrCodeOverlayView.Rebind(qrCodeTexture, true, false);
                 // LOGIN!
                 // Show View with QR-Code and "Launch Anchor" Button
+                ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
+                var qrCodeTexture = StringToQRCodeTexture2D(ESRLink);
+
+                StartCoroutine(TransitionScreens(QrCodeOverlayView));
+                QrCodeOverlayView.Rebind(qrCodeTexture, true, false);
+
             }
             else
             {
                 Application.OpenURL(esrLinkUri);
-                // SigningOverlayView or however it's called is shown
-                // ( the one with the Timer)
-                SigningTimerOverlayView.Show();
+  
+                StartCoroutine(TransitionScreens(LoadingOverlayView));
+
+                StartCoroutine(TransitionScreens(SigningTimerOverlayView));
+                SigningTimerOverlayView.StartCountdownTimer();
             }
             Debug.Log("DisplayRequest");
         }

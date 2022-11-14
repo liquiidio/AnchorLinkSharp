@@ -31,6 +31,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private DateTime _pendingUntil;
         private TimeSpan _remainingTime;
 
+        [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
         void Start()
         {
             _closeViewButton = Root.Q<Button>("close-view-button");
@@ -39,7 +40,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _singingTimerLabel = Root.Q<Label>("anchor-link-title-label");
             _signManualLabel = Root.Q<Label>("anchor-link-manual-label");
 
-            _versionLabel.text = Version;
+            _versionLabel.text = UnityUiToolkitTransport.Version;
 
             BindButtons();
         }
@@ -52,14 +53,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(VersionUrl);
+                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
             });
 
             _signManualLabel.RegisterCallback<ClickEvent>(evt =>
             {
                 Hide();
-                //QrCodeOverlayView.Show();
-                //QrCodeOverlayView.SignManual();
+                //UiToolkitTransport.QrCodeOverlayView.Rebind();
             });
 
         }
@@ -80,8 +80,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                 _remainingTime = _pendingUntil - DateTime.UtcNow;
                 _singingTimerLabel.text = $"Sign - {_remainingTime.ToString("mm\\:ss")}";
             }
-            //else
-                //TimeoutOverlayView.Show();
+            else
+               UiToolkitTransport.TimeoutOverlayView.Show();
 
             _singingTimerLabel.schedule.Execute((ts) => ScheduleTimer(ts, _singingTimerLabel));
         }

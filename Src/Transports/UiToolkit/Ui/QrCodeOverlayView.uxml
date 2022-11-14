@@ -16,7 +16,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="anchor-link-info" style="width: 300px; height: 401px;">
                     <ui:VisualElement name="anchor-link-qr" style="width: 300px; height: 300px; border-left-color: rgb(38, 45, 67); border-right-color: rgb(38, 45, 67); border-top-color: rgb(38, 45, 67); border-bottom-color: rgb(38, 45, 67); background-color: rgb(19, 27, 51); margin-top: 21px; border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; padding-left: 11px; padding-right: 11px; padding-top: 11px; padding-bottom: 11px; border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px; transition-timing-function: ease-in-out; transition-duration: 400ms; translate: 1px 0;">
-                        <ui:VisualElement name="qr-code-box" style="width: 270px; height: 270px; background-color: rgb(255, 255, 255);" />
+                        <ui:VisualElement name="qr-code-box" style="width: 270px; height: 270px; background-color: rgb(255, 255, 255); scale: 1 1; position: relative;" />
                         <ui:VisualElement name="anchor-link-copy" style="position: absolute; bottom: -10px; left: 0; width: 293px; align-items: center; opacity: 1; -unity-text-align: upper-center; height: 17.67px; transition-duration: 200ms; transition-timing-function: ease-in-out; transition-delay: 400ms;">
                             <ui:VisualElement style="flex-direction: row; justify-content: center; align-items: center;">
                                 <ui:VisualElement name="ready-to-copy" style="display: flex; visibility: visible;">

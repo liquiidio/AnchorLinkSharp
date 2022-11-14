@@ -431,6 +431,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UiToolkitTransport
       objectReference: {fileID: 0}
+    - target: {fileID: 2825780271992535464, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2825780271992535465, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
       propertyPath: m_RootOrder
       value: 2

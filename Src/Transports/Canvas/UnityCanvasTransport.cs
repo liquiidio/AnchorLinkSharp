@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using AnchorLinkSharp;
+using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using EosioSigningRequest;
 using TMPro;
 using UnityEngine;
@@ -11,10 +12,17 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 {
     public class UnityCanvasTransport : UnityTransport
     {
+        //private string ESRLinkUrl = "";
+
+        internal GameObject currentPanel;
+
         #region Login-Panel
         [Header("Login Panel Panel Components")]
         public GameObject LoginPanel;   // The holding panel for the login details
         public GameObject HyperlinkCopiedNotificationPanel; // Confirmation panel for when the link has been successfully copied
+
+        public GameObject LoginSubpanel;
+        public GameObject ManuallySignSubpanel;
 
         //Buttons
         public Button CloseLoginPanelButton;
@@ -54,6 +62,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         public GameObject TimeoutPanel;
         #endregion
 
+        private void Awake()
+        {
+            ClearAllLinks();
+
+            DisableAllPanels();
+        }
+
         public UnityCanvasTransport(TransportOptions options) : base(options)
         {
 
@@ -65,7 +80,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         {
             Debug.Log("ShowLoading");
 
-            LoadingPanel.SetActive(true);
+            SwitchToNewPanel(LoadingPanel);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
@@ -73,7 +88,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         {
             Debug.Log("OnSuccess");
 
-            SuccessPanel.SetActive(true);
+            SwitchToNewPanel(SuccessPanel);
+
+            ClearAllLinks();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
@@ -83,20 +100,26 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
             Debug.LogWarning($"FailurePanel's name is {FailurePanel.name}");
 
-            FailurePanel.SetActive(true);
+            SwitchToNewPanel(FailurePanel);
+
+            ClearAllLinks();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
-            Debug.Log("DisplayRequest");
-            var esrLinkUri = request.Encode(false, false);  // This returns ESR link to be converted
+            var ESRLinkUrl = request.Encode(false, false);  // This returns ESR link to be converted
 
             if (request.IsIdentity())
             {
-                LoginPanel.SetActive(true);
+                LoginSubpanel.SetActive(true);
+                ManuallySignSubpanel.SetActive(false);
+                SwitchToNewPanel(LoginPanel);
 
-                var _tex = StringToQRCodeTexture2D(esrLinkUri);
+                var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, new Color32(19, 27, 51, 255), Color.white);
+
+                StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
+                   ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = true;
 
                 StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite =
                     ResizableQRCodeHolderTargetButton.GetComponent<Image>().sprite =
@@ -104,8 +127,30 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             }
             else
             {
-                Application.OpenURL(esrLinkUri);
+                Application.OpenURL(ESRLinkUrl);
+
+                var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, new Color32(19, 27, 51, 255), Color.white);
+
+                StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite =
+                    ResizableQRCodeHolderTargetButton.GetComponent<Image>().sprite =
+                        Sprite.Create(_tex, new Rect(0.0f, 0.0f, _tex.width, _tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+
+                StartTimer();
             }
+
+            HyperlinkCopyButton.onClick.RemoveAllListeners();
+            HyperlinkCopyButton.onClick.AddListener(delegate
+            {
+                CopyToClipboard(ESRLinkUrl);
+            }
+            );
+
+            LaunchAnchorButton.onClick.RemoveAllListeners();
+            LaunchAnchorButton.onClick.AddListener(delegate
+            {
+                Application.OpenURL(ESRLinkUrl);
+            }
+            );
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
@@ -127,10 +172,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             Application.OpenURL(DownloadURL);
         }
 
-
         public void OnLoginPanelCloseButtonPressed()
         {
-            Debug.LogWarning("Close the login panel");
+            DisableTargetPanel(LoginPanel);
         }
 
         public void OnStaticQRCodeHolderTargetButtonPressed(RectTransform resizableQRCodePanel)
@@ -163,8 +207,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
             HyperlinkCopiedNotificationPanel.SetActive(true);
 
-            // TODO, pass this string from other View, don't work with class-level variable
-            //CopyToClipboard(ESRLink);
+            //CopyToClipboard(ESRLinkUrl);
 
             StopCoroutine(nameof(ToggleHyperlinkCopyButton_Delayed));
             StartCoroutine(ToggleHyperlinkCopyButton_Delayed());
@@ -181,58 +224,116 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         public void OnLaunchAnchorButtonPressed()
         {
             Debug.LogWarning("Launch Anchor Button pressed!");
-            Application.OpenURL("");// TODO
+            //Application.OpenURL(ESRLinkUrl);
         }
 
         public void OnCloseLoadingPanelButtonPressed()
         {
             Debug.LogWarning("Close loading Panel button has been pressed!");
-            LoadingPanel.gameObject.SetActive(false);
+            DisableTargetPanel(LoadingPanel);
         }
 
         public void OnCloseTimeoutPanelButtonPressed()
         {
             Debug.LogWarning("Close timeout Panel button has been pressed!");
-            TimeoutPanel.gameObject.SetActive(false);
+            DisableTargetPanel(TimeoutPanel);
         }
 
         public void StartTimer()
         {
-
             if (counterCoroutine != null)
                 StopCoroutine(counterCoroutine);
 
-            SignPanel.SetActive(true);
+            SwitchToNewPanel(SignPanel);
             CountdownTextGUI.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
-            counterCoroutine = StartCoroutine(CountdownTimer(this, 2));
+            counterCoroutine = StartCoroutine(CountdownTimer(2));
+        }
+
+        public IEnumerator CountdownTimer(float counterDuration = 3.5f)
+        {
+            float _newCounter = 0;
+            while (_newCounter < counterDuration * 60)
+            {
+                _newCounter += Time.deltaTime;
+
+                CountdownText = $"Sign - {TimeSpan.FromSeconds((counterDuration * 60) - _newCounter):mm\\:ss}";
+                yield return null;
+            }
+
+            SwitchToNewPanel(TimeoutPanel);
         }
 
         public void OnSignManuallyButtonPressed()
         {
             Debug.LogWarning("Sign manually button has been pressed!");
+
+            LoginSubpanel.SetActive(false);
+            ManuallySignSubpanel.SetActive(true);
+            SwitchToNewPanel(LoginPanel);
+
+            StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
+                ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = true;
         }
 
         public void OnCloseSignPanelButtonPressed()
         {
             Debug.LogWarning("Close sign Panel button has been pressed!");
-            SignPanel.gameObject.SetActive(false);
+            DisableTargetPanel(SignPanel);
         }
 
         public void OnCloseSuccessPanelButtonPressed()
         {
             Debug.LogWarning("Close success Panel button has been pressed!");
 
-            SuccessPanel.SetActive(false);
-
-            //LoginPanel.SetActive(false);
+            DisableTargetPanel(SuccessPanel);
         }
 
         public void OnCloseFailurePanelButtonPressed()
         {
             Debug.LogWarning("Close failure Panel button has been pressed!");
 
-            FailurePanel.SetActive(false);
+            DisableTargetPanel(FailurePanel);
         }
+
+        private void ClearAllLinks()
+        {
+            //ESRLinkUrl = "";
+
+            StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite =
+                   ResizableQRCodeHolderTargetButton.GetComponent<Image>().sprite = null;
+
+            StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
+                   ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = false;
+        }
+
+        internal void SwitchToNewPanel(GameObject toPanel)
+        {
+            DisableAllPanels();
+
+            currentPanel = toPanel;
+
+            currentPanel.SetActive(true);
+        }
+
+        internal void DisableCurrentPanel(GameObject fallbackPanel = null)
+        {
+            currentPanel?.SetActive(false);
+            fallbackPanel?.SetActive(true);
+        }
+
+
+        private void DisableTargetPanel(GameObject targetPanel) => targetPanel.SetActive(false);
+
+        internal void DisableAllPanels()
+        {
+            LoginPanel.SetActive(false);
+            SignPanel.SetActive(false);
+            LoadingPanel.SetActive(false);
+            SuccessPanel.SetActive(false);
+            FailurePanel.SetActive(false);
+            TimeoutPanel.SetActive(false);
+        }
+
         #endregion
     }
 }

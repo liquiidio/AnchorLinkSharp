@@ -95,10 +95,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
         /// Puts the passed string into the clipboard buffer to be pasted elsewhere.
         /// </summary>
         /// <param name="targetString">Text to be copied to the buffer</param>
-        public void CopyToClipboard(string targetString)
-        {
-            GUIUtility.systemCopyBuffer = targetString;
-        }
+        public void CopyToClipboard(string targetString) => GUIUtility.systemCopyBuffer = targetString;
 
         /// <summary>
         /// Call this to generate a QR code based on the parameters passed
@@ -107,16 +104,26 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
         /// <param name="textureWidth">How wide the new texture should be</param>
         /// <param name="textureHeight">How high the new texture should be</param>
         /// <returns></returns>
-        public Texture2D StringToQRCodeTexture2D(string textForEncoding, int textureWidth = 256, int textureHeight = 256)
+        public Texture2D StringToQRCodeTexture2D(string textForEncoding,
+                                                 int textureWidth = 256, int textureHeight = 256,
+                                                 Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
         {
             Texture2D _newTexture2D = new(textureWidth, textureHeight);
-            _newTexture2D.SetPixels32(StringEncoder(textForEncoding, _newTexture2D.width, _newTexture2D.height));
+
+            if (baseColor == Color.clear)
+                baseColor = Color.white;
+            if (pixelColor == Color.clear)
+                pixelColor = Color.black;
+
+            _newTexture2D.SetPixels32(StringEncoder(textForEncoding, _newTexture2D.width, _newTexture2D.height, baseColor, pixelColor));
             _newTexture2D.Apply();
 
             return _newTexture2D;
         }
 
-        private Color32[] StringEncoder(string textForEncoding, int width, int height)
+        private Color32[] StringEncoder(string textForEncoding, 
+                                        int width, int height,
+                                         Color32 baseColor, Color32 pixelColor)
         {
             var _barcodeWriter = new BarcodeWriter
             {
@@ -131,20 +138,21 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
 
             Color32[] _color32Array = _barcodeWriter.Write(textForEncoding);
 
+            //foreach (var _c in _color32Array)
+            //    print($"Color code is {_c}");
+        
+            for (int x = 0; x < _color32Array.Length; x++)
+            {
+                if (_color32Array[x] == Color.white)
+                {
+                    _color32Array[x] = baseColor;
+                }
 
-            // Attempt to change the color of the QRCode will be done later...
-            //for (int x = 0; x<_color32Array.Length; x++)
-            //{
-            //    if (_color32Array[x] == Color.white)
-            //    {
-            //        _color32Array[x] = new Color32(49, 77, 121, 0);
-            //    }
-
-            //    else if (_color32Array[x] == Color.black)
-            //    {
-            //        _color32Array[x] = Color.white;
-            //    }
-            //}
+                else if (_color32Array[x] == Color.black)
+                {
+                    _color32Array[x] = pixelColor;
+                }
+            }
 
             return _color32Array;
         }
@@ -178,31 +186,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
 
         //    return bm;
         //}
-
-        public IEnumerator CountdownTimer(UnityTransport subClass, float counterDuration = 3.5f)
-        {
-            float _newCounter = 0;
-            while (_newCounter < counterDuration * 60)
-            {
-
-                _newCounter += Time.deltaTime;
-
-
-                switch (subClass)
-                {
-                    case UnityCanvasTransport transport:
-                        transport.CountdownText = $"Sign - {TimeSpan.FromSeconds((counterDuration * 60) - _newCounter):mm\\:ss}";
-                        break;
-                    case UnityUiToolkitTransport:
-                        // @Evans write to a variable string from the UnityUiToolkitTransport 
-                        // and assign string x =  $"Sign - {TimeSpan.FromSeconds((counterDuration * 60)  - _newCounter):mm\\:ss}";
-                        break;
-                }
-                yield return null;
-            }
-
-            // Call the timeout screen
-        }
 
         public abstract void ShowLoading();
 

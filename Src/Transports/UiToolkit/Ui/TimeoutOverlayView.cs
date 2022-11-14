@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using Assets.Packages.AnchorLinkTransportSharp;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,12 +8,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     public class TimeoutOverlayView : ScreenBase
     {
-        /*
-         * Connected Views
-         */
-        public QrCodeOverlayView QrCodeOverlayView;
-
-
         /*
          * Child-Controls
          */
@@ -20,9 +17,12 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         private Label _versionLabel;
 
+
+
         /*
          * Fields, Properties
          */
+
 
         void Start()
         {
@@ -31,7 +31,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel = Root.Q<Label>("version-label");
 
-            _versionLabel.text = UnityUiToolkitTransport.Version;
+            _versionLabel.text = Version;
 
             BindButtons();
         }
@@ -46,21 +46,16 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _signManuallyButton.clickable.clicked += () =>
             {
                 Hide();
-                QrCodeOverlayView.Show();
-                QrCodeOverlayView.SignManually();
+                //QrCodeOverlayView.Show();
+                //QrCodeOverlayView.SignManual();
             };
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
+                Application.OpenURL(VersionUrl);
             });
 
         }
-        #endregion
-
-        #region other
-
-
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
@@ -7,8 +8,8 @@ using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using EosioSigningRequest;
 using UnityEngine;
-using ZXing;
-using ZXing.QrCode;
+//using ZXing;
+//using ZXing.QrCode;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Src
 {
@@ -19,7 +20,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
         private SigningRequest _activeRequest;
         private object _activeCancel; //?: (reason: string | Error) => void
 
-        //internal ProcessStartInfo Ps;
+        internal ProcessStartInfo Ps;
         //internal Timer _countdownTimer;
         //internal Timer _closeTimer;
         public ILinkStorage Storage { get; }
@@ -42,8 +43,12 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
             var uri = request.Encode(false, true);
             Console.WriteLine(uri);
 
+            Ps = new ProcessStartInfo(uri)
+            {
+                UseShellExecute = true,
+            };
             // TODO
-            // Application.OpenURL(uri); has to be called instead
+            // Application.OpenURL(uri); //has to be called instead
 
             DisplayRequest(request);
         }
@@ -118,18 +123,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
 
         private Color32[] StringEncoder(string textForEncoding, int width, int height)
         {
-            var _barcodeWriter = new BarcodeWriter
-            {
-                Format = BarcodeFormat.QR_CODE,
+            //var _barcodeWriter = new BarcodeWriter
+            //{
+            //    Format = BarcodeFormat.QR_CODE,
 
-                Options = new QrCodeEncodingOptions
-                {
-                    Width = width,
-                    Height = height
-                }
-            };
+            //    Options = new QrCodeEncodingOptions
+            //    {
+            //        Width = width,
+            //        Height = height
+            //    }
+            //};
 
-            Color32[] _color32Array = _barcodeWriter.Write(textForEncoding);
+            //Color32[] _color32Array = _barcodeWriter.Write(textForEncoding);
+            Color32[] _color32Array = new Color32[0];
 
 
             // Attempt to change the color of the QRCode will be done later...
@@ -213,5 +219,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
         public abstract void DisplayRequest(SigningRequest request);
 
         public abstract void ShowDialog(string title = null, string subtitle = null, string type = null, System.Action action = null, object content = null);
+
+        public void StartAnchorDesktop()
+        {
+            Process.Start(Ps);
+        }
     }
 }

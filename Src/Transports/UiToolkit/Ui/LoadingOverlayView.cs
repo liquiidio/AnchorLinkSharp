@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using Assets.Packages.AnchorLinkTransportSharp;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,10 +8,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     public class LoadingOverlayView : ScreenBase
     {
-        /*
-         * Connected Views
-         */
-
         /*
          * Child-Controls
          */
@@ -24,18 +23,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         void Start()
         {
-            //Grab a reference to the root element that is drawn
-            Root = GetComponent<UIDocument>().rootVisualElement;
-
             _closeViewButton = Root.Q<Button>("close-view-button");
 
             _versionLabel = Root.Q<Label>("version-label");
 
-            _versionLabel.text = UnityUiToolkitTransport.Version;
+            _versionLabel.text = Version;
 
             BindButtons();
         }
-
 
         #region Button Binding
 
@@ -45,14 +40,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
+                Application.OpenURL(VersionUrl);
             });
 
         }
-        #endregion
-
-        #region other
-
         #endregion
     }
 }

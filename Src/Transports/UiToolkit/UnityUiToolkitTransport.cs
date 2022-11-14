@@ -1,5 +1,7 @@
 using System;
+using System.Threading.Tasks;
 using AnchorLinkSharp;
+using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosioSigningRequest;
 using UnityEngine;
@@ -15,12 +17,23 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         [SerializeField] internal SigningTimerOverlayView SigningTimerOverlayView;
         [SerializeField] internal TimeoutOverlayView TimeoutOverlayView;
 
+        // app identifier, should be set to the eosio contract account if applicable
+        private const string Identifier = "example";
+
+        // Assign UnityTransport through the Editor
+        //[SerializeField] internal UnityTransport Transport;
+
+        // initialize the link
+        private AnchorLink _anchorLink;
+
+        // the session instance, either re
+
 
         public const string VersionUrl = "https://github.com/greymass/anchor-link";
         public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
 
         // the session instance, either restored using link.restoreSession() or created with link.login()
-        public LinkSession Session;
+        public LinkSession LinkSession;
 
         public const string Version = "3.3.0 (3.4.1)";
 
@@ -34,6 +47,51 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             TimeoutOverlayView = FindObjectOfType<TimeoutOverlayView>();
         }
 
+
+        public async Task StartSession()
+        {
+            _anchorLink = new AnchorLink(new LinkOptions()
+            {
+                Transport = this,
+                ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+                Rpc = "https://eos.greymass.com",
+                ZlibProvider = new NetZlibProvider(),
+                Storage = new JsonLocalStorage()
+            });
+
+            try
+            {
+                var loginResult = await _anchorLink.Login(Identifier);
+
+                LinkSession = loginResult.Session;
+                Debug.Log($"{LinkSession.Auth.actor} logged-in");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
+        }
+
+        // tries to restore session, called when document is loaded
+        public async Task RestoreSession()
+        {
+            var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
+            LinkSession = restoreSessionResult;
+
+            if (LinkSession != null)
+                Debug.Log($"{LinkSession.Auth.actor} logged-in");
+        }
+
+
+        // transfer tokens using a session  
+        public async Task Transfer(EosSharp.Core.Api.v1.Action action)
+        {
+            var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
+
+            print($"Transaction broadcast! {transactResult.Processed}");
+        }
+
+
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         // and https://github.com/greymass/anchor-link-console-transport/blob/master/src/index.ts#L10
         public override void ShowLoading()
@@ -45,6 +103,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
         public override void OnSuccess(SigningRequest request, TransactResult result)
         {
+            SuccessOverlayView.Show();
+            SuccessOverlayView.CloseTimer();
+
             Debug.Log("OnSuccess");
             SuccessOverlayView.Show();
             QrCodeOverlayView.Hide();
@@ -70,6 +131,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
             if (request.IsIdentity())
             {
+                //ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
+                //var qrCodeTexture = StringToQRCodeTexture2D(ESRLink);
+
+                QrCodeOverlayView.Show();
+                //QrCodeOverlayView.Rebind(qrCodeTexture, true, false);
                 // LOGIN!
                 // Show View with QR-Code and "Launch Anchor" Button
             }
@@ -78,6 +144,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
                 Application.OpenURL(esrLinkUri);
                 // SigningOverlayView or however it's called is shown
                 // ( the one with the Timer)
+                SigningTimerOverlayView.Show();
             }
             Debug.Log("DisplayRequest");
         }

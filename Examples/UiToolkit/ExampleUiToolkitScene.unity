@@ -216,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UiToolkitTransport: {fileID: 1058237616}
+  UiToolkitExample: {fileID: 724035594}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,8 +617,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07717490f219fa644ae31ca67a3432c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Transport: {fileID: 1058237616}
   UnityUiToolkitTransport: {fileID: 1058237616}
+  UiToolkitExample: {fileID: 724035594}
   TransferView: {fileID: 291586823}
 --- !u!1001 &4180421305426750790
 PrefabInstance:

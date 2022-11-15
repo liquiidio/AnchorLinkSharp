@@ -45,6 +45,7 @@ public class Examples : MonoBehaviour
             catch (Exception e)
             {
                 Debug.Log(JsonConvert.SerializeObject(e));
+                throw;
             }
             // logout removes the session so it's not restorable
             //                await loginExample.logout();
@@ -56,14 +57,14 @@ public class Examples : MonoBehaviour
             throw;
         }
 
-        try
-        {
-            TransactExample.Vote();
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e);
-            throw;
-        }
+        //try
+        //{
+        //    TransactExample.Vote();
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.Log(e);
+        //    throw;
+        //}
     }
 }

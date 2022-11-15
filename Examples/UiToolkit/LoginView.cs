@@ -15,18 +15,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
 {
     public class LoginView : ScreenBase
     {
-        // app identifier, should be set to the eosio contract account if applicable
-        private const string Identifier = "example";
-
-        // Assign UnityTransport through the Editor
-        [SerializeField] internal UnityTransport Transport;
-
-        // initialize the link
-        private AnchorLink _link;
-
-        // the session instance, either restored using link.restoreSession() or created with link.login()
-        private LinkSession _session;
-
         /*
          * Child-Controls
          */
@@ -40,6 +28,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
          * Fields, Properties
          */
         [SerializeField]internal UnityUiToolkitTransport UnityUiToolkitTransport;
+        [SerializeField]internal UiToolkitExample UiToolkitExample;
         [SerializeField]internal TransferView TransferView;
 
 
@@ -49,22 +38,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             _versionLabel = Root.Q<Label>("version-label");
 
             _versionLabel.text = UnityUiToolkitTransport.Version;
-
-
-            //Transport = UiToolkitTransport;
-
-            //_link = new AnchorLink(new LinkOptions()
-            //{
-            //    Transport = this.Transport,
-            //    ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-            //    Rpc = "https://eos.greymass.com",
-            //    ZlibProvider = new NetZlibProvider(),
-            //    Storage = new JsonLocalStorage()
-            //    //chains: [{
-            //    //    chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-            //    //    nodeUrl: 'https://eos.greymass.com',
-            //    //}]
-            //});
 
             BindButtons();
             Show();
@@ -82,11 +55,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             _loginButton.clickable.clicked +=  async () =>
             {
                 try
-                {
-                   await UnityUiToolkitTransport.StartSession();
-                   TransferView.Show();
-                   TransferView.Rebind();
-                   Hide();
+                { 
+                    await UiToolkitExample.StartSession(); 
+                    TransferView.Show();
+                    TransferView.Rebind();
+                    Hide();
                 }
                 catch (Exception e)
                 {
@@ -100,15 +73,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         #endregion
 
         #region Other
-
-
-        // login and store session if sucessful
-        public async Task Login()
-        {
-            var loginResult = await _link.Login(Identifier);
-            _session = loginResult.Session;
-            //DidLogin();
-        }
 
         #endregion
     }

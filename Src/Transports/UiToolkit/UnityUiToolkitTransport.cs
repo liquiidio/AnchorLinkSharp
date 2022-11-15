@@ -18,21 +18,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         [SerializeField] internal SigningTimerOverlayView SigningTimerOverlayView;
         [SerializeField] internal TimeoutOverlayView TimeoutOverlayView;
 
-        // app identifier, should be set to the eosio contract account if applicable
-        private const string Identifier = "example";
-
-        // initialize the link
-        private AnchorLink _anchorLink;
-
         public const string VersionUrl = "https://github.com/greymass/anchor-link";
         public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
-
-        // the session instance, either restored using link.restoreSession() or created with link.login()
-        public LinkSession LinkSession;
+        public const string Version = "3.3.0 (3.4.1)";
 
         public string ESRLink = ""; // Link that will be converted to a QR code and can be copy from
 
-        public const string Version = "3.3.0 (3.4.1)";
+    
 
         public ScreenBase ActiveScreen;
         private bool _transitioningScreens;
@@ -45,60 +37,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             LoadingOverlayView = FindObjectOfType<LoadingOverlayView>();
             SigningTimerOverlayView = FindObjectOfType<SigningTimerOverlayView>();
             TimeoutOverlayView = FindObjectOfType<TimeoutOverlayView>();
-        }
-
-
-        public async Task StartSession()
-        {
-            //Eosio.Token
-            _anchorLink = new AnchorLink(new LinkOptions()
-            {
-                Transport = this,
-                ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-                Rpc = "https://eos.greymass.com",
-                ZlibProvider = new NetZlibProvider(),
-                Storage = new JsonLocalStorage()
-            });
-
-            ////Wax.Token
-            //_anchorLink = new AnchorLink(new LinkOptions()
-            //{
-            //    Transport = this,
-            //    ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
-            //    Rpc = "https://wax.greymass.com",
-            //    ZlibProvider = new NetZlibProvider(),
-            //    Storage = new JsonLocalStorage()
-            //});
-
-            try
-            {
-                var loginResult = await _anchorLink.Login(Identifier);
-
-                LinkSession = loginResult.Session;
-                Debug.Log($"{LinkSession.Auth.actor} logged-in");
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError(ex);
-            }
-        }
-
-        // tries to restore session, called when document is loaded
-        public async Task RestoreSession()
-        {
-            var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
-            LinkSession = restoreSessionResult;
-
-            if (LinkSession != null)
-                Debug.Log($"{LinkSession.Auth.actor} logged-in");
-        }
-
-        // transfer tokens using a session  
-        public async Task Transfer(EosSharp.Core.Api.v1.Action action)
-        {
-            var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
-
-            print($"Transaction broadcast! {transactResult.Processed}");
         }
 
         public IEnumerator<float> TransitionScreens(ScreenBase to)
@@ -170,7 +108,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             Debug.Log("OnFailure");
 
             StartCoroutine(TransitionScreens(FailureOverlayView));
-            FailureOverlayView.SetExceptionText(exception);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
@@ -184,11 +121,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             if (request.IsIdentity())
             {
                 // Show View with QR-Code and "Launch Anchor" Button
-                ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
-                var qrCodeTexture = StringToQRCodeTexture2D(esrLinkUri);
+                //ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
+                //var qrCodeTexture = StringToQRCodeTexture2D(esrLinkUri);
 
                 StartCoroutine(TransitionScreens(QrCodeOverlayView));
-                QrCodeOverlayView.Rebind(qrCodeTexture, true, false);
+                QrCodeOverlayView.Rebind(request, true, false);
 
             }
             else

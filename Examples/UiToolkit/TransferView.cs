@@ -37,6 +37,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
          * Fields, Properties
          */
         [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
+        [SerializeField] internal UiToolkitExample UiToolkitExample;
 
 
         void Start()
@@ -71,10 +72,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
                 {
                     account = "eosio.token",
                     name = "transfer",
-                    authorization = new List<PermissionLevel>() { UiToolkitTransport.LinkSession.Auth },
+                    authorization = new List<PermissionLevel>() { UiToolkitExample.LinkSession.Auth },
                     data = new Dictionary<string, object>()
                     {
-                        { "from", UiToolkitTransport.LinkSession.Auth.actor },
+                        { "from", UiToolkitExample.LinkSession.Auth.actor },
                         { "to", _toTextField.value },
                         { "quantity", _quantityTextField.value},
                         { "memo", _memoTextField.value }
@@ -82,7 +83,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
                 };
                 try
                 {
-                    await UiToolkitTransport.Transfer(action);
+                    await UiToolkitExample.Transfer(action);
                 }
                 catch (Exception e)
                 {
@@ -98,7 +99,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
 
         public void Rebind()
         {
-            _fromTextField.value = UiToolkitTransport.LinkSession.Auth.actor;
+            _fromTextField.value = UiToolkitExample.LinkSession.Auth.actor;
             _accountLabel.text = _fromTextField.value;
         }
 

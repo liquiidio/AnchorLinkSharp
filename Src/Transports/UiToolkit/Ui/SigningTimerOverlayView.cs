@@ -22,8 +22,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private Label _singingTimerLabel;
         private Label _signManualLabel;
 
-
-
         /*
          * Fields, Properties
          */

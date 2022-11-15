@@ -5,10 +5,13 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp;
+using EosioSigningRequest;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ZXing;
+using ZXing.QrCode;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
@@ -40,6 +43,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
          */
         [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
         private readonly Vector3 _qrCurrentSize = new Vector3(1, 1);
+        private SigningRequest _request;
 
         void Start()
         {
@@ -96,16 +100,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             //login to your anchor wallet and a session is created for your account.
             _launchAnchorButton.clickable.clicked +=() =>
             {
-                UiToolkitTransport.StartAnchorDesktop();
+                var uri = _request.Encode(false, true);
+                Application.OpenURL(uri);
             };
         }
         #endregion
 
         #region Rebind
 
-        public void Rebind(Texture2D qrCodeTexture2D, bool isLogin, bool isSignManually)
+        public void Rebind(SigningRequest request, bool isLogin, bool isSignManually)
         {
-            _qrCodeBox.style.backgroundImage = qrCodeTexture2D;
+            _request = request;
+            _qrCodeBox.style.backgroundImage = StringToQrCodeTexture2D(_request.Encode(false, true));
+            //_qrCodeBox.style.backgroundImage = qrCodeTexture2D;
 
             if (isLogin)
             {
@@ -147,6 +154,65 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _readyToCopy.style.display = DisplayStyle.Flex;
 
             _copyLabel.text = "Copy request link";
+        }
+
+
+        /// <summary>
+        /// Call this to generate a QR code based on the parameters passed
+        /// </summary>
+        /// <param name="textForEncoding">The actual texture that will be encoded into a QRCode</param>
+        /// <param name="textureWidth">How wide the new texture should be</param>
+        /// <param name="textureHeight">How high the new texture should be</param>
+        /// <returns></returns>
+        public Texture2D StringToQrCodeTexture2D(string textForEncoding,
+                                                 int textureWidth = 256, int textureHeight = 256,
+                                                 Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
+        {
+            Texture2D newTexture2D = new(textureWidth, textureHeight);
+
+            if (baseColor == Color.clear)
+                baseColor = Color.white;
+            if (pixelColor == Color.clear)
+                pixelColor = Color.black;
+
+            newTexture2D.SetPixels32(StringEncoder(textForEncoding, newTexture2D.width, newTexture2D.height, baseColor, pixelColor));
+            newTexture2D.Apply();
+
+            return newTexture2D;
+        }
+
+        private Color32[] StringEncoder(string textForEncoding,
+                                        int width, int height,
+                                         Color32 baseColor, Color32 pixelColor)
+        {
+            var barcodeWriter = new BarcodeWriter
+            {
+                Format = BarcodeFormat.QR_CODE,
+
+                Options = new QrCodeEncodingOptions
+                {
+                    Width = width,
+                    Height = height
+                }
+            };
+
+            Color32[] color32Array = barcodeWriter.Write(textForEncoding);
+
+            for (int x = 0; x < color32Array.Length; x++)
+            {
+                if (color32Array[x] == Color.white)
+                {
+                    color32Array[x] = baseColor;
+                }
+
+                else if (color32Array[x] == Color.black)
+                {
+                    color32Array[x] = pixelColor;
+                }
+            }
+
+
+            return color32Array;
         }
         #endregion
     }

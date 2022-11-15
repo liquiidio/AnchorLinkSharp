@@ -70,6 +70,10 @@ namespace AnchorLinkSharp
             {
                 ChainId = Defaults.ChainId;
             }
+            else
+            {
+                ChainId = options.ChainId;
+            }
 
             if (options.Rpc is string && !string.IsNullOrEmpty((string) options.Rpc))
             {

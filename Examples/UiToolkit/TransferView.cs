@@ -110,7 +110,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         {
             string toName = "???";
             string memoComment = "Anchor is the best! Thank you.";
-            string quantityAmount = "0.0000 EOS";
+            string quantityAmount = "0.0000 EOS OR WAX";
             
             _toTextField.SetValueWithoutNotify(toName);
             _memoTextField.SetValueWithoutNotify(memoComment);

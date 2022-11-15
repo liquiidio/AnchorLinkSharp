@@ -7,6 +7,7 @@ using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp;
 using EosioSigningRequest;
 using EosSharp.Core.Api.v1;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,6 +29,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private VisualElement _qrCodeBox;
         private VisualElement _alreadyCopied;
         private VisualElement _readyToCopy;
+        private VisualElement _anchorFootnote;
 
         private Label _downloadNowLabel;
         private Label _versionLabel;
@@ -35,8 +37,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private Label _linkedCopiedLabel;
         private Label _loginTitleLabel;
         private Label _subtitleLabel;
-
-
 
         /*
          * Fields, Properties
@@ -58,6 +58,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _qrCodeBox = Root.Q<VisualElement>("qr-code-box");
             _alreadyCopied = Root.Q<VisualElement>("already-copied");
             _readyToCopy = Root.Q<VisualElement>("ready-to-copy");
+            _anchorFootnote = Root.Q<VisualElement>("anchor-link-footnote");
 
             _versionLabel.text = UnityUiToolkitTransport.Version;
 
@@ -73,6 +74,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _closeViewButton.clickable.clicked += Hide;
 
             _downloadNowLabel.RegisterCallback<ClickEvent>(evt =>
+            {
+                UiToolkitTransport.OpenDownloadAnchorLink();
+            });
+
+            _anchorFootnote.RegisterCallback<ClickEvent>(evt =>
             {
                 UiToolkitTransport.OpenDownloadAnchorLink();
             });
@@ -108,23 +114,27 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         #region Rebind
 
-        public void Rebind(SigningRequest request, bool isLogin, bool isSignManually)
+        public void Rebind(SigningRequest request, bool isLogin)
         {
             _request = request;
-            _qrCodeBox.style.backgroundImage = StringToQrCodeTexture2D(_request.Encode(false, true));
+            var qrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512, new Color32(19, 27, 51, 255), Color.white);
+            _qrCodeBox.style.backgroundImage = qrCodeTexture;
 
             if (isLogin)
             {
                 _loginTitleLabel.text = "Login";
                 _subtitleLabel.text = "Scan the QR-code with Anchor on another device or use the button to open it here.";
             }
-            if(isSignManually)
+        }
+
+        public void Rebind(bool isSignManually)
+        {
+            if (isSignManually)
             {
                 _loginTitleLabel.text = "Sign Manually";
                 _subtitleLabel.text = "Want to sign with another device or didn’t get the signing request in your wallet, scan this QR or copy request and paste in app.";
             }
         }
-
         #endregion
 
         #region other

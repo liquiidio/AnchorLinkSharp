@@ -25,9 +25,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
-        private string _timeFormat = "mm\\:ss";
-        private DateTime _pendingUntil;
-        private TimeSpan _remainingTime;
+        internal Coroutine CounterCoroutine = null;
+
+        public string CountdownText
+        {
+            get { return _singingTimerLabel.text; }
+
+            set { _singingTimerLabel.text = value; }
+        }
 
         [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
         void Start()
@@ -56,8 +61,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _signManualLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Hide();
-                //UiToolkitTransport.QrCodeOverlayView.Rebind();
+                UiToolkitTransport.QrCodeOverlayView.Rebind(true);
+                StartCoroutine(UiToolkitTransport.TransitionScreens(UiToolkitTransport.QrCodeOverlayView));
             });
 
         }
@@ -67,23 +72,25 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         public void StartCountdownTimer()
         {
-            _pendingUntil = DateTime.UtcNow.AddSeconds(120);
-            _singingTimerLabel.schedule.Execute((ts) => ScheduleTimer(ts, _singingTimerLabel));
+            if (CounterCoroutine != null)
+                StopCoroutine(CounterCoroutine);
+
+            _singingTimerLabel.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
+            CounterCoroutine = StartCoroutine(ScheduleTimer(2));
         }
-        
-        private void ScheduleTimer(TimerState timerState, VisualElement element)
+
+        public IEnumerator ScheduleTimer(float counterDuration = 3.5f)
         {
-            if (_pendingUntil >= DateTime.UtcNow)
+            float _newCounter = 0;
+            while (_newCounter < counterDuration * 60)
             {
-                _remainingTime = _pendingUntil - DateTime.UtcNow;
-                _singingTimerLabel.text = $"Sign - {_remainingTime.ToString("mm\\:ss")}";
+                _newCounter += Time.deltaTime;
+
+                CountdownText = $"Sign - {TimeSpan.FromSeconds((counterDuration * 60) - _newCounter):mm\\:ss}";
+                yield return null;
             }
-            else
-               UiToolkitTransport.TimeoutOverlayView.Show();
-
-            _singingTimerLabel.schedule.Execute((ts) => ScheduleTimer(ts, _singingTimerLabel));
+            StartCoroutine(UiToolkitTransport.TransitionScreens(UiToolkitTransport.TimeoutOverlayView));
         }
-
         #endregion
 
     }

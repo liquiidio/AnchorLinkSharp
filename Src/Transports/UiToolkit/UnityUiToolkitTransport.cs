@@ -22,11 +22,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
         public const string Version = "3.3.0 (3.4.1)";
 
-        public string ESRLink = ""; // Link that will be converted to a QR code and can be copy from
 
-    
-
-        public ScreenBase ActiveScreen;
+        private ScreenBase _activeScreen;
         private bool _transitioningScreens;
 
         public UnityUiToolkitTransport(TransportOptions options) : base(options)
@@ -41,7 +38,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
         public IEnumerator<float> TransitionScreens(ScreenBase to)
         {
-            if (ActiveScreen == to)
+            if (_activeScreen == to)
                 yield break;
 
             var i = 0;
@@ -53,10 +50,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
             _transitioningScreens = true;
 
-            ActiveScreen?.Hide();
+            _activeScreen?.Hide();
             to?.Show();
 
-            ActiveScreen = to;
+            _activeScreen = to;
             _transitioningScreens = false;
 
             if (to == null)
@@ -95,11 +92,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
             StartCoroutine(TransitionScreens(SuccessOverlayView));
             SuccessOverlayView.CloseTimer();
-
-            //QrCodeOverlayView.Hide();
-            // Any other View must be closed as well!
-            // Had a few cases where multiple Views where active and shown at the same time
-            // Add a Method that ensures that always only one View is shown!
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
@@ -113,17 +105,12 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
-            // QR-Code to be shown
-            // Url to be opened via Application.OpenURL(requestUri);
-            // Application.OpenURL(requestUri); automatically opens Anchor Wallet
             var esrLinkUri = request.Encode();
 
             if (request.IsIdentity())
             {
-                // Show View with QR-Code and "Launch Anchor" Button
                 StartCoroutine(TransitionScreens(QrCodeOverlayView));
-                QrCodeOverlayView.Rebind(request, true, false);
-
+                QrCodeOverlayView.Rebind(request, true);
             }
             else
             {

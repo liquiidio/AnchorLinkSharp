@@ -36,7 +36,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             BindButtons();
         }
 
-
         #region Button Binding
 
         private void BindButtons()
@@ -57,7 +56,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         {
             StartCoroutine(SetTimeout());
         }
-
 
         public IEnumerator SetTimeout(float counterDuration = 0.5f)
         {

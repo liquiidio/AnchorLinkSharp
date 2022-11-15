@@ -16,7 +16,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="anchor-link-info" style="align-items: center; justify-content: center; width: 300px; height: 52px; flex-direction: column;">
                     <ui:VisualElement name="border-box" style="width: 300px; height: 1px; background-color: rgb(38, 45, 67); margin-top: 0; margin-bottom: 0; justify-content: center;" />
-                    <ui:Label text="Sign manually or with another device" display-tooltip-when-elided="true" name="anchor-link-manual-label" style="color: rgb(252, 252, 252); -unity-font-style: bold; font-size: 12px; margin-top: 14px; letter-spacing: 0; width: 212px; height: 13px; -unity-text-align: upper-center; white-space: nowrap; -unity-font: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1cd74a0089e942a4ba2129d8eb6be746&amp;type=3#NotInter-Regular&apos;);" />
+                    <ui:Label text="Sign manually or with another device" display-tooltip-when-elided="true" name="anchor-link-manual-label" class="anchor-link-label-click" style="color: rgb(252, 252, 252); -unity-font-style: bold; font-size: 12px; margin-top: 14px; letter-spacing: 0; width: 212px; height: 13px; -unity-text-align: upper-center; white-space: nowrap; -unity-font: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1cd74a0089e942a4ba2129d8eb6be746&amp;type=3#NotInter-Regular&apos;);" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

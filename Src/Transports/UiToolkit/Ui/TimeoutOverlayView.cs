@@ -45,8 +45,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _signManuallyButton.clickable.clicked += () =>
             {
-                Hide();
-                //UiToolkitTransport.QrCodeOverlayView.Rebind();
+                UnityUiToolkitTransport.QrCodeOverlayView.Rebind(true);
+                StartCoroutine(UnityUiToolkitTransport.TransitionScreens(UnityUiToolkitTransport.QrCodeOverlayView));
             };
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>

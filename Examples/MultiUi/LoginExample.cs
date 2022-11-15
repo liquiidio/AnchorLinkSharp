@@ -6,6 +6,7 @@ using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using EosSharp.Core.Api.v1;
 using EosSharp.Core.Exceptions;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class LoginExample : MonoBehaviour
@@ -66,7 +67,7 @@ public class LoginExample : MonoBehaviour
     // called when session was restored or created
     public void DidLogin()
     {
-        Console.WriteLine($"{_session.Auth.actor} logged-in");
+       Debug.Log($"{_session.Auth.actor} logged-in");
     }
 
     // transfer tokens using a session
@@ -83,26 +84,26 @@ public class LoginExample : MonoBehaviour
                 {
                     {"from", _session.Auth.actor},
                     {"to", "test2.liq"},
-                    {"quantity", "0.0001 WAX"},
+                    {"quantity", "0.00010000 WAX"},
                     {"memo", "Test transfer from test1.liq to test2.liq"}
                 }
             };
 
             var transactResult = await _session.Transact(new TransactArgs() {Action = action});
-            Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+           Debug.Log($"Transaction broadcast! {transactResult.Processed}");
         }
         catch (ApiErrorException ae)
         {
-            Console.WriteLine(ae.message);
-            Console.WriteLine(ae.error.name + ae.error.what);
+           Debug.Log(ae.message);
+           Debug.Log(ae.error.name + ae.error.what);
             foreach (var apiErrorDetail in ae.error.details)
             {
-                Console.WriteLine(apiErrorDetail.message);
+               Debug.Log(apiErrorDetail.message);
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+           Debug.Log(e);
             throw;
         }
 

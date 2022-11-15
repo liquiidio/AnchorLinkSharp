@@ -5,6 +5,7 @@ using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using EosSharp.Core.Api.v1;
+using EosSharp.Core.Exceptions;
 using UnityEngine;
 
 public class LoginExample : MonoBehaviour
@@ -26,8 +27,10 @@ public class LoginExample : MonoBehaviour
         _link = new AnchorLink(new LinkOptions()
         {
             Transport = this.Transport,
-            ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-            Rpc = "https://eos.greymass.com",
+            //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+            //Rpc = "https://eos.greymass.com",
+            ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
+            Rpc = "https://wax.greymass.com",
             ZlibProvider = new NetZlibProvider(),
             Storage = new JsonLocalStorage()
             //chains: [{
@@ -69,21 +72,39 @@ public class LoginExample : MonoBehaviour
     // transfer tokens using a session
     public async Task Transfer()
     {
-        var action = new EosSharp.Core.Api.v1.Action()
+        try
         {
-            account = "eosio.token",
-            name = "transfer",
-            authorization = new List<PermissionLevel>() { _session.Auth },
-            data = new Dictionary<string, object>()
+            var action = new EosSharp.Core.Api.v1.Action()
             {
-                { "from", _session.Auth.actor },
-                { "to", "teamgreymass" },
-                { "quantity", "0.0001 EOS" },
-                { "memo", "Anchor is the best! Thank you <3" }
-            }
-        };
+                account = "eosio.token",
+                name = "transfer",
+                authorization = new List<PermissionLevel>() {_session.Auth},
+                data = new Dictionary<string, object>()
+                {
+                    {"from", _session.Auth.actor},
+                    {"to", "test2.liq"},
+                    {"quantity", "0.0001 WAX"},
+                    {"memo", "Test transfer from test1.liq to test2.liq"}
+                }
+            };
 
-        var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-        Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+            var transactResult = await _session.Transact(new TransactArgs() {Action = action});
+            Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+        }
+        catch (ApiErrorException ae)
+        {
+            Console.WriteLine(ae.message);
+            Console.WriteLine(ae.error.name + ae.error.what);
+            foreach (var apiErrorDetail in ae.error.details)
+            {
+                Console.WriteLine(apiErrorDetail.message);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
     }
 }

@@ -39,6 +39,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
          * Fields, Properties
          */
         [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
+        private readonly Vector3 _qrCurrentSize = new Vector3(1, 1);
 
         void Start()
         {
@@ -63,16 +64,18 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #region Button Binding
         private void BindButtons()
         {
+            _qrCodeBox.transform.scale = new Vector3(1, 1);
+
             _closeViewButton.clickable.clicked += Hide;
 
             _downloadNowLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(url: UnityUiToolkitTransport.DownloadAnchorUrl);
+                UiToolkitTransport.OpenDownloadAnchorLink();
             });
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
+                UiToolkitTransport.OpenVersion();
             });
 
             _copyLabel.RegisterCallback<ClickEvent>(evt =>
@@ -83,14 +86,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _qrCodeBox.RegisterCallback<ClickEvent>(evt =>
             {
-                if (_qrCodeBox.style.scale.Equals(new StyleScale(new Scale(new Vector3(1, 1)))))
+                if (_qrCodeBox.style.scale.value.value == _qrCurrentSize )
                 {
-                    //_qrCodeBox.style.transitionDuration = new StyleList<TimeValue>(new List<TimeValue>(2));
-                    _qrCodeBox.style.scale = new StyleScale(new Scale(new Vector3(2, 2)));
+                    _qrCodeBox.transform.scale = new Vector3(2, 2);
                 }
-                else _qrCodeBox.style.scale = new StyleScale(new Scale(new Vector3(1, 1)));
-
-                StartCoroutine(SetText());
+                else _qrCodeBox.transform.scale = new Vector3(1, 1);
             });
 
             //login to your anchor wallet and a session is created for your account.

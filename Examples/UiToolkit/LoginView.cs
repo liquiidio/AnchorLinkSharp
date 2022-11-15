@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
+using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
-using Assets.Packages.AnchorLinkTransportSharp.UI.Example;
+using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
+namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
 {
     public class LoginView : ScreenBase
     {
@@ -40,8 +39,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
-        [SerializeField]public UnityUiToolkitTransport UnityUiToolkitTransport;
-        [SerializeField]private LoggedView LoggedView;
+        [SerializeField]internal UnityUiToolkitTransport UnityUiToolkitTransport;
+        [SerializeField]internal TransferView TransferView;
 
 
         void Start()
@@ -75,13 +74,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #region Button Binding
         private void BindButtons()
         {
+            _versionLabel.RegisterCallback<ClickEvent>(evt =>
+            {
+                UnityUiToolkitTransport.OpenVersion();
+            });
+
             _loginButton.clickable.clicked +=  async () =>
             {
                 try
                 {
                    await UnityUiToolkitTransport.StartSession();
-                   LoggedView.Show();
-                   LoggedView.Rebind();
+                   TransferView.Show();
+                   TransferView.Rebind();
+                   Hide();
                 }
                 catch (Exception e)
                 {
@@ -89,13 +94,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                     throw;
                 }
                 
-                Hide();
+                
             };
-
-            _versionLabel.RegisterCallback<ClickEvent>(evt =>
-            {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
-            });
         }
         #endregion
 

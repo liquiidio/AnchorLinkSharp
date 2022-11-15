@@ -24,6 +24,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
+        [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
 
         void Start()
         {
@@ -45,13 +46,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
+                UiToolkitTransport.OpenVersion();
             });
         }
         #endregion
 
         #region others
-        public void ExceptionHandler(Exception exception)
+        public void SetExceptionText(Exception exception)
         {
             _titleLabel.text = "Transaction Error";
             _subtitleLabel.text = exception.Message;

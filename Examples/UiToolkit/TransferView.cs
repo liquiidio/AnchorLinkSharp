@@ -5,21 +5,17 @@ using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
-using Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml;
+using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Action = EosSharp.Core.Api.v1.Action;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
+namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
 {
-    public class LoggedView : ScreenBase
+    public class TransferView : ScreenBase
     {
-        /*
-         * Connected Views
-         */
-
 
         /*
          * Child-Controls
@@ -61,13 +57,12 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
             SetTransferAccountText();
         }
 
-
         #region Button Binding
         private void BindButtons()
         {
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
+                UiToolkitTransport.OpenVersion();
             });
 
             _transferTokenButton.clickable.clicked += async () =>
@@ -87,10 +82,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
                 };
                 try
                 {
-                    print("#########################################");
                     await UiToolkitTransport.Transfer(action);
-
-                    //UiToolkitTransport.StartAnchorDesktop();
                 }
                 catch (Exception e)
                 {
@@ -107,8 +99,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
         public void Rebind()
         {
             _fromTextField.value = UiToolkitTransport.LinkSession.Auth.actor;
-            _accountLabel.text = UiToolkitTransport.LinkSession.Auth.actor;
-
+            _accountLabel.text = _fromTextField.value;
         }
 
         #endregion

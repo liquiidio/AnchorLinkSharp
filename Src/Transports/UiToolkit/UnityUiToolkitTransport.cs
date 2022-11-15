@@ -21,14 +21,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         // app identifier, should be set to the eosio contract account if applicable
         private const string Identifier = "example";
 
-        // Assign UnityTransport through the Editor
-        //[SerializeField] internal UnityTransport Transport;
-
         // initialize the link
         private AnchorLink _anchorLink;
-
-        // the session instance, either re
-
 
         public const string VersionUrl = "https://github.com/greymass/anchor-link";
         public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
@@ -56,6 +50,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
         public async Task StartSession()
         {
+            //Eosio.Token
             _anchorLink = new AnchorLink(new LinkOptions()
             {
                 Transport = this,
@@ -64,6 +59,16 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
                 ZlibProvider = new NetZlibProvider(),
                 Storage = new JsonLocalStorage()
             });
+
+            ////Wax.Token
+            //_anchorLink = new AnchorLink(new LinkOptions()
+            //{
+            //    Transport = this,
+            //    ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
+            //    Rpc = "https://wax.greymass.com",
+            //    ZlibProvider = new NetZlibProvider(),
+            //    Storage = new JsonLocalStorage()
+            //});
 
             try
             {
@@ -78,6 +83,24 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             }
         }
 
+        // tries to restore session, called when document is loaded
+        public async Task RestoreSession()
+        {
+            var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
+            LinkSession = restoreSessionResult;
+
+            if (LinkSession != null)
+                Debug.Log($"{LinkSession.Auth.actor} logged-in");
+        }
+
+        // transfer tokens using a session  
+        public async Task Transfer(EosSharp.Core.Api.v1.Action action)
+        {
+            var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
+
+            print($"Transaction broadcast! {transactResult.Processed}");
+        }
+
         public IEnumerator<float> TransitionScreens(ScreenBase to)
         {
             if (ActiveScreen == to)
@@ -86,7 +109,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             var i = 0;
             while (_transitioningScreens && i < 100)
             {
-                yield return(0.1f);
+                yield return (0.1f);
                 i++;
             }
 
@@ -105,25 +128,18 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
         }
 
-        // tries to restore session, called when document is loaded
-        public async Task RestoreSession()
-        {
-            var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
-            LinkSession = restoreSessionResult;
 
-            if (LinkSession != null)
-                Debug.Log($"{LinkSession.Auth.actor} logged-in");
+        //open anchor link version on chrome page
+        public void OpenVersion()
+        {
+            Application.OpenURL(VersionUrl);
         }
 
-
-        // transfer tokens using a session  
-        public async Task Transfer(EosSharp.Core.Api.v1.Action action)
+        //open Download anchor on chrome page
+        public void OpenDownloadAnchorLink()
         {
-            var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
-
-            print($"Transaction broadcast! {transactResult.Processed}");
+            Application.OpenURL(DownloadAnchorUrl);
         }
-
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         // and https://github.com/greymass/anchor-link-console-transport/blob/master/src/index.ts#L10
@@ -154,7 +170,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             Debug.Log("OnFailure");
 
             StartCoroutine(TransitionScreens(FailureOverlayView));
-            FailureOverlayView.ExceptionHandler(exception);
+            FailureOverlayView.SetExceptionText(exception);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
@@ -167,10 +183,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
             if (request.IsIdentity())
             {
-                // LOGIN!
                 // Show View with QR-Code and "Launch Anchor" Button
                 ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
-                var qrCodeTexture = StringToQRCodeTexture2D(ESRLink);
+                var qrCodeTexture = StringToQRCodeTexture2D(esrLinkUri);
 
                 StartCoroutine(TransitionScreens(QrCodeOverlayView));
                 QrCodeOverlayView.Rebind(qrCodeTexture, true, false);

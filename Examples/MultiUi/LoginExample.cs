@@ -77,7 +77,7 @@ public class LoginExample : MonoBehaviour
             data = new Dictionary<string, object>()
             {
                 { "from", _session.Auth.actor },
-                { "to", "teamgreymass" },
+                { "to", "broken.gm" },
                 { "quantity", "0.0001 EOS" },
                 { "memo", "Anchor is the best! Thank you <3" }
             }

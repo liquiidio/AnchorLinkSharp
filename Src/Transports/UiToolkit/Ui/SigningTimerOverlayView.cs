@@ -53,7 +53,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
+                UiToolkitTransport.OpenVersion();
             });
 
             _signManualLabel.RegisterCallback<ClickEvent>(evt =>

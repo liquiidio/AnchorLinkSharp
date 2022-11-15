@@ -9,43 +9,47 @@ using UnityEngine.Diagnostics;
 using UnityEngine.UIElements;
 using Action = System.Action;
 
-[RequireComponent(typeof(UIDocument))]
-public class ScreenBase : MonoBehaviour
+namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
-
-    internal UIDocument Screen;
-    internal VisualElement Root;
-
-    //public string VersionUrl;
-    //public string DownloadAnchorUrl;
-
-    // the session instance, either restored using link.restoreSession() or created with link.login()
-    public LinkSession Session;
-
-    //public const string Version = "3.3.0 (3.4.1)";
-
-    void Awake()
+    [RequireComponent(typeof(UIDocument))]
+    public class ScreenBase : MonoBehaviour
     {
-        Screen = GetComponent<UIDocument>();
-        Root = Screen.rootVisualElement;
 
-        //VersionUrl = "https://github.com/greymass/anchor-link";
-        //DownloadAnchorUrl = "https://greymass.com/anchor/";
-        
-        Hide();
+        internal UIDocument Screen;
+        internal VisualElement Root;
+
+        //public string VersionUrl;
+        //public string DownloadAnchorUrl;
+
+        // the session instance, either restored using link.restoreSession() or created with link.login()
+        public LinkSession Session;
+
+        //public const string Version = "3.3.0 (3.4.1)";
+
+        void Awake()
+        {
+            Screen = GetComponent<UIDocument>();
+            Root = Screen.rootVisualElement;
+
+            //VersionUrl = "https://github.com/greymass/anchor-link";
+            //DownloadAnchorUrl = "https://greymass.com/anchor/";
+
+            Hide();
+        }
+
+        //show the view
+        public void Show()
+        {
+            Root.style.visibility = Visibility.Visible;
+            Root.style.display = DisplayStyle.Flex;
+        }
+
+        //hide the view
+        public void Hide()
+        {
+            Root.style.visibility = Visibility.Hidden;
+            Root.style.display = DisplayStyle.None;
+        }
     }
 
-    //show the view
-    public void Show()
-    {
-        Root.style.visibility = Visibility.Visible;
-        Root.style.display = DisplayStyle.Flex;
-    }
-
-    //hide the view
-    public void Hide()
-    {
-        Root.style.visibility = Visibility.Hidden;
-        Root.style.display = DisplayStyle.None;
-    }
 }

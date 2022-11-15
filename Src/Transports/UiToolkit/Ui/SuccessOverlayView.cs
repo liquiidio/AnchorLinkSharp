@@ -24,7 +24,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
-
+        [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
 
         void Start()
         {
@@ -45,7 +45,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
+                UiToolkitTransport.OpenVersion(); ;
             });
 
         }

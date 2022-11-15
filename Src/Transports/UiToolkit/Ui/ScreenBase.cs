@@ -18,8 +18,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         internal UIDocument Screen;
         internal VisualElement Root;
 
-        public LinkSession Session;
-
         void Awake()
         {
             Screen = GetComponent<UIDocument>();
@@ -41,46 +39,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             Root.style.visibility = Visibility.Hidden;
             Root.style.display = DisplayStyle.None;
         }
-
-        //public void Show()
-        //{
-        //    Root.Show(this);
-        //    OnShow?.Invoke();
-        //    IsScreenVisible = true;
-        //}
-
-        //public void Hide()
-        //{
-        //    Root.Hide();
-        //    OnHide?.Invoke();
-        //    IsScreenVisible = false;
-        //}
-
-        ///// <summary>
-        ///// Extension-method to show an UI Element (set it to visible)
-        ///// </summary>
-        ///// <param name="element"></param>
-        //public void Show(VisualElement element)
-        //{
-        //    if (element == null)
-        //        return;
-
-        //    element.style.visibility = Visibility.Visible;
-        //    element.style.display = DisplayStyle.Flex;
-        //}
-
-        ///// <summary>
-        ///// Extension-method to hide an UI Element (set it to invisible)
-        ///// </summary>
-        ///// <param name="element"></param>
-        //public void Hide(VisualElement element)
-        //{
-        //    if (element == null)
-        //        return;
-
-        //    element.style.visibility = Visibility.Hidden;
-        //    element.style.display = DisplayStyle.None;
-        //}
     }
 
 }

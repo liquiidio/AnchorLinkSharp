@@ -121,9 +121,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             if (request.IsIdentity())
             {
                 // Show View with QR-Code and "Launch Anchor" Button
-                //ESRLink = request.Encode(false, false);  // This returns ESR link to be converted
-                //var qrCodeTexture = StringToQRCodeTexture2D(esrLinkUri);
-
                 StartCoroutine(TransitionScreens(QrCodeOverlayView));
                 QrCodeOverlayView.Rebind(request, true, false);
 

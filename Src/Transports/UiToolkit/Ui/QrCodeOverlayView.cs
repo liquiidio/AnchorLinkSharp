@@ -84,7 +84,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _copyLabel.RegisterCallback<ClickEvent>(evt =>
             {
-                UiToolkitTransport.CopyToClipboard(UiToolkitTransport.ESRLink);
+                CopyToClipboard(_request.Encode());
                 StartCoroutine(SetText());
             });
 
@@ -97,7 +97,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                 else _qrCodeBox.transform.scale = new Vector3(1, 1);
             });
 
-            //login to your anchor wallet and a session is created for your account.
+            //login to your anchor wallet and with a session.
             _launchAnchorButton.clickable.clicked +=() =>
             {
                 var uri = _request.Encode(false, true);
@@ -112,7 +112,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         {
             _request = request;
             _qrCodeBox.style.backgroundImage = StringToQrCodeTexture2D(_request.Encode(false, true));
-            //_qrCodeBox.style.backgroundImage = qrCodeTexture2D;
 
             if (isLogin)
             {
@@ -164,9 +163,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /// <param name="textureWidth">How wide the new texture should be</param>
         /// <param name="textureHeight">How high the new texture should be</param>
         /// <returns></returns>
-        public Texture2D StringToQrCodeTexture2D(string textForEncoding,
-                                                 int textureWidth = 256, int textureHeight = 256,
-                                                 Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
+        public Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth = 256, int textureHeight = 256, Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
         {
             Texture2D newTexture2D = new(textureWidth, textureHeight);
 
@@ -181,9 +178,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             return newTexture2D;
         }
 
-        private Color32[] StringEncoder(string textForEncoding,
-                                        int width, int height,
-                                         Color32 baseColor, Color32 pixelColor)
+        private Color32[] StringEncoder(string textForEncoding, int width, int height, Color32 baseColor, Color32 pixelColor)
         {
             var barcodeWriter = new BarcodeWriter
             {
@@ -214,6 +209,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             return color32Array;
         }
+
+
+        /// <summary>
+        /// Puts the passed string into the clipboard buffer to be pasted elsewhere.
+        /// </summary>
+        /// <param name="targetString">Text to be copied to the buffer</param>
+        public void CopyToClipboard(string targetString) => GUIUtility.systemCopyBuffer = targetString;
+
         #endregion
     }
 }

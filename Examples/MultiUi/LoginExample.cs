@@ -27,10 +27,10 @@ public class LoginExample : MonoBehaviour
         _link = new AnchorLink(new LinkOptions()
         {
             Transport = this.Transport,
-            //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-            //Rpc = "https://eos.greymass.com",
-            ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
-            Rpc = "https://wax.greymass.com",
+            ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906", 
+            Rpc = "https://eos.greymass.com",
+            //ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
+            //Rpc = "https://wax.greymass.com",
             ZlibProvider = new NetZlibProvider(),
             Storage = new JsonLocalStorage()
             //chains: [{
@@ -82,8 +82,8 @@ public class LoginExample : MonoBehaviour
                 data = new Dictionary<string, object>()
                 {
                     {"from", _session.Auth.actor},
-                    {"to", "test2.liq"},
-                    {"quantity", "0.0001 WAX"},
+                    {"to", "test3.liq"},
+                    {"quantity", "0.00010000 WAX"},
                     {"memo", "Test transfer from test1.liq to test2.liq"}
                 }
             };

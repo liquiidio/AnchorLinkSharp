@@ -43,7 +43,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             Show();
         }
 
-
         #region Button Binding
         private void BindButtons()
         {
@@ -66,14 +65,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
                     Console.WriteLine(e);
                     throw;
                 }
-                
-                
             };
         }
         #endregion
 
-        #region Other
-
-        #endregion
     }
 }

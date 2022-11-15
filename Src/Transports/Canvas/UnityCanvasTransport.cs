@@ -303,6 +303,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         internal void SwitchToNewPanel(GameObject toPanel)
         {
+            currentPanel?.SetActive(false);
             DisableAllPanels();
 
             currentPanel = toPanel;
@@ -314,6 +315,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         {
             currentPanel?.SetActive(false);
             fallbackPanel?.SetActive(true);
+
+            currentPanel= fallbackPanel;
         }
 
 

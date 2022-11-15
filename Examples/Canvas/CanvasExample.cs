@@ -13,19 +13,26 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
 {
     public class CanvasExample : MonoBehaviour
     {
+        // Assign UnityTransport through the Editor
+        [SerializeField] internal UnityCanvasTransport Transport;
+
+        public GameObject CustomLoginPanel;
         public GameObject CustomTransferPanel;
 
         // app identifier, should be set to the eosio contract account if applicable
         private const string Identifier = "example";
-
-        // Assign UnityTransport through the Editor
-        [SerializeField] internal UnityCanvasTransport Transport;
 
         // initialize the link
         private AnchorLink _link;
 
         // the session instance, either restored using link.restoreSession() or created with link.login()
         private LinkSession _session;
+
+        private void Start()
+        {
+            CustomLoginPanel.SetActive(true);
+            CustomTransferPanel.SetActive(false);
+        }
 
         public async void StartSession()
         {
@@ -73,11 +80,18 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
         // called when session was restored or created
         public void DidLogin()
         {
-            Console.WriteLine($"{_session.Auth.actor} logged-in");
+            Debug.Log($"{_session.Auth.actor} logged-in");
+
+            Invoke(nameof(ShowCustomTransferPanel), 1.5f);
+        }
+
+        private void ShowCustomTransferPanel ()
+        {
+            Transport.DisableCurrentPanel(CustomTransferPanel);
         }
 
         // transfer tokens using a session
-        public async Task Transfer()
+        public async Task Transfer(string frmAcc, string toAcc, string qnty, string memo)
         {
             var action = new EosSharp.Core.Api.v1.Action()
             {
@@ -86,15 +100,15 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 authorization = new List<PermissionLevel>() { _session.Auth },
                 data = new Dictionary<string, object>()
                 {
-                    {"from", _session.Auth.actor},
-                    {"to", "test2.liq"},
-                    {"quantity", "0.00010000 WAX"},
-                    {"memo", "Test transfer from test1.liq to test2.liq"}
+                    {"from", frmAcc},
+                    {"to", toAcc},
+                    {"quantity", qnty},
+                    {"memo", memo}
                 }
             };
 
             var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-            Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+           Debug.Log($"Transaction broadcast! {transactResult.Processed}");
         }
 
 
@@ -157,30 +171,31 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
             string _qnty = "";
             string _memo = "";
 
-            foreach (var _entry in TransferDetailsPanel.GetComponentsInChildren<TMP_InputField>())
+            foreach (var _inputField in TransferDetailsPanel.GetComponentsInChildren<TMP_InputField>())
             {
-                if (_entry.name == "FromAccountInputField(TMP)")
-                    _frmAcc = _entry.text;
+                if (_inputField.name == "FromAccountInputField(TMP)")
+                    _frmAcc = _inputField.text;
 
-                else if (_entry.name == "ToAccountInputField(TMP)")
-                    _toAcc = _entry.text;
+                else if (_inputField.name == "ToAccountInputField(TMP)")
+                    _toAcc = _inputField.text;
 
-                else if (_entry.name == "QuantityAccountInputField(TMP)")
-                    _frmAcc = $"{_entry.text} EOS";
+                else if (_inputField.name == "QuantityAccountInputField(TMP)")
+                    _qnty = $"{_inputField.text} WAX";
 
-                else if (_entry.name == "MemoAccountInputField(TMP)")
-                    _frmAcc = _entry.text;
+                else if (_inputField.name == "MemoAccountInputField(TMP)")
+                    _memo = _inputField.text;
             }
 
-            //await Transfer
-            //(
-            //    _frmAcc,
-            //    _toAcc,
-            //    _qnty,
-            //    _memo
-            //);
+            await Transfer
+            (
+                _frmAcc,
+                _toAcc,
+                _qnty,
+                _memo
+            );
 
-            await Transfer();
+            //CustomTransferPanel.SetActive( false );
+            //await Transfer();
         }
 
         //// transfer tokens using a session  // For testing
@@ -201,7 +216,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
         //    };
 
         //    var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-        //    Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+        //   Debug.Log($"Transaction broadcast! {transactResult.Processed}");
         //}
 
         //// transfer tokens using a session
@@ -222,7 +237,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
         //    };
 
         //    var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-        //    Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+        //   Debug.Log($"Transaction broadcast! {transactResult.Processed}");
         //}
     }
 }

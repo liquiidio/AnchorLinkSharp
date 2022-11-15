@@ -1,39 +1,6 @@
 VisualElement {
 }
 
-.anchor-link-button {
-    width: 300px;
-    height: 59px;
-    opacity: 1;
-}
-
-.anchor-link-button :hover {
-    width: auto;
-    height: auto;
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-    border-bottom-width: 4px;
-    background-color: rgb(255, 255, 255);
-    -unity-background-image-tint-color: rgb(255, 255, 255);
-}
-
-.anchor-link-button:active {
-}
-
-.anchor-link-button:focus {
-}
-
-.anchor-link-button:selected {
-}
-
-.anchor-link-button:checked {
-}
-
 .anchor-close-button {
     background-image: none;
     background-color: rgba(88, 88, 88, 0);
@@ -67,6 +34,14 @@ VisualElement {
     border-top-width: 2px;
     border-bottom-width: 2px;
     -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/UI/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 21px;
+    margin-bottom: 1px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .anchor-launch-button:hover {
@@ -82,6 +57,9 @@ VisualElement {
     height: 59px;
     flex-grow: 0;
     -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/UI/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    transition-duration: 0s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
 }
 
 .version-visibility {

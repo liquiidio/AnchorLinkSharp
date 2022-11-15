@@ -17,11 +17,13 @@ public class TransactExample : MonoBehaviour
 
     public void Start()
     {
-       _link = new AnchorLink(new LinkOptions()
+        _link = new AnchorLink(new LinkOptions()
         {
             Transport = this.Transport,
-            ChainId = "4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11",
-            Rpc = "https://telos.greymass.com",
+            //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+            //Rpc = "https://eos.greymass.com",
+            ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
+            Rpc = "https://wax.greymass.com",
             ZlibProvider = new NetZlibProvider(),
             Storage = new JsonLocalStorage()
             //chains: [{

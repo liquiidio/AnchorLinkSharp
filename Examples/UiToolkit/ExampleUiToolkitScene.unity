@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f020345e0c7b74994fe857345e9065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UiToolkitTransport: {fileID: 1058237616}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,7 +602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: a187da3a40ccd1e4ea2045d93d878edb, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: dc8e91bb44b392c4e9daf4ceb0f7b250, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: daf16fdcb6eaa484bbbf1177311e0144, type: 3}
   m_SortingOrder: 0
 --- !u!114 &1813730791
 MonoBehaviour:
@@ -612,21 +613,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1813730788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e76dc422404df8d4a95dc190dd49e44c, type: 3}
+  m_Script: {fileID: 11500000, guid: 07717490f219fa644ae31ca67a3432c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QrCodeOverlayView: {fileID: 1929126770}
---- !u!114 &1929126770 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2825780272849794676, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
-  m_PrefabInstance: {fileID: 2825780272614118662}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e0d7795ef622414291f8a24b88b922f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  Transport: {fileID: 0}
+  UnityUiToolkitTransport: {fileID: 1058237616}
+  LoggedView: {fileID: 291586823}
 --- !u!1001 &2825780272614118662
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -682,5 +674,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2825780271992535478, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: Transport
+      value: 
+      objectReference: {fileID: 1058237616}
+    - target: {fileID: 2825780272849794676, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: UiToolkitTransport
+      value: 
+      objectReference: {fileID: 1058237616}
+    - target: {fileID: 2825780272934037575, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: UiToolkitTransport
+      value: 
+      objectReference: {fileID: 1058237616}
+    - target: {fileID: 2825780272970268717, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: UiToolkitTransport
+      value: 
+      objectReference: {fileID: 1058237616}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}

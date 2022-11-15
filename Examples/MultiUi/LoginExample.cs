@@ -5,6 +5,7 @@ using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using EosSharp.Core.Api.v1;
+using EosSharp.Core.Exceptions;
 using UnityEngine;
 
 public class LoginExample : MonoBehaviour
@@ -71,21 +72,39 @@ public class LoginExample : MonoBehaviour
     // transfer tokens using a session
     public async Task Transfer()
     {
-        var action = new EosSharp.Core.Api.v1.Action()
+        try
         {
-            account = "wax.token",
-            name = "transfer",
-            authorization = new List<PermissionLevel>() { _session.Auth },
-            data = new Dictionary<string, object>()
+            var action = new EosSharp.Core.Api.v1.Action()
             {
-                { "from", _session.Auth.actor },
-                { "to", "test2.liq" },
-                { "quantity", "0.0001 WAX" },
-                { "memo", "Test transfer from test1.liq to test2.liq" }
-            }
-        };
+                account = "eosio.token",
+                name = "transfer",
+                authorization = new List<PermissionLevel>() {_session.Auth},
+                data = new Dictionary<string, object>()
+                {
+                    {"from", _session.Auth.actor},
+                    {"to", "test2.liq"},
+                    {"quantity", "0.0001 WAX"},
+                    {"memo", "Test transfer from test1.liq to test2.liq"}
+                }
+            };
 
-        var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-        Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+            var transactResult = await _session.Transact(new TransactArgs() {Action = action});
+            Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+        }
+        catch (ApiErrorException ae)
+        {
+            Console.WriteLine(ae.message);
+            Console.WriteLine(ae.error.name + ae.error.what);
+            foreach (var apiErrorDetail in ae.error.details)
+            {
+                Console.WriteLine(apiErrorDetail.message);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
     }
 }

@@ -1,4 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Assets.Packages.AnchorLinkTransportSharp;
+using EosioSigningRequest;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,18 +12,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     public class SigningTimerOverlayView : ScreenBase
     {
-        /*
-         * Connected Views
-         */
-
-        public TimeoutOverlayView TimeoutOverlayView;
-        public QrCodeOverlayView QrCodeOverlayView;
-
-        /*
-         * Cloneable Controls
-         */
-
-
         /*
          * Child-Controls
          */
@@ -29,6 +23,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private Label _signManualLabel;
 
 
+
         /*
          * Fields, Properties
          */
@@ -36,6 +31,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private DateTime _pendingUntil;
         private TimeSpan _remainingTime;
 
+        [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
         void Start()
         {
             _closeViewButton = Root.Q<Button>("close-view-button");
@@ -53,10 +49,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         private void BindButtons()
         {
-            _closeViewButton.clickable.clicked += () =>
-            {
-                this.Hide();
-            };
+            _closeViewButton.clickable.clicked += Hide;
 
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
@@ -66,8 +59,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _signManualLabel.RegisterCallback<ClickEvent>(evt =>
             {
                 Hide();
-                QrCodeOverlayView.Show();
-                QrCodeOverlayView.SignManually();
+                //UiToolkitTransport.QrCodeOverlayView.Rebind();
             });
 
         }
@@ -89,7 +81,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                 _singingTimerLabel.text = $"Sign - {_remainingTime.ToString("mm\\:ss")}";
             }
             else
-                TimeoutOverlayView.Show();
+               UiToolkitTransport.TimeoutOverlayView.Show();
 
             _singingTimerLabel.schedule.Execute((ts) => ScheduleTimer(ts, _singingTimerLabel));
         }

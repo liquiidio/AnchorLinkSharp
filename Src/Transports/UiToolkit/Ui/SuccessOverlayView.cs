@@ -1,15 +1,17 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using AnchorLinkSharp;
+using Assets.Packages.AnchorLinkTransportSharp;
+using EosioSigningRequest;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
+    [RequireComponent(typeof(SuccessOverlayView))]
     public class SuccessOverlayView : ScreenBase
     {
-        /*
-         * Connected Views
-         */
-
-
         /*
          * Child-Controls
          */
@@ -51,11 +53,22 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         #region other
 
-        public void Test()
+        public void CloseTimer()
         {
-            Debug.Log("#################################");
+            StartCoroutine(SetTimeout());
         }
 
+
+        public IEnumerator SetTimeout(float counterDuration = 0.5f)
+        {
+            float _newCounter = 0;
+            while (_newCounter < counterDuration * 2)
+            {
+                _newCounter += Time.deltaTime;
+                yield return null;
+            }
+            this.Hide();
+        }
         #endregion
     }
 }

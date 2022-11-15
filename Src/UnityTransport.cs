@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
@@ -19,7 +20,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
         private SigningRequest _activeRequest;
         private object _activeCancel; //?: (reason: string | Error) => void
 
-        //internal ProcessStartInfo Ps;
+        internal ProcessStartInfo Ps;
         //internal Timer _countdownTimer;
         //internal Timer _closeTimer;
         public ILinkStorage Storage { get; }
@@ -42,8 +43,12 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
             var uri = request.Encode(false, true);
             Console.WriteLine(uri);
 
+            Ps = new ProcessStartInfo(uri)
+            {
+                UseShellExecute = true,
+            };
             // TODO
-            // Application.OpenURL(uri); has to be called instead
+            // Application.OpenURL(uri); //has to be called instead
 
             DisplayRequest(request);
         }
@@ -132,6 +137,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
             Color32[] _color32Array = _barcodeWriter.Write(textForEncoding);
 
 
+
             // Attempt to change the color of the QRCode will be done later...
             //for (int x = 0; x<_color32Array.Length; x++)
             //{
@@ -194,7 +200,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
                         transport.CountdownText = $"Sign - {TimeSpan.FromSeconds((counterDuration * 60) - _newCounter):mm\\:ss}";
                         break;
                     case UnityUiToolkitTransport:
-                        // @Evans write to a variable string from the UnityUiToolkitTransport 
+                        // @Evans write to a variable string from the UiToolkitTransport 
                         // and assign string x =  $"Sign - {TimeSpan.FromSeconds((counterDuration * 60)  - _newCounter):mm\\:ss}";
                         break;
                 }
@@ -213,5 +219,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
         public abstract void DisplayRequest(SigningRequest request);
 
         public abstract void ShowDialog(string title = null, string subtitle = null, string type = null, System.Action action = null, object content = null);
+
+        public void StartAnchorDesktop()
+        {
+            Process.Start(Ps);
+        }
     }
 }

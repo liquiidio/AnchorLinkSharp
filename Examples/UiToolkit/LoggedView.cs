@@ -1,35 +1,25 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src;
-using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
+using Assets.Packages.AnchorLinkTransportSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
+using Assets.Packages.AnchorLinkTransportSharp.UI.ScriptsAndUxml;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Action = EosSharp.Core.Api.v1.Action;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
+namespace Assets.Packages.AnchorLinkTransportSharp.UI.Example
 {
-    public class LoggedView : MonoBehaviour
+    public class LoggedView : ScreenBase
     {
-        internal UIDocument Screen;
-        internal VisualElement Root;
-
         /*
          * Connected Views
          */
 
-        /*
-         * No No No!
-         */
-        //public SigningTimerOverlayView SigningTimerOverlayView;
-        //public SuccessOverlayView SuccessOverlayView;
-        //public FailureOverlayView FailureOverlayView;
-        /*
-         * No No No!
-         */
 
         /*
          * Child-Controls
@@ -42,212 +32,98 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         private Label _loginTitleLabel;
         private Label _subtitleLabel;
 
+        private TextField _toTextField;
+        private TextField _fromTextField;
+        private TextField _memoTextField;
+        private TextField _quantityTextField;
 
         /*
          * Fields, Properties
          */
-        private LinkSession _session;
-        private AnchorLink _link;
-        private EosSharp.Core.Api.v1.Action _action;
-
-        // app identifier, should be set to the eosio contract account if applicable
-        private const string Identifier = "example";
+        [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
 
 
         void Start()
         {
-            Screen = GetComponent<UIDocument>();
-            Root = Screen.rootVisualElement;
-
             _transferTokenButton = Root.Q<Button>("transfer-token-button");
             _accountLabel = Root.Q<Label>("account-label");
             _versionLabel = Root.Q<Label>("version-label");
             _loginTitleLabel = Root.Q<Label>("anchor-link-title-label");
             _subtitleLabel = Root.Q<Label>("anchor-link-subtitle-label");
+            _toTextField = Root.Q<TextField>("to-account-text-field");
+            _fromTextField = Root.Q<TextField>("from-account-text-field");
+            _memoTextField = Root.Q<TextField>("memo-text-field");
+            _quantityTextField = Root.Q<TextField>("quantity-text-field");
 
             _versionLabel.text = UnityUiToolkitTransport.Version;
 
             BindButtons();
+            SetTransferAccountText();
         }
 
 
         #region Button Binding
         private void BindButtons()
         {
-            _transferTokenButton.clickable.clicked += async () =>
-            {
-                //await RestoreSession();
-
-                //try
-                //{
-                //    // throws if the account doesn't have enough CPU
-                //    await Transfer();
-                //}
-                //catch (Exception e)
-                //{
-                //    Debug.Log(JsonConvert.SerializeObject(e));
-                //}
-
-                //try
-                //{
-                //    Vote();
-                //}
-                //catch (Exception e)
-                //{
-                //    Debug.Log(e);
-                //    throw;
-                //}
-                //SigningTimerOverlayView.Show();
-                //SigningTimerOverlayView.StartCountdownTimer();
-
-
-
-                try
-                {
-                    await Login();
-                    await RestoreSession();
-                    try
-                    {
-                        // throws if the account doesn't have enough CPU
-                        await Transfer();
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.Log(JsonConvert.SerializeObject(e));
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(e);
-                    throw;
-                }
-                Root.style.visibility = Visibility.Visible;
-                Root.style.display = DisplayStyle.Flex;
-                
-                
-                //SuccessOverlayView.Show();
-
-                try
-                {
-                    Vote();
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(e);
-                    throw;
-                }
-                //SigningTimerOverlayView.Show();
-                //SigningTimerOverlayView.StartCountdownTimer();
-            };
-
             _versionLabel.RegisterCallback<ClickEvent>(evt =>
             {
                 Application.OpenURL(UnityUiToolkitTransport.VersionUrl);
             });
+
+            _transferTokenButton.clickable.clicked += async () =>
+            {
+                var action = new EosSharp.Core.Api.v1.Action()
+                {
+                    account = "eosio.token",
+                    name = "transfer",
+                    authorization = new List<PermissionLevel>() { UiToolkitTransport.LinkSession.Auth },
+                    data = new Dictionary<string, object>()
+                    {
+                        { "from", UiToolkitTransport.LinkSession.Auth.actor },
+                        { "to", _toTextField.value },
+                        { "quantity", _quantityTextField.value},
+                        { "memo", _memoTextField.value }
+                    }
+                };
+                try
+                {
+                    print("#########################################");
+                    await UiToolkitTransport.Transfer(action);
+
+                    //UiToolkitTransport.StartAnchorDesktop();
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                    throw;
+                }
+            };
+
         }
         #endregion
 
         #region Rebind
 
-        public void Rebind(LinkSession session)
+        public void Rebind()
         {
-            _accountLabel.text = session.Auth.actor;
-            _session = session;
+            _fromTextField.value = UiToolkitTransport.LinkSession.Auth.actor;
+            _accountLabel.text = UiToolkitTransport.LinkSession.Auth.actor;
 
-            _link = new AnchorLink(new LinkOptions()
-            {
-                Transport = new UnityUiToolkitTransport(new TransportOptions()),
-                ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-                Rpc = "https://eos.greymass.com",
-                ZlibProvider = new NetZlibProvider(),
-                Storage = new JsonLocalStorage()
-            });
-
-            _action = new EosSharp.Core.Api.v1.Action()
-            {
-                account = "eosio",
-                name = "voteproducer",
-                authorization = new List<PermissionLevel>()
-                {
-                    new PermissionLevel()
-                    {
-                        actor = "............1", // ............1 will be resolved to the signing accounts permission
-                        permission = "............2" // ............2 will be resolved to the signing accounts authority
-                    }
-                },
-                data = new Dictionary<string, object>()
-                {
-                    { "voter", "............1" },
-                    { "proxy", "coredevproxy" },
-                    { "producers", Array.Empty<object>() },
-                }
-            };
         }
 
         #endregion
 
         #region other
-
-        // tries to restore session, called when document is loaded
-        public async Task RestoreSession()
+        private void SetTransferAccountText()
         {
-            var restoreSessionResult = await _link.RestoreSession(Identifier);
-            _session = restoreSessionResult;
-            if (_session != null)
-                DidLogin();
+            string toName = "???";
+            string memoComment = "Anchor is the best! Thank you.";
+            string quantityAmount = "0.0000 EOS";
+            
+            _toTextField.SetValueWithoutNotify(toName);
+            _memoTextField.SetValueWithoutNotify(memoComment);
+            _quantityTextField.SetValueWithoutNotify(quantityAmount);
         }
-
-        // logout and remove session from storage
-        public async Task Logout()
-        {
-            await _session.Remove();
-        }
-
-        // called when session was restored or created
-        public void DidLogin()
-        {
-            Debug.Log($"{_session.Auth.actor} logged-in");
-        }
-
-        // transfer tokens using a session
-        public async Task Transfer()
-        {
-            var action = new EosSharp.Core.Api.v1.Action()
-            {
-                account = "wax.token",
-                name = "transfer",
-                authorization = new List<PermissionLevel>() { _session.Auth },
-                data = new Dictionary<string, object>()
-                {
-                    { "from", _session.Auth.actor},
-                    { "to", "test3.liq" },
-                    { "quantity", "0.0001 EOS" },
-                    { "memo", "Anchor is the best! Thank you <3" }
-                }
-            };
-
-            var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-            Debug.Log($"Transaction broadcast! {transactResult.Processed}");
-        }
-
-        // ask the user to sign the transaction and then broadcast to chain
-        public void Vote()
-        {
-            _link.Transact(new TransactArgs() { Action = _action }).ContinueWith(transactTask =>
-            {
-                Debug.Log($"Thank you {transactTask.Result.Signer.actor}");
-            });
-        }
-
-        // login and store session if successful
-        private async Task Login()
-        {
-            var loginResult = await _link.Login(Identifier);
-            _session = loginResult.Session;
-            DidLogin();
-        }
-
         #endregion
     }
 }

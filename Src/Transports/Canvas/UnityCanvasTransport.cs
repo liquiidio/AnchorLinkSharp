@@ -260,7 +260,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         public void OnSignManuallyButtonPressed()
         {
-            Debug.LogWarning("Sign manually button has been pressed!");
+            if (counterCoroutine != null)
+                StopCoroutine(counterCoroutine);
 
             LoginSubpanel.SetActive(false);
             ManuallySignSubpanel.SetActive(true);
@@ -320,7 +321,15 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         }
 
 
-        private void DisableTargetPanel(GameObject targetPanel) => targetPanel.SetActive(false);
+        internal void DisableTargetPanel(GameObject targetPanel, GameObject fallbackPanel = null)
+        {
+            targetPanel.SetActive(false);
+
+            if (fallbackPanel)
+            {
+                SwitchToNewPanel(fallbackPanel);
+            }
+        }
 
         internal void DisableAllPanels()
         {

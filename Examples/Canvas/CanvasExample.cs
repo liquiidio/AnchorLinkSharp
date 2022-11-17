@@ -1,25 +1,38 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas;
 using EosSharp.Core.Api.v1;
+using Newtonsoft.Json.Bson;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
 {
     public class CanvasExample : MonoBehaviour
     {
-        public GameObject CustomTransferPanel;
-
-        // app identifier, should be set to the eosio contract account if applicable
-        private const string Identifier = "example";
-
         // Assign UnityTransport through the Editor
         [SerializeField] internal UnityCanvasTransport Transport;
+
+        [Header("Panels")]
+        public GameObject CustomActionsPanel;
+        public GameObject CustomTransferPanel;
+
+        [Header("Buttons")]
+        public Button LoginButton;
+        public Button RestoreSessionButton;
+        public Button TransferButton;
+        public Button LogoutButton;
+
+        private Coroutine waitCoroutine;
+        // app identifier, should be set to the eosio contract account if applicable
+        private const string Identifier = "example";
 
         // initialize the link
         private AnchorLink _link;
@@ -27,19 +40,39 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
         // the session instance, either restored using link.restoreSession() or created with link.login()
         private LinkSession _session;
 
+        private void Start()
+        {
+            Transport.DisableTargetPanel(CustomTransferPanel, CustomActionsPanel);
+            Transport.FailurePanel.GetComponentsInChildren<Button>(true).First(_btn => _btn.name == "CloseFailurePanelButton").onClick.AddListener(delegate
+            {
+                Transport.SwitchToNewPanel(CustomActionsPanel);
+            }
+            );
+
+            Transport.SuccessPanel.GetComponentsInChildren<Button>(true).First(_btn => _btn.name == "CloseSuccessPanelButton").onClick.AddListener(delegate
+            {
+                if (waitCoroutine != null)
+                    StopCoroutine(waitCoroutine);
+
+                Transport.SwitchToNewPanel(CustomTransferPanel);
+            }
+           );
+        }
+
         public async void StartSession()
         {
             _link = new AnchorLink(new LinkOptions()
             {
                 Transport = this.Transport,
-                ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-                Rpc = "https://eos.greymass.com",
+                // Uncomment this for and EOS session
+                //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+                //Rpc = "https://eos.greymass.com",
+
+                // WAX session
+                ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
+                Rpc = "https://wax.greymass.com",
                 ZlibProvider = new NetZlibProvider(),
                 Storage = new JsonLocalStorage()
-                //chains: [{
-                //    chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-                //    nodeUrl: 'https://eos.greymass.com',
-                //}]
             });
 
             await Login();
@@ -53,8 +86,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
             DidLogin();
         }
 
+        public async void RestoreASession()
+        {
+            await RestoreSession();
+        }
+
         // tries to restore session, called when document is loaded
-        public async Task RestoreSession()
+        private async Task RestoreSession()
         {
             var restoreSessionResult = await _link.RestoreSession(Identifier);
             _session = restoreSessionResult;
@@ -62,20 +100,63 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 DidLogin();
         }
 
+        public async void DoLogout()
+        {
+            await Logout();
+        }
         // logout and remove session from storage
-        public async Task Logout()
+        private async Task Logout()
         {
             await _session.Remove();
         }
 
         // called when session was restored or created
-        public void DidLogin()
+        private void DidLogin()
         {
-            Console.WriteLine($"{_session.Auth.actor} logged-in");
+            Debug.Log($"{_session.Auth.actor} logged-in");
+
+            waitCoroutine = StartCoroutine(SwitchPanels(CustomActionsPanel, CustomTransferPanel, 1.5f));
+        }
+
+        public void ShowTargetPanel(GameObject targetPanel)
+        {
+            Transport.SwitchToNewPanel(targetPanel);
+        }
+
+        // Gather data from the custom transfer UI panel
+        public async void TryTransferTokens(GameObject TransferDetailsPanel)
+        {
+            string _frmAcc = "";
+            string _toAcc = "";
+            string _qnty = "";
+            string _memo = "";
+
+            foreach (var _inputField in TransferDetailsPanel.GetComponentsInChildren<TMP_InputField>())
+            {
+                if (_inputField.name == "FromAccountInputField(TMP)")
+                    _frmAcc = _inputField.text;
+
+                else if (_inputField.name == "ToAccountInputField(TMP)")
+                    _toAcc = _inputField.text;
+
+                else if (_inputField.name == "QuantityAccountInputField(TMP)")
+                    _qnty = $"{_inputField.text} WAX";
+
+                else if (_inputField.name == "MemoAccountInputField(TMP)")
+                    _memo = _inputField.text;
+            }
+
+            await Transfer
+            (
+                _frmAcc,
+                _toAcc,
+                _qnty,
+                _memo
+            );
         }
 
         // transfer tokens using a session
-        public async Task Transfer()
+        private async Task Transfer(string frmAcc, string toAcc, string qnty, string memo)
         {
             var action = new EosSharp.Core.Api.v1.Action()
             {
@@ -84,144 +165,36 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 authorization = new List<PermissionLevel>() { _session.Auth },
                 data = new Dictionary<string, object>()
                 {
-                    { "from", _session.Auth.actor },
-                    { "to", "teamgreymass" },
-                    { "quantity", "0.0001 EOS" },
-                    { "memo", "Anchor is the best! Thank you <3" }
+                    {"from", frmAcc},
+                    {"to", toAcc},
+                    {"quantity", qnty},
+                    {"memo", memo}
                 }
             };
 
-            var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-            Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
-        }
 
-
-        //private AnchorLink _anchorLink;
-        //private LinkSession _linkSession;
-
-        //private const string Identifier = "example";
-
-        //public async void StartSession()
-        //{
-        //    _anchorLink = new AnchorLink(new LinkOptions()
-        //    {
-        //        Transport = this,
-        //        ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-        //        Rpc = "https://eos.greymass.com",
-        //        ZlibProvider = new NetZlibProvider(),
-        //        Storage = new JsonLocalStorage()
-        //    });
-
-        //    try
-        //    {
-        //        await CreateSession();
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        Debug.LogError(ex);
-        //    }
-        //}
-
-        //public async Task CreateSession()
-        //{
-        //    try
-        //    {
-        //        var loginResult = await _anchorLink.Login(Identifier);
-
-        //        _linkSession = loginResult.Session;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.LogError(ex);
-        //    }
-        //}
-
-        // tries to restore session, called when document is loaded
-        //public async Task RestoreSession()
-        //{
-        //    var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
-        //    _linkSession = restoreSessionResult;
-
-        //    if (_linkSession != null)
-        //        Debug.Log($"{_linkSession.Auth.actor} logged-in");
-        //}
-
-
-        public async void TryTransferTokens(GameObject TransferDetailsPanel)
-        {
-            string _frmAcc = "";
-            string _toAcc = "";
-            string _qnty = "";
-            string _memo = "";
-
-            foreach (var _entry in TransferDetailsPanel.GetComponentsInChildren<TMP_InputField>())
+            try
             {
-                if (_entry.name == "FromAccountInputField(TMP)")
-                    _frmAcc = _entry.text;
+                var transactResult = await _session.Transact(new TransactArgs() { Action = action });
+                Debug.Log($"Transaction broadcast! {transactResult.Processed}");
 
-                else if (_entry.name == "ToAccountInputField(TMP)")
-                    _toAcc = _entry.text;
+                waitCoroutine = StartCoroutine(SwitchPanels(Transport.currentPanel, CustomActionsPanel, 1.5f));
 
-                else if (_entry.name == "QuantityAccountInputField(TMP)")
-                    _frmAcc = $"{_entry.text} EOS";
-
-                else if (_entry.name == "MemoAccountInputField(TMP)")
-                    _frmAcc = _entry.text;
             }
-
-            //await Transfer
-            //(
-            //    _frmAcc,
-            //    _toAcc,
-            //    _qnty,
-            //    _memo
-            //);
-
-            await Transfer();
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                throw;
+            }
         }
 
-        //// transfer tokens using a session  // For testing
-        //public async Task Transfer2(string fromAccount = "", string toAccount = "teamgreymass", string quanitiy = "0.0001 EOS", string memo = "Anchor is the best! Thank you <3")
-        //{
-        //    var action = new EosSharp.Core.Api.v1.Action()
-        //    {
-        //        account = "eosio.token",
-        //        name = "transfer",
-        //        authorization = new List<PermissionLevel>() { _session.Auth },
-        //        data = new Dictionary<string, object>()
-        //            {
-        //                { "from", fromAccount == "" ?  _session.Auth.actor: fromAccount},
-        //                { "to", toAccount },
-        //                { "quantity", quanitiy },
-        //                { "memo", memo }
-        //            }
-        //    };
+        private IEnumerator SwitchPanels(GameObject fromPanel, GameObject toPanel, float SecondsToWait = 0.1f)
+        {
+            Debug.Log("Start counter");
+            yield return new WaitForSeconds(SecondsToWait);
 
-        //    var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-        //    Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
-        //}
-
-        //// transfer tokens using a session
-        //public async Task Transfer()
-        //{
-        //    var action = new EosSharp.Core.Api.v1.Action()
-        //    {
-        //        account = "eosio.token",
-        //        name = "transfer",
-        //        authorization = new List<PermissionLevel>() { _session.Auth },
-        //        data = new Dictionary<string, object>()
-        //            {
-        //                { "from", _session.Auth.actor },
-        //                { "to", "teamgreymass" },
-        //                { "quantity", "0.0001 EOS" },
-        //                { "memo", "Anchor is the best! Thank you <3" }
-        //            }
-        //    };
-
-        //    var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-        //    Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
-        //}
+            Transport.DisableTargetPanel(fromPanel, toPanel);
+        }
     }
 }
 

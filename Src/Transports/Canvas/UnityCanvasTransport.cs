@@ -78,15 +78,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         public override void ShowLoading()
         {
-            Debug.Log("ShowLoading");
-
-            SwitchToNewPanel(LoadingPanel);
+           SwitchToNewPanel(LoadingPanel);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
         public override void OnSuccess(SigningRequest request, TransactResult result)
         {
-            Debug.Log("OnSuccess");
+            if (counterCoroutine != null)
+                StopCoroutine(counterCoroutine);
 
             SwitchToNewPanel(SuccessPanel);
 
@@ -96,10 +95,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
         public override void OnFailure(SigningRequest request, Exception exception)
         {
-            Debug.Log("OnFailure");
-
-            Debug.LogWarning($"FailurePanel's name is {FailurePanel.name}");
-
             SwitchToNewPanel(FailurePanel);
 
             ClearAllLinks();
@@ -265,7 +260,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         public void OnSignManuallyButtonPressed()
         {
-            Debug.LogWarning("Sign manually button has been pressed!");
+            if (counterCoroutine != null)
+                StopCoroutine(counterCoroutine);
 
             LoginSubpanel.SetActive(false);
             ManuallySignSubpanel.SetActive(true);
@@ -308,6 +304,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         internal void SwitchToNewPanel(GameObject toPanel)
         {
+            currentPanel?.SetActive(false);
             DisableAllPanels();
 
             currentPanel = toPanel;
@@ -319,10 +316,19 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         {
             currentPanel?.SetActive(false);
             fallbackPanel?.SetActive(true);
+
+            currentPanel= fallbackPanel;
         }
 
+        internal void DisableTargetPanel(GameObject targetPanel, GameObject fallbackPanel = null)
+        {
+            targetPanel.SetActive(false);
 
-        private void DisableTargetPanel(GameObject targetPanel) => targetPanel.SetActive(false);
+            if (fallbackPanel != null)
+            {
+                SwitchToNewPanel(fallbackPanel);
+            }
+        }
 
         internal void DisableAllPanels()
         {

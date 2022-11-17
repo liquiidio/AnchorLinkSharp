@@ -1,14 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp;
 using EosioSigningRequest;
-using EosSharp.Core.Api.v1;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ZXing;
@@ -16,41 +7,40 @@ using ZXing.QrCode;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
-    [RequireComponent(typeof(QrCodeOverlayView))]
-    public class QrCodeOverlayView : ScreenBase
+    [RequireComponent(typeof(QrCodePanel))]
+    public class QrCodePanel : PanelBase
     {
-        /*
-         * Child-Controls
-         */
-
-        private Button _closeViewButton;
-        private Button _launchAnchorButton;
-
-        private VisualElement _qrCodeBox;
-        private VisualElement _alreadyCopied;
-        private VisualElement _readyToCopy;
-        private VisualElement _anchorFootnote;
-
-        private Label _downloadNowLabel;
-        private Label _versionLabel;
-        private Label _copyLabel;
-        private Label _linkedCopiedLabel;
-        private Label _loginTitleLabel;
-        private Label _subtitleLabel;
+        
+        public LoadingPanel LoadingPanel;
+        public SigningTimerPanel SigningTimerPanel;
 
         /*
          * Fields, Properties
          */
-        [SerializeField] internal UnityUiToolkitTransport UiToolkitTransport;
-        private readonly Vector3 _qrCurrentSize = new Vector3(1, 1);
+        private readonly Vector3 _qrCurrentSize = new(1, 1);
         private SigningRequest _request;
 
-        void Start()
+        /*
+         * Child-Controls
+         */
+
+        private Button _launchAnchorButton;
+
+        private VisualElement _qrCodeBox;
+        private VisualElement _readyToCopy;
+        private VisualElement _alreadyCopied;
+        private VisualElement _anchorFootnote;
+
+        private Label _subtitleLabel;
+        private Label _copyLabel;
+        private Label _downloadNowLabel;
+        private Label _linkedCopiedLabel;
+        private Label _loginTitleLabel;
+
+        private void Start()
         {
-            _closeViewButton = Root.Q<Button>("close-view-button");
             _launchAnchorButton = Root.Q<Button>("launch-anchor-button");
             _downloadNowLabel = Root.Q<Label>("download-now-link-label");
-            _versionLabel = Root.Q<Label>("version-label");
             _copyLabel = Root.Q<Label>("anchor-link-copy-label");
             _linkedCopiedLabel = Root.Q<Label>("anchor-linked-copied-label");
             _loginTitleLabel = Root.Q<Label>("anchor-link-title-label");
@@ -60,33 +50,20 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _readyToCopy = Root.Q<VisualElement>("ready-to-copy");
             _anchorFootnote = Root.Q<VisualElement>("anchor-link-footnote");
 
-            _versionLabel.text = UnityUiToolkitTransport.Version;
-
+            OnStart();
             BindButtons();
         }
 
 
         #region Button Binding
+
         private void BindButtons()
         {
             _qrCodeBox.transform.scale = new Vector3(1, 1);
 
-            _closeViewButton.clickable.clicked += Hide;
+            _downloadNowLabel.RegisterCallback<ClickEvent>(evt => { UnityUiToolkitTransport.OpenDownloadAnchorLink(); });
 
-            _downloadNowLabel.RegisterCallback<ClickEvent>(evt =>
-            {
-                UiToolkitTransport.OpenDownloadAnchorLink();
-            });
-
-            _anchorFootnote.RegisterCallback<ClickEvent>(evt =>
-            {
-                UiToolkitTransport.OpenDownloadAnchorLink();
-            });
-
-            _versionLabel.RegisterCallback<ClickEvent>(evt =>
-            {
-                UiToolkitTransport.OpenVersion();
-            });
+            _anchorFootnote.RegisterCallback<ClickEvent>(evt => { UnityUiToolkitTransport.OpenDownloadAnchorLink(); });
 
             _copyLabel.RegisterCallback<ClickEvent>(evt =>
             {
@@ -96,20 +73,30 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _qrCodeBox.RegisterCallback<ClickEvent>(evt =>
             {
-                if (_qrCodeBox.style.scale.value.value == _qrCurrentSize )
-                {
+                if (_qrCodeBox.style.scale.value.value == _qrCurrentSize)
                     _qrCodeBox.transform.scale = new Vector3(2, 2);
-                }
                 else _qrCodeBox.transform.scale = new Vector3(1, 1);
             });
 
-            //login to your anchor wallet and with a session.
-            _launchAnchorButton.clickable.clicked +=() =>
+            _launchAnchorButton.clickable.clicked += () =>
             {
-                var uri = _request.Encode(false, true);
-                Application.OpenURL(uri);
+                var esrLinkUri = _request.Encode(false, false);
+
+                if (_request.IsIdentity())
+                {
+                    Application.OpenURL(esrLinkUri);
+                }
+                else
+                {
+                    StartCoroutine(UnityUiToolkitTransport.TransitionPanels(LoadingPanel));
+                    Application.OpenURL(esrLinkUri);
+                    StartCoroutine(UnityUiToolkitTransport.TransitionPanels(SigningTimerPanel));
+                    SigningTimerPanel.StartCountdownTimer();
+                    
+                }
             };
         }
+
         #endregion
 
         #region Rebind
@@ -117,13 +104,21 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         public void Rebind(SigningRequest request, bool isLogin)
         {
             _request = request;
-            var qrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512, new Color32(19, 27, 51, 255), Color.white);
+            var qrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
+                new Color32(19, 27, 51, 255), Color.white);
             _qrCodeBox.style.backgroundImage = qrCodeTexture;
 
             if (isLogin)
             {
                 _loginTitleLabel.text = "Login";
-                _subtitleLabel.text = "Scan the QR-code with Anchor on another device or use the button to open it here.";
+                _subtitleLabel.text =
+                    "Scan the QR-code with Anchor on another device or use the button to open it here.";
+            }
+            else
+            {
+                _loginTitleLabel.text = "Sign";
+                _subtitleLabel.text =
+                    "Scan the QR-code with Anchor on another device or use the button to open it here.";
             }
         }
 
@@ -132,9 +127,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             if (isSignManually)
             {
                 _loginTitleLabel.text = "Sign Manually";
-                _subtitleLabel.text = "Want to sign with another device or didn’t get the signing request in your wallet, scan this QR or copy request and paste in app.";
+                _subtitleLabel.text =
+                    "Want to sign with another device or didn’t get the signing request in your wallet, scan this QR or copy request and paste in app.";
             }
         }
+
         #endregion
 
         #region other
@@ -167,13 +164,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
 
         /// <summary>
-        /// Call this to generate a QR code based on the parameters passed
+        ///     Call this to generate a QR code based on the parameters passed
         /// </summary>
         /// <param name="textForEncoding">The actual texture that will be encoded into a QRCode</param>
         /// <param name="textureWidth">How wide the new texture should be</param>
         /// <param name="textureHeight">How high the new texture should be</param>
         /// <returns></returns>
-        public Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth = 256, int textureHeight = 256, Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
+        public Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth = 256,
+            int textureHeight = 256, Color32 baseColor = new(), Color32 pixelColor = new())
         {
             Texture2D newTexture2D = new(textureWidth, textureHeight);
 
@@ -182,13 +180,15 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             if (pixelColor == Color.clear)
                 pixelColor = Color.black;
 
-            newTexture2D.SetPixels32(StringEncoder(textForEncoding, newTexture2D.width, newTexture2D.height, baseColor, pixelColor));
+            newTexture2D.SetPixels32(StringEncoder(textForEncoding, newTexture2D.width, newTexture2D.height, baseColor,
+                pixelColor));
             newTexture2D.Apply();
 
             return newTexture2D;
         }
 
-        private Color32[] StringEncoder(string textForEncoding, int width, int height, Color32 baseColor, Color32 pixelColor)
+        private Color32[] StringEncoder(string textForEncoding, int width, int height, Color32 baseColor,
+            Color32 pixelColor)
         {
             var barcodeWriter = new BarcodeWriter
             {
@@ -201,20 +201,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                 }
             };
 
-            Color32[] color32Array = barcodeWriter.Write(textForEncoding);
+            var color32Array = barcodeWriter.Write(textForEncoding);
 
-            for (int x = 0; x < color32Array.Length; x++)
-            {
+            for (var x = 0; x < color32Array.Length; x++)
                 if (color32Array[x] == Color.white)
-                {
                     color32Array[x] = baseColor;
-                }
 
-                else if (color32Array[x] == Color.black)
-                {
-                    color32Array[x] = pixelColor;
-                }
-            }
+                else if (color32Array[x] == Color.black) color32Array[x] = pixelColor;
 
 
             return color32Array;
@@ -222,10 +215,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
 
         /// <summary>
-        /// Puts the passed string into the clipboard buffer to be pasted elsewhere.
+        ///     Puts the passed string into the clipboard buffer to be pasted elsewhere.
         /// </summary>
         /// <param name="targetString">Text to be copied to the buffer</param>
-        public void CopyToClipboard(string targetString) => GUIUtility.systemCopyBuffer = targetString;
+        public void CopyToClipboard(string targetString)
+        {
+            GUIUtility.systemCopyBuffer = targetString;
+        }
 
         #endregion
     }

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosioSigningRequest;
 using UnityEngine;
@@ -11,67 +9,63 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 {
     public class UnityUiToolkitTransport : UnityTransport
     {
-        [SerializeField] internal SuccessOverlayView SuccessOverlayView;
-        [SerializeField] internal FailureOverlayView FailureOverlayView;
-        [SerializeField] internal QrCodeOverlayView QrCodeOverlayView;
-        [SerializeField] internal LoadingOverlayView LoadingOverlayView;
-        [SerializeField] internal SigningTimerOverlayView SigningTimerOverlayView;
-        [SerializeField] internal TimeoutOverlayView TimeoutOverlayView;
+        [SerializeField] internal FailurePanel FailurePanel;
+        [SerializeField] internal LoadingPanel LoadingPanel;
+        [SerializeField] internal QrCodePanel QrCodePanel;
+        [SerializeField] internal SigningTimerPanel SigningTimerPanel;
+        [SerializeField] internal SuccessPanel SuccessPanel;
+        [SerializeField] internal TimeoutPanel TimeoutPanel;
 
         public const string VersionUrl = "https://github.com/greymass/anchor-link";
         public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
         public const string Version = "3.3.0 (3.4.1)";
 
 
-        private ScreenBase _activeScreen;
-        private bool _transitioningScreens;
+        private static ScreenBase _activeScreen;
+        private static bool _transitioningPanel;
 
         public UnityUiToolkitTransport(TransportOptions options) : base(options)
         {
-            SuccessOverlayView = FindObjectOfType<SuccessOverlayView>();
-            FailureOverlayView = FindObjectOfType<FailureOverlayView>();
-            QrCodeOverlayView = FindObjectOfType<QrCodeOverlayView>();
-            LoadingOverlayView = FindObjectOfType<LoadingOverlayView>();
-            SigningTimerOverlayView = FindObjectOfType<SigningTimerOverlayView>();
-            TimeoutOverlayView = FindObjectOfType<TimeoutOverlayView>();
+            SuccessPanel = FindObjectOfType<SuccessPanel>();
+            FailurePanel = FindObjectOfType<FailurePanel>();
+            QrCodePanel = FindObjectOfType<QrCodePanel>();
+            LoadingPanel = FindObjectOfType<LoadingPanel>();
+            SigningTimerPanel = FindObjectOfType<SigningTimerPanel>();
+            TimeoutPanel = FindObjectOfType<TimeoutPanel>();
         }
 
-        public IEnumerator<float> TransitionScreens(ScreenBase to)
+        public static IEnumerator<float> TransitionPanels(ScreenBase to)
         {
             if (_activeScreen == to)
                 yield break;
 
             var i = 0;
-            while (_transitioningScreens && i < 100)
+            while (_transitioningPanel && i < 100)
             {
-                yield return (0.1f);
+                yield return 0.1f;
                 i++;
             }
 
-            _transitioningScreens = true;
+            _transitioningPanel = true;
 
             _activeScreen?.Hide();
             to?.Show();
 
             _activeScreen = to;
-            _transitioningScreens = false;
+            _transitioningPanel = false;
 
-            if (to == null)
-            {
-                Debug.Log("missing the screen");
-            }
-
+            if (to == null) Debug.Log("missing the panel");
         }
 
 
         //open anchor link version on chrome page
-        public void OpenVersion()
+        public static void OpenVersion()
         {
             Application.OpenURL(VersionUrl);
         }
 
         //open Download anchor on chrome page
-        public void OpenDownloadAnchorLink()
+        public static void OpenDownloadAnchorLink()
         {
             Application.OpenURL(DownloadAnchorUrl);
         }
@@ -82,7 +76,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         {
             Debug.Log("ShowLoading");
 
-            StartCoroutine(TransitionScreens(LoadingOverlayView));
+            StartCoroutine(TransitionPanels(LoadingPanel));
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
@@ -90,8 +84,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         {
             Debug.Log("OnSuccess");
 
-            StartCoroutine(TransitionScreens(SuccessOverlayView));
-            SuccessOverlayView.CloseTimer();
+            StartCoroutine(TransitionPanels(SuccessPanel));
+            SuccessPanel.Rebind(request);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
@@ -99,33 +93,22 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         {
             Debug.Log("OnFailure");
 
-            StartCoroutine(TransitionScreens(FailureOverlayView));
+            StartCoroutine(TransitionPanels(FailurePanel));
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
-            var esrLinkUri = request.Encode();
-
-            if (request.IsIdentity())
-            {
-                StartCoroutine(TransitionScreens(QrCodeOverlayView));
-                QrCodeOverlayView.Rebind(request, true);
-            }
-            else
-            {
-                Application.OpenURL(esrLinkUri);
-  
-                StartCoroutine(TransitionScreens(LoadingOverlayView));
-
-                StartCoroutine(TransitionScreens(SigningTimerOverlayView));
-                SigningTimerOverlayView.StartCountdownTimer();
-            }
             Debug.Log("DisplayRequest");
+
+            StartCoroutine(TransitionPanels(QrCodePanel));
+            QrCodePanel.Rebind(request, request.IsIdentity());
+
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
-        public override void ShowDialog(string title = null, string subtitle = null, string type = null, Action action = null,
+        public override void ShowDialog(string title = null, string subtitle = null, string type = null,
+            Action action = null,
             object content = null)
         {
             Debug.Log("ShowDialog");

@@ -27,9 +27,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         /*
          * Fields, Properties
          */
-        [SerializeField]internal UnityUiToolkitTransport UnityUiToolkitTransport;
         [SerializeField]internal UiToolkitExample UiToolkitExample;
-        [SerializeField]internal TransferView TransferView;
+        [SerializeField]internal MainView MainView;
 
 
         void Start()
@@ -54,15 +53,15 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             _loginButton.clickable.clicked +=  async () =>
             {
                 try
-                { 
-                    await UiToolkitExample.StartSession(); 
-                    TransferView.Show();
-                    TransferView.Rebind();
+                {
                     Hide();
+                    await UiToolkitExample.StartSession(); 
+                    MainView.Show();
+                    MainView.Rebind();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Debug.Log(e);
                     throw;
                 }
             };

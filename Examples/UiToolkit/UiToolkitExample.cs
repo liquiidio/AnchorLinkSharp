@@ -28,9 +28,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             _anchorLink = new AnchorLink(new LinkOptions()
             {
                 Transport = this.Transport,
+
                 //EOSIO.Token
                 //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
                 //Rpc = "https://eos.greymass.com",
+
                 //WAX.Token
                 ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
                 Rpc = "https://wax.greymass.com",
@@ -45,7 +47,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             });
         }
 
-
         public async Task StartSession()
         {
             try
@@ -59,6 +60,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             {
                 Debug.LogError(ex);
             }
+        }
+
+
+        // logout and remove session from storage
+        public async Task Logout()
+        {
+            await LinkSession.Remove();
         }
 
         // tries to restore session, called when document is loaded
@@ -77,6 +85,26 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
 
             print($"Transaction broadcast! {transactResult.Processed}");
+        }
+
+        // ask the user to sign the transaction and then broadcast to chain
+        public void Vote(EosSharp.Core.Api.v1.Action action)
+        {
+            _anchorLink.Transact(new TransactArgs() { Action = action }).ContinueWith(transactTask =>
+            {
+                Debug.Log($"Thank you {transactTask.Result.Signer.actor}");
+            });
+        }
+
+        // ask the user to sign the transaction and then broadcast to chain
+        public async Task SellOrBuyRam(EosSharp.Core.Api.v1.Action action)
+        {
+            var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
+
+            //_anchorLink.Transact(new TransactArgs() { Action = action }).ContinueWith(transactTask =>
+            //{
+            //    Debug.Log($"Thank you {transactTask.Result.Signer.actor}");
+            //});
         }
     }
 

@@ -320,12 +320,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             currentPanel= fallbackPanel;
         }
 
-
         internal void DisableTargetPanel(GameObject targetPanel, GameObject fallbackPanel = null)
         {
             targetPanel.SetActive(false);
 
-            if (fallbackPanel)
+            if (fallbackPanel != null)
             {
                 SwitchToNewPanel(fallbackPanel);
             }

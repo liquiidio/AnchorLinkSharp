@@ -110,7 +110,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
                 LoginSubpanel.SetActive(true);
                 ManuallySignSubpanel.SetActive(false);
                 SwitchToNewPanel(LoginPanel);
-
+                ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
+                
                 var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, new Color32(19, 27, 51, 255), Color.white);
 
                 StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
@@ -169,6 +170,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         public void OnLoginPanelCloseButtonPressed()
         {
+            ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
+
             DisableTargetPanel(LoginPanel);
         }
 
@@ -265,7 +268,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
             LoginSubpanel.SetActive(false);
             ManuallySignSubpanel.SetActive(true);
+
             SwitchToNewPanel(LoginPanel);
+            ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
 
             StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
                 ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = true;

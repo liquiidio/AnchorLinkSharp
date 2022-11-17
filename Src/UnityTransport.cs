@@ -96,6 +96,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
             return request;
         }
 
+        #region Util methods
         /// <summary>
         /// Puts the passed string into the clipboard buffer to be pasted elsewhere.
         /// </summary>
@@ -115,20 +116,28 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
         {
             Texture2D _newTexture2D = new(textureWidth, textureHeight);
 
-            if (baseColor == Color.clear)
-                baseColor = Color.white;
-            if (pixelColor == Color.clear)
-                pixelColor = Color.black;
+            var _encodedData = StringEncoder(textForEncoding, _newTexture2D.width, _newTexture2D.height);
 
-            _newTexture2D.SetPixels32(StringEncoder(textForEncoding, _newTexture2D.width, _newTexture2D.height, baseColor, pixelColor));
+            for (int x = 0; x < _encodedData.Length; x++)
+            {
+                // If there is an assigned base colour for each white "pixel" convert it to the base colour
+                if (baseColor != Color.clear && _encodedData[x] == Color.white)
+                {
+                    _encodedData[x] = baseColor;
+                }
+                // If there is an assigned pixelColor colour for each black "pixel" convert it to the pixelColor colour
+                else if (pixelColor != Color.clear && _encodedData[x] == Color.black)
+                {
+                    _encodedData[x] = pixelColor;
+                }
+            }
+            _newTexture2D.SetPixels32(_encodedData);
             _newTexture2D.Apply();
 
             return _newTexture2D;
         }
 
-        private Color32[] StringEncoder(string textForEncoding, 
-                                        int width, int height,
-                                         Color32 baseColor, Color32 pixelColor)
+        private Color32[] StringEncoder(string textForEncoding, int width, int height)
         {
             var _barcodeWriter = new BarcodeWriter
             {
@@ -141,27 +150,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
                 }
             };
 
-            Color32[] _color32Array = _barcodeWriter.Write(textForEncoding);
-
-            //foreach (var _c in _color32Array)
-            //    print($"Color code is {_c}");
-        
-            for (int x = 0; x < _color32Array.Length; x++)
-            {
-                if (_color32Array[x] == Color.white)
-                {
-                    _color32Array[x] = baseColor;
-                }
-
-                else if (_color32Array[x] == Color.black)
-                {
-                    _color32Array[x] = pixelColor;
-                }
-            }
-
-
-            return _color32Array;
+            return _barcodeWriter.Write(textForEncoding);
         }
+        #endregion
 
         // Future attempt to add an image overlay
         //public Bitmap GenerateQR(int width, int height, string text)

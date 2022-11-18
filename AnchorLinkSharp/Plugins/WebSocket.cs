@@ -5,9 +5,11 @@
  * @copyright 2018 Jiri Hybek <jiri@hybek.cz>
  * @license Apache 2.0 - See LICENSE file distributed with this source code.
  */
-
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEngine;
+using AOT;
 
 namespace HybridWebSocket
 {

@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
+namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 {
     public class LoginView : ScreenBase
     {

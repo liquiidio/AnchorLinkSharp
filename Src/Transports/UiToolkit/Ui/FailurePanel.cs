@@ -24,7 +24,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             OnStart();
         }
 
-
         #region others
 
         public void SetExceptionText(Exception exception)

@@ -4,11 +4,23 @@ using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosioSigningRequest;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 {
     public class UnityUiToolkitTransport : UnityTransport
     {
+        public const string VersionUrl = "https://github.com/greymass/anchor-link";
+        public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
+        public const string Version = "3.3.0 (3.4.1)";
+
+        private static ScreenBase _activeScreen;
+        private static bool _transitioningPanel;
+        public bool IsDarkTheme;
+
+        [SerializeField] internal StyleSheet DarkTheme;
+        [SerializeField] internal StyleSheet WhiteTheme;
+        
         [SerializeField] internal FailurePanel FailurePanel;
         [SerializeField] internal LoadingPanel LoadingPanel;
         [SerializeField] internal QrCodePanel QrCodePanel;
@@ -16,13 +28,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         [SerializeField] internal SuccessPanel SuccessPanel;
         [SerializeField] internal TimeoutPanel TimeoutPanel;
 
-        public const string VersionUrl = "https://github.com/greymass/anchor-link";
-        public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
-        public const string Version = "3.3.0 (3.4.1)";
-
-
-        private static ScreenBase _activeScreen;
-        private static bool _transitioningPanel;
 
         public UnityUiToolkitTransport(TransportOptions options) : base(options)
         {
@@ -32,6 +37,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             LoadingPanel = FindObjectOfType<LoadingPanel>();
             SigningTimerPanel = FindObjectOfType<SigningTimerPanel>();
             TimeoutPanel = FindObjectOfType<TimeoutPanel>();
+            DarkTheme = FindObjectOfType<StyleSheet>();
+            WhiteTheme = FindObjectOfType<StyleSheet>();
         }
 
         public static IEnumerator<float> TransitionPanels(ScreenBase to)
@@ -57,6 +64,22 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             if (to == null) Debug.Log("missing the panel");
         }
 
+        void CheckTheme()
+        {
+            _activeScreen.Root.styleSheets.Clear();
+
+            IsDarkTheme = false;
+            if (IsDarkTheme)
+            {
+                _activeScreen.Root.styleSheets.Remove(WhiteTheme);
+                _activeScreen.Root.styleSheets.Add(DarkTheme);
+            }
+            else
+            {
+                _activeScreen.Root.styleSheets.Remove(DarkTheme);
+                _activeScreen.Root.styleSheets.Add(WhiteTheme);
+            }
+        }
 
         //open anchor link version on chrome page
         public static void OpenVersion()
@@ -100,10 +123,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         public override void DisplayRequest(SigningRequest request)
         {
             Debug.Log("DisplayRequest");
-
             StartCoroutine(TransitionPanels(QrCodePanel));
             QrCodePanel.Rebind(request, request.IsIdentity());
-
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226

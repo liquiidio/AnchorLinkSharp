@@ -138,12 +138,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         public IEnumerator SetText(float counterDuration = 0.5f)
         {
-            _readyToCopy.style.visibility = Visibility.Hidden;
-            _readyToCopy.style.display = DisplayStyle.None;
-
-            _alreadyCopied.style.visibility = Visibility.Visible;
-            _alreadyCopied.style.display = DisplayStyle.Flex;
-
+            _readyToCopy.Hide();
+            _alreadyCopied.Show();
             _linkedCopiedLabel.text = "Link copied - Paste in Anchor";
 
             float _newCounter = 0;
@@ -153,12 +149,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                 yield return null;
             }
 
-            _alreadyCopied.style.visibility = Visibility.Hidden;
-            _alreadyCopied.style.display = DisplayStyle.None;
-
-            _readyToCopy.style.visibility = Visibility.Visible;
-            _readyToCopy.style.display = DisplayStyle.Flex;
-
+            _alreadyCopied.Hide();
+            _readyToCopy.Show();
             _copyLabel.text = "Copy request link";
         }
 

@@ -6,6 +6,7 @@ using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using EosSharp.Core.Api.v1;
 using EosSharp.Core.Exceptions;
+using Newtonsoft.Json;
 using UnityEngine;
 using Action = EosSharp.Core.Api.v1.Action;
 
@@ -105,7 +106,6 @@ public class LoginExample : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e);
-            throw;
         }
     }
 }

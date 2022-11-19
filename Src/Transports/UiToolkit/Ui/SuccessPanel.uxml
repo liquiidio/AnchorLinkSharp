@@ -7,7 +7,7 @@
                 <ui:Label text="3.3.0 (3.4.1)" display-tooltip-when-elided="true" name="version-label" class="version-visibility version-label" />
             </ui:VisualElement>
             <ui:VisualElement name="anchor-link-request" class="outer-background-color" style="border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
-                <ui:VisualElement name="anchor-link-success-logo" style="background-image: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Assets/Textures/Icons/correct.png?fileID=2800000&amp;guid=c15638517ca6fd94095f2085c7ac5d4a&amp;type=3#correct&apos;); width: 70px; height: 70px; margin-top: -56px; margin-right: auto; margin-left: auto;" />
+                <ui:VisualElement name="anchor-link-success-logo" style="background-image: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/successIcon.png?fileID=2800000&amp;guid=86332b50ca7845d4eaed4f17492ed087&amp;type=3#successIcon&apos;); width: 70px; height: 70px; margin-top: -56px; margin-right: auto; margin-left: auto;" />
                 <ui:VisualElement name="anchor-link-info" style="align-items: center;">
                     <ui:Label text="Success!" display-tooltip-when-elided="true" name="anchor-link-title-label" class="anchor-link-title-label" />
                     <ui:Label text="Login completed." display-tooltip-when-elided="true" name="anchor-link-subtitle-label" class="anchor-link-subtitle-label" />

@@ -7,14 +7,12 @@ using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using EosSharp.Core.Api.v1;
 using EosSharp.Core.Exceptions;
 using UnityEngine;
+using Action = EosSharp.Core.Api.v1.Action;
 
 public class LoginExample : MonoBehaviour
 {
     // app identifier, should be set to the eosio contract account if applicable
     private const string Identifier = "example";
-
-    // Assign UnityTransport through the Editor
-    [SerializeField] internal UnityTransport Transport;
 
     // initialize the link
     private AnchorLink _link;
@@ -22,11 +20,14 @@ public class LoginExample : MonoBehaviour
     // the session instance, either restored using link.restoreSession() or created with link.login()
     private LinkSession _session;
 
+    // Assign UnityTransport through the Editor
+    [SerializeField] internal UnityTransport Transport;
+
     public void Awake()
     {
-        _link = new AnchorLink(new LinkOptions()
+        _link = new AnchorLink(new LinkOptions
         {
-            Transport = this.Transport,
+            Transport = Transport,
             //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906", 
             //Rpc = "https://eos.greymass.com",
             ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
@@ -66,7 +67,7 @@ public class LoginExample : MonoBehaviour
     // called when session was restored or created
     public void DidLogin()
     {
-        Console.WriteLine($"{_session.Auth.actor} logged-in");
+        Debug.Log($"{_session.Auth.actor} logged-in");
     }
 
     // transfer tokens using a session
@@ -74,37 +75,37 @@ public class LoginExample : MonoBehaviour
     {
         try
         {
-            var action = new EosSharp.Core.Api.v1.Action()
+            var action = new Action
             {
                 account = "eosio.token",
                 name = "transfer",
-                authorization = new List<PermissionLevel>() { _session.Auth },
-                data = new Dictionary<string, object>()
+                authorization = new List<PermissionLevel> { _session.Auth },
+                data = new Dictionary<string, object>
                 {
-                    {"from", _session.Auth.actor},
-                    {"to", "test3.liq"},
-                    {"quantity", "0.00010000 WAX"},
-                    {"memo", "Test transfer from test1.liq to test2.liq"}
+                    { "from", _session.Auth.actor },
+
+                    { "to", "test3.liq" },
+
+                    { "to", "test2.liq" },
+
+                    { "quantity", "0.00010000 WAX" },
+                    { "memo", "Test transfer from test1.liq to test2.liq" }
                 }
             };
 
-            var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-            Console.WriteLine($"Transaction broadcast! {transactResult.Processed}");
+            var transactResult = await _session.Transact(new TransactArgs { Action = action });
+            Debug.Log($"Transaction broadcast! {transactResult.Processed}");
         }
         catch (ApiErrorException ae)
         {
-            Console.WriteLine(ae.message);
-            Console.WriteLine(ae.error.name + ae.error.what);
-            foreach (var apiErrorDetail in ae.error.details)
-            {
-                Console.WriteLine(apiErrorDetail.message);
-            }
+            Debug.Log(ae.message);
+            Debug.Log(ae.error.name + ae.error.what);
+            foreach (var apiErrorDetail in ae.error.details) Debug.Log(apiErrorDetail.message);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Debug.Log(e);
             throw;
         }
-
     }
 }

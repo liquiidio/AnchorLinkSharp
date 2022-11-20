@@ -21,8 +21,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 
         private Button _loginButton;
 
-        private Label _versionLabel;
-
 
         /*
          * Fields, Properties
@@ -34,9 +32,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         void Start()
         {
             _loginButton = Root.Q<Button>("login-button");
-            _versionLabel = Root.Q<Label>("version-label");
-
-            _versionLabel.text = UnityUiToolkitTransport.Version;
 
             BindButtons();
             Show();
@@ -44,12 +39,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 
         #region Button Binding
         private void BindButtons()
-        {
-            _versionLabel.RegisterCallback<ClickEvent>(evt =>
-            {
-                UnityUiToolkitTransport.OpenVersion();
-            });
-
+        { 
             _loginButton.clickable.clicked +=  async () =>
             {
                 try

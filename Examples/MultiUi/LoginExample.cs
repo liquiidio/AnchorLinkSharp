@@ -84,11 +84,7 @@ public class LoginExample : MonoBehaviour
                 data = new Dictionary<string, object>
                 {
                     { "from", _session.Auth.actor },
-
                     { "to", "test3.liq" },
-
-                    { "to", "test2.liq" },
-
                     { "quantity", "0.00010000 WAX" },
                     { "memo", "Test transfer from test1.liq to test2.liq" }
                 }

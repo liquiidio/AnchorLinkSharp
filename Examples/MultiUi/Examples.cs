@@ -54,7 +54,6 @@ public class Examples : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e);
-            throw;
         }
 
         //try

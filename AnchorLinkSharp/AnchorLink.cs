@@ -164,6 +164,8 @@ namespace AnchorLinkSharp
         public async Task<TransactResult> SendRequest(SigningRequest request, ILinkTransport transport,
             bool broadcast = false)
         {
+            Debug.Log("SendRequest");
+
             var t = transport ?? Transport;
             try
             {
@@ -307,6 +309,8 @@ namespace AnchorLinkSharp
          */
         public async Task<IdentifyResult> Identify(/*TODO Scope */PermissionLevel requestPermission, object info /*, info?: {[key: string]: string | Uint8Array}*/)
         {
+            Debug.Log("Identify");
+
             var request = await CreateRequest(new SigningRequestCreateArguments()
             {
                 Identity = new IdentityV2()
@@ -641,6 +645,8 @@ namespace AnchorLinkSharp
          */
         public Task<CallbackPayload> WaitForCallback(string url, CancellationTokenSource cts)
         {
+            Debug.Log("WaitForCallback");
+
             return Task.Run(async () =>
             {
                 var active = true;

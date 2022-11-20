@@ -76,6 +76,8 @@ var LibraryWebSocket = {
 	 */
 	WebSocketAllocate: function(url) {
 
+		console.log("[JSLIB WebSocket] Allocating new WebSocket instance");
+
 		var urlStr = UTF8ToString(url);
 		var id = webSocketState.lastId++;
 
@@ -133,6 +135,8 @@ var LibraryWebSocket = {
 	 * @param instanceId Instance ID
 	 */
 	WebSocketConnect: function(instanceId) {
+
+		console.log("[JSLIB WebSocket] Trying to connect.");
 
 		var instance = webSocketState.instances[instanceId];
 		if (!instance) return -1;

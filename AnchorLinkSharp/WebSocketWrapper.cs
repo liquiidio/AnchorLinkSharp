@@ -65,8 +65,10 @@ namespace AnchorLinkSharp
                 _newRequest = false;
             }
 
+#if UNITY_WEBGL && !UNITY_EDITOR
             if (_webSocket != null && _webSocket.State == WebSocketState.Open)
-                _webSocket?.DispatchMessageQueue();
+                _webSocket?.DispatchMessageQueue();      
+#endif
         }
 
         /// <summary>

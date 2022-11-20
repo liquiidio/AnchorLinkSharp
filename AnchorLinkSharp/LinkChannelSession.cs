@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace AnchorLinkSharp
      */
     public class LinkChannelSession : LinkSession, ILinkTransport
     {
-        private readonly Timer _timeoutTimer = new Timer(); // Timer anlegen
+        private readonly Timer _timeoutTimer = new Timer();
         public override AnchorLink AnchorLink { get; set; }
         public override string Identifier { get; set; }
         public override string PublicKey { get; set; }
@@ -72,8 +73,8 @@ namespace AnchorLinkSharp
             };
             _timeoutTimer.Start(); // start Timer
 
-            request.Data.Info.Add(new InfoPair() {Key = "anchorLink", Value = new object()}); /*value =abiEncode(info, "link_info") TODO */ //)};
-
+            request.Data.Info.Add(new InfoPair() {Key = "anchorLink", Value = AnchorLink.SerializeStructData(info,
+                    LinkAbiData.Types.structs.FirstOrDefault(lad => lad.name == "link_info"), LinkAbiData.Types)});
             try
             {
                 using (var httpClient = new HttpClient())
@@ -124,7 +125,7 @@ namespace AnchorLinkSharp
             };
         }
 
-        public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
+        public void OnSessionRequest(LinkSession session, SigningRequest request, Action<object> cancel)
         {
             throw new NotImplementedException();
         }

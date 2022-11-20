@@ -29,7 +29,7 @@ namespace AnchorLinkSharp
          * @param session Session where the request originated.
          * @param request Signing request that will be sent over the session.
          */
-        void OnSessionRequest(LinkSession session, SigningRequest request, object cancel);
+        void OnSessionRequest(LinkSession session, SigningRequest request, Action<object> cancel);
         
         /*cancel: (reason: string | Error) => void)*/
   

@@ -18,26 +18,10 @@ using UnityEngine;
 namespace AnchorLinkSharp
 {
     /**
-     * Main class, also exposed as the default export of the library.
-     *
-     * Example:
-     *
-     * ```ts
-     * import AnchorLink from 'anchor-anchorLink'
-     * import ConsoleTransport from 'anchor-anchorLink-console-transport'
-     *
-     * const anchorLink = new AnchorLink({
-     *     transport: new ConsoleTransport()
-     * })
-     *
-     * const result = await anchorLink.transact({actions: myActions})
-     * ```
+     * Main class
      */
     public class AnchorLink : AbiSerializationProvider
     {
-        /** The eosjs RPC instance used to communicate with the EOSIO node. */
-        //public readonly EosApi rpc;
-
         /** Transport used to deliver requests to the user wallet. */
         public readonly ILinkTransport Transport;
 
@@ -197,24 +181,8 @@ namespace AnchorLinkSharp
                 // wait for callback or user cancel
                 var cts = new CancellationTokenSource();
                 var socket = WaitForCallback(linkUrl, cts);
-                //    .ContinueWith((data) =>
-                //{
-                //    if (data.IsCanceled)
-                //    {
-                //        throw new CancelException($"Task cancelled");
-                //    }
-
-                //    if (data.Exception != null)
-                //    {
-                //        throw new CancelException($"Rejected by wallet: {data.Exception.Message}");
-                //    }
-
-                //    return data;
-                //}, cts.Token);
                 var token = cts.Token;
 
-                //var cancel = Task.Run(() =>
-                //{
                 t.OnRequest(request, (reason) =>
                 {
                     if(!cts.IsCancellationRequested)
@@ -227,18 +195,17 @@ namespace AnchorLinkSharp
                         throw new CancelException(sreason);
                     }
                 });
-                //}, token);
 
-                //var poll = pollForCallback(linkUrl, token);
+                // TODO var poll = PollForCallback(linkUrl, token);
                 await socket;
-                CallbackPayload payload = socket.Result;
-                PermissionLevel signer = new PermissionLevel()
+                var payload = socket.Result;
+                var signer = new PermissionLevel()
                 {
                     actor = payload.Sa,
                     permission = payload.Sp,
                 };
 
-                List<string> signatures = new List<string>(){ payload.Sig }; // TODO, multiple sigs?
+                var signatures = new List<string>(){ payload.Sig }; // TODO, multiple sigs?
 
                 // recreate transaction from request response
                 var resolved = await ResolvedSigningRequest.FromPayload(
@@ -246,15 +213,10 @@ namespace AnchorLinkSharp
                     _requestOptions,
                     this
                 );
-                var info = resolved.Request.GetInfos();
-                if (info.ContainsKey("fuel_sig"))
-                {
-                    signatures.Insert(0, info["fuel_sig"]);
-                }
 
                 var transaction = resolved.Transaction;
                 var serializedTransaction = resolved.SerializedTransaction;
-                TransactResult result = new TransactResult()
+                var result = new TransactResult()
                 {
                     Request = resolved.Request,
                     SerializedTransaction = serializedTransaction,
@@ -353,10 +315,8 @@ namespace AnchorLinkSharp
                 Info = info// (List<InfoPair>)info,
             });
 
-            /*string test = "";
-            pollForCallback(request.data.callback, CancellationToken.None);*/
-            //pollForCallback(request.data.callback, CancellationToken.None);
-            var res = await SendRequest(request, null); // TODO
+            // TODO pollForCallback(request.data.callback, CancellationToken.None);*/
+            var res = await SendRequest(request, null);
             if (!res.Request.IsIdentity())
             {
                 throw new IdentityException("Unexpected response");
@@ -516,7 +476,7 @@ namespace AnchorLinkSharp
                 throw new Exception("Unable to restore session: No storage adapter configured");
             }
 
-            string key = "";
+            var key = "";
             if (auth != null)
             {
                 key = SessionKey(identifier, LinkConstants.FormatAuth(auth));
@@ -684,7 +644,7 @@ namespace AnchorLinkSharp
             {
                 var active = true;
                 var retries = 0;
-                string socketUrl = url.Replace("http", "ws");
+                var socketUrl = url.Replace("http", "ws");
                 
                 Console.WriteLine(socketUrl);
 

@@ -21,7 +21,7 @@ namespace AnchorLinkSharp
 
         private readonly LinkFallbackSessionData _data;
 
-        public LinkFallbackSession(AnchorLink anchorLink, LinkFallbackSessionData data, Dictionary<string,object> metadata /*, metadata: any*/) : base()
+        public LinkFallbackSession(AnchorLink anchorLink, LinkFallbackSessionData data, Dictionary<string,object> metadata)
         {
             AnchorLink = anchorLink;
             Auth = data.Auth;
@@ -77,7 +77,7 @@ namespace AnchorLinkSharp
             };
         }
 
-        public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
+        public void OnSessionRequest(LinkSession session, SigningRequest request, Action<object> cancel)
         {
             throw new NotImplementedException();
         }

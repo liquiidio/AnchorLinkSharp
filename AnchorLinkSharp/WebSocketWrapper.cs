@@ -11,17 +11,9 @@ namespace AnchorLinkSharp
 {
     public class WebSocketWrapper : MonoBehaviour
     {
-        //public Queue<string> messageQueue = new Queue<string>();
-
-        //private const int ReceiveChunkSize = 1024;
-        //private const int SendChunkSize = 1024;
-
         private static WebSocket _webSocket;
 
         public WebSocketState State => _webSocket?.State ?? WebSocketState.Closed;
-        //private readonly Uri _uri;
-        //private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        //private readonly CancellationToken _cancellationToken;
 
         public event Action OnOpen;
         public event Action<string> OnMessage;
@@ -31,14 +23,6 @@ namespace AnchorLinkSharp
         private string _uri;
         private bool _newRequest;
 
-        //public WebSocketWrapper()
-        //{
-        //    //_webSocket = new WebSocket(url.Replace("http", "ws"));
-        //    ////_ws.Options.KeepAliveInterval = TimeSpan.FromSeconds(20);
-        //    ////_uri = new Uri(uri);
-        //    //_cancellationToken = _cancellationTokenSource.Token;
-        //}
-
         /// <summary>
         /// Creates a new instance.
         /// </summary>
@@ -46,6 +30,8 @@ namespace AnchorLinkSharp
         /// <returns></returns>
         public async Task Create(string uri)
         {
+            Debug.Log("Websocket Create");
+
             OnOpen = null;
             OnMessage = null;
             OnClose = null;
@@ -92,6 +78,8 @@ namespace AnchorLinkSharp
                 i++;
             }
 
+            Debug.Log("Websocket ConnectAsync");
+
             if (_webSocket != null)
             {
                 _webSocket.OnClose += WebSocketOnOnClose;
@@ -121,6 +109,8 @@ namespace AnchorLinkSharp
         {
             try
             {
+                Debug.Log("Websocket MessageReceived");
+
                 var message = Encoding.UTF8.GetString(data ?? throw new ApplicationException("data = null"));
                 OnMessage?.Invoke(message);
             }

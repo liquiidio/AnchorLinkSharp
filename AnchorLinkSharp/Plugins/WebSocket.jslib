@@ -22,7 +22,7 @@ var LibraryWebSocket = {
 		onClose: null,
 
 		/* Debug mode */
-		debug: false
+		debug: true
 	},
 
 	/**

@@ -17,22 +17,24 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders
             return $"{this._keyPrefix}{key}";
         }
 
-        public async Task Write(string key, string data)
+        public Task Write(string key, string data)
         {
-            await Task.Run(() => { PlayerPrefs.SetString(this.StorageKey(key), data); });
+            PlayerPrefs.SetString(this.StorageKey(key), data);
+            return Task.CompletedTask;
         }
 
-        public async Task<string> Read(string key)
+        public Task<string> Read(string key)
         {
-            return await Task.Run(() => PlayerPrefs.HasKey(this.StorageKey(key))
+            return Task.FromResult(PlayerPrefs.HasKey(this.StorageKey(key))
                 ? PlayerPrefs.GetString(this.StorageKey(key))
                 : null);
         }
 
-        public async Task Remove(string key)
+        public Task Remove(string key)
         {
             if(PlayerPrefs.HasKey(this.StorageKey(key)))
-                await Task.Run(() => { PlayerPrefs.DeleteKey(this.StorageKey(key)); });
+               PlayerPrefs.DeleteKey(this.StorageKey(key));
+            return Task.CompletedTask;
         }
     }
 }

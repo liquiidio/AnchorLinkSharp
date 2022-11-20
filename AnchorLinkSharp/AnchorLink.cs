@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using EosioSigningRequest;
@@ -12,7 +11,9 @@ using EosSharp.Core.Api.v1;
 using EosSharp.Core.Helpers;
 using EosSharp.Core.Providers;
 using EosSharp;
+using NativeWebSocket;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace AnchorLinkSharp
 {
@@ -102,6 +103,8 @@ namespace AnchorLinkSharp
                 SignatureProvider = new DefaultSignProvider(),
                 Zlib = options.ZlibProvider
             };
+
+            _socket = new GameObject(nameof(WebSocketWrapper)).AddComponent<WebSocketWrapper>();
         }
 
 
@@ -669,6 +672,8 @@ namespace AnchorLinkSharp
             return $"{ChainId}-{identifier}-{suffix}";
         }
 
+        private WebSocketWrapper _socket;
+
         /**
          * Connect to a WebSocket channel and wait for a message.
          * @internal
@@ -685,16 +690,17 @@ namespace AnchorLinkSharp
 
                 CallbackPayload cbp = null;
 
-                var socket = WebSocketWrapper.Create(socketUrl);
- 
-                socket.OnMessage += async (data) =>
+                await _socket.Create(socketUrl);
+
+                _socket.OnMessage += async (data) =>
                 {
                     try
                     {
                         active = false;
-                        if (socket.State == WebSocketState.Open)
+                        if (_socket.State == WebSocketState.Open)
                         {
-                            //await socket.CloseAsync(WebSocketCloseStatus.Empty, "", cts.Token);
+                            await _socket.CloseAsync();
+                            _socket.Clear();
                         }
 
                         cbp = JsonConvert.DeserializeObject<CallbackPayload>(data);
@@ -708,28 +714,31 @@ namespace AnchorLinkSharp
                         throw new Exception("Unable to parse callback JSON: " + ex.Message);
                     }
                 };
-                socket.OnOpen += () =>
+                _socket.OnOpen += () =>
                 {
                     Console.WriteLine($"connected");
                     retries = 0;
                 };
-                //socket.OnError += Console.WriteLine;
-                socket.OnClose += async (code, closeReason) =>
+                _socket.OnError += (errormsg) =>
                 {
-                    Console.WriteLine($"closed {code} {closeReason}");
-                    if (active)
-                    {
-                        // I have no idea if this backoff-thing makes sense :D
-                        await Task.Delay(100);
-                        await socket.ConnectAsync();
-                    }
+                    Console.WriteLine(errormsg);
                 };
+                //socket.OnError += Console.WriteLine;
+                _socket.OnClose += async (code) =>
+                {
+                    Console.WriteLine($"closed with code {code} {code.ToString()}");
+                    //if (active)
+                    //{
+                    //    // I have no idea if this backoff-thing makes sense :D
+                    //    await Task.Delay(100);
+                    //    //await _socket.ConnectAsync();
+                    //}
+                };
+                await _socket.ConnectAsync();
 
-                await socket.ConnectAsync();
                 while (cbp == null && !cts.IsCancellationRequested && retries < 100)
                 {
-                    var test = socket.State;
-                    Console.WriteLine(socket.State);
+                    Console.WriteLine(_socket.State);
 
                     await Task.Delay(100, cts.Token);
                 }

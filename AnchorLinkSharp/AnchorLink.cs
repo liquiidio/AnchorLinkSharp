@@ -694,7 +694,7 @@ namespace AnchorLinkSharp
             //socket.OnError += Console.WriteLine;
             _socket.OnClose += async (code) =>
             {
-                Debug.Log(($"closed with code {code} {code.ToString()}");
+                Debug.Log($"closed with code {code} {code.ToString()}");
                 //if (active)
                 //{
                 //    // I have no idea if this backoff-thing makes sense :D

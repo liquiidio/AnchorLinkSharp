@@ -709,7 +709,7 @@ namespace AnchorLinkSharp
                 Debug.Log($"SocketState: {_socket.State}" );
 
 #if UNITY_WEBGL
-                await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: true);
+                await UniTask.Delay(100);
 #else
                 await Task.Delay(100, cts.Token);
 #endif
@@ -752,7 +752,7 @@ namespace AnchorLinkSharp
                     }
 
 #if UNITY_WEBGL
-                    await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: true);
+                    await UniTask.Delay(100);
 #else
                     await Task.Delay(100, ctl);
 #endif

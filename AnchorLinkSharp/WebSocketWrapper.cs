@@ -7,6 +7,12 @@ using UnityEngine;
 using WebSocket = NativeWebSocket.WebSocket;
 using WebSocketState = NativeWebSocket.WebSocketState;
 
+#if UNITY_WEBGL
+// ReSharper disable once RedundantUsingDirective
+using Cysharp.Threading.Tasks;
+#endif
+
+
 namespace AnchorLinkSharp
 {
     public class WebSocketWrapper : MonoBehaviour

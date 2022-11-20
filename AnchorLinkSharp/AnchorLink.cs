@@ -14,7 +14,11 @@ using EosSharp;
 using NativeWebSocket;
 using Newtonsoft.Json;
 using UnityEngine;
+
+#if UNITY_WEBGL
+// ReSharper disable once RedundantUsingDirective
 using Cysharp.Threading.Tasks;
+#endif
 
 namespace AnchorLinkSharp
 {

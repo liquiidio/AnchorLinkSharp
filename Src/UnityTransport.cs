@@ -16,83 +16,48 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
     public abstract class UnityTransport : MonoBehaviour, ILinkTransport
     {
         private readonly bool _requestStatus;
-        private readonly bool _fuelEnabled;
         private SigningRequest _activeRequest;
-        private object _activeCancel; //?: (reason: string | Error) => void
-
-        internal ProcessStartInfo Ps;
-        //internal Timer _countdownTimer;
-        //internal Timer _closeTimer;
+        private Action<object> _activeCancel;
         public ILinkStorage Storage { get; }
-
-        internal Coroutine counterCoroutine = null;
 
         public UnityTransport(TransportOptions options)
         {
-            this._requestStatus = options.RequestStatus != false;
-            this._fuelEnabled = options.DisableGreymassFuel != true;
-            this.Storage = new PlayerPrefsStorage(options.StoragePrefix);
+            _requestStatus = options.RequestStatus != false;
+            Storage = new PlayerPrefsStorage(options.StoragePrefix);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L374
         // and https://github.com/greymass/anchor-link-console-transport/blob/master/src/index.ts#L10
-        public void OnRequest(SigningRequest request, System.Action<object> cancel)
+        public void OnRequest(SigningRequest request, Action<object> cancel)
         {
-            this._activeRequest = request;
-            this._activeCancel = cancel;
+            _activeRequest = request;
+            _activeCancel = cancel;
             var uri = request.Encode(false, true);
             Console.WriteLine(uri);
-
-            Ps = new ProcessStartInfo(uri)
-            {
-                UseShellExecute = true,
-            };
-            // TODO
-            // Application.OpenURL(uri); //has to be called instead
 
             DisplayRequest(request);
         }
 
-        public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
+        public void OnSessionRequest(LinkSession session, SigningRequest request, Action<object> cancel)
         {
             if (session is LinkFallbackSession)
             {
-                this.OnRequest(request, null);  // TODO CancellationToken?
+                OnRequest(request, cancel);
                 return;
             }
 
-            this._activeRequest = request;
-            this._activeCancel = cancel;
+            _activeRequest = request;
+            _activeCancel = cancel;
 
             var subTitle = session.Metadata.ContainsKey("name")
                 ? $"Please open Anchor Wallet on “${session.Metadata["name"]}” to review and sign the transaction."
                 : "Please review and sign the transaction in the linked wallet.";
             var title = "Sign";
-            this.ShowDialog(title, subTitle);
+            ShowDialog(title, subTitle);
         }
 
         public async Task<SigningRequest> Prepare(SigningRequest request, LinkSession session = null)
         {
-            //    this.showLoading()
-            if (!this._fuelEnabled || session == null || request.IsIdentity())
-            {
-                // don't attempt to cosign id request or if we don't have a session attached
-                return request;
-            }
-            try
-            {
-                var result = FuelSharp.Fuel(request, session /*, this.updatePrepareStatus.bind(this)*/);
-                if (await Task.WhenAny(result, Task.Delay(3500)) != result)
-                {
-                    throw new Exception("Fuel API timeout after 3500ms");
-                }
-
-                return result.Result;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Not applying fuel( {ex.Message})");
-            }
             return request;
         }
 
@@ -114,32 +79,32 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
                                                  int textureWidth = 256, int textureHeight = 256,
                                                  Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
         {
-            Texture2D _newTexture2D = new(textureWidth, textureHeight);
+            Texture2D newTexture2D = new(textureWidth, textureHeight);
 
-            var _encodedData = StringEncoder(textForEncoding, _newTexture2D.width, _newTexture2D.height);
+            var encodedData = StringEncoder(textForEncoding, newTexture2D.width, newTexture2D.height);
 
-            for (int x = 0; x < _encodedData.Length; x++)
+            for (int x = 0; x < encodedData.Length; x++)
             {
                 // If there is an assigned base colour for each white "pixel" convert it to the base colour
-                if (baseColor != Color.clear && _encodedData[x] == Color.white)
+                if (baseColor != Color.clear && encodedData[x] == Color.white)
                 {
-                    _encodedData[x] = baseColor;
+                    encodedData[x] = baseColor;
                 }
                 // If there is an assigned pixelColor colour for each black "pixel" convert it to the pixelColor colour
-                else if (pixelColor != Color.clear && _encodedData[x] == Color.black)
+                else if (pixelColor != Color.clear && encodedData[x] == Color.black)
                 {
-                    _encodedData[x] = pixelColor;
+                    encodedData[x] = pixelColor;
                 }
             }
-            _newTexture2D.SetPixels32(_encodedData);
-            _newTexture2D.Apply();
+            newTexture2D.SetPixels32(encodedData);
+            newTexture2D.Apply();
 
-            return _newTexture2D;
+            return newTexture2D;
         }
 
         private Color32[] StringEncoder(string textForEncoding, int width, int height)
         {
-            var _barcodeWriter = new BarcodeWriter
+            var barcodeWriter = new BarcodeWriter
             {
                 Format = BarcodeFormat.QR_CODE,
 
@@ -150,7 +115,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
                 }
             };
 
-            return _barcodeWriter.Write(textForEncoding);
+            return barcodeWriter.Write(textForEncoding);
         }
         #endregion
 
@@ -192,11 +157,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
 
         public abstract void DisplayRequest(SigningRequest request);
 
-        public abstract void ShowDialog(string title = null, string subtitle = null, string type = null, System.Action action = null, object content = null);
+        public abstract void ShowDialog(string title = null, string subtitle = null, string type = null, Action action = null, object content = null);
 
         public void StartAnchorDesktop()
         {
-            Process.Start(Ps);
+            Application.OpenURL(_activeRequest.Encode());
         }
     }
 }

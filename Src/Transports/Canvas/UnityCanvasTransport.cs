@@ -12,7 +12,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 {
     public class UnityCanvasTransport : UnityTransport
     {
-        //private string ESRLinkUrl = "";
+        internal Coroutine counterCoroutine = null;
 
         internal GameObject currentPanel;
 

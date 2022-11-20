@@ -20,7 +20,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
                     return outputStream.ToArray();
                 }
             }
-
         }
 
         public byte[] InflateRaw(byte[] data)

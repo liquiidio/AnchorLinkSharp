@@ -655,7 +655,8 @@ namespace AnchorLinkSharp
             var active = true;
             var retries = 0;
             var socketUrl = url.Replace("http", "ws");
-            
+
+            RejectedPayload rp = null;
             CallbackPayload cbp = null;
 
             await _socket.Create(socketUrl);
@@ -670,6 +671,8 @@ namespace AnchorLinkSharp
                         await _socket.CloseAsync();
                         _socket.Clear();
                     }
+
+                    rp = JsonConvert.DeserializeObject<RejectedPayload>(data);
 
                     cbp = JsonConvert.DeserializeObject<CallbackPayload>(data);
                     if (cbp.Data == null)
@@ -704,16 +707,18 @@ namespace AnchorLinkSharp
             };
             await _socket.ConnectAsync();
 
-            while (cbp == null && !cts.IsCancellationRequested && retries < 100)
+            while (cbp == null && rp == null && !cts.IsCancellationRequested && retries < 100)
             {
                 Debug.Log($"SocketState: {_socket.State}" );
-
 #if UNITY_WEBGL
                 await UniTask.Delay(100);
 #else
                 await Task.Delay(100, cts.Token);
 #endif
             }
+
+            if (!string.IsNullOrEmpty(rp?.Rejected))
+                throw new CancelException(rp?.Rejected);
 
             active = false;
             return cbp;

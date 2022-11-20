@@ -267,7 +267,7 @@ MonoBehaviour:
   UnityCanvasTransport: {fileID: 1257263940129545644}
   LoginExample: {fileID: 2134134564}
   TransactExample: {fileID: 1714617601}
-  UseCanvas: 1
+  UseCanvas: 0
 --- !u!1 &487579942
 GameObject:
   m_ObjectHideFlags: 0

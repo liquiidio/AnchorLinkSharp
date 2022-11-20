@@ -61,8 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a6e6b8e64ef8a47a4d4ef122270cca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsWhiteTheme: 0
   QrCodePanel: {fileID: 7828644621323565626}
   TimeoutPanel: {fileID: 7828644622817441497}
+  DarkTheme: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+  WhiteTheme: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
 --- !u!1 &7828644621158132761
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1489e50bf2687f43b006cd5b2401dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsWhiteTheme: 0
+  DarkTheme: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+  WhiteTheme: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
 --- !u!1 &7828644621352055937
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,6 +191,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e0d7795ef622414291f8a24b88b922f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsWhiteTheme: 0
+  DarkTheme: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+  WhiteTheme: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
   LoadingPanel: {fileID: 7828644621903909045}
   SigningTimerPanel: {fileID: 7828644621199537391}
 --- !u!1 &7828644621563561486
@@ -248,7 +257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98daeaaef6177324aa5eed36de5b3771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsWhiteTheme: 0
   QrCodePanel: {fileID: 7828644621323565626}
+  DarkTheme: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+  WhiteTheme: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
 --- !u!1 &7828644621629816843
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +322,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1032b55c4f5e9584d8a969c9d3bbc5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsWhiteTheme: 0
+  DarkTheme: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+  WhiteTheme: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
 --- !u!1 &7828644621766742935
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,3 +445,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad80b35c10adcf24380ad21c2cb9fb5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsWhiteTheme: 0
+  DarkTheme: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+  WhiteTheme: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}

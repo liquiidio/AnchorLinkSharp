@@ -10,6 +10,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         internal UIDocument Screen;
 
+
         private void Awake()
         {
             Screen = GetComponent<UIDocument>();

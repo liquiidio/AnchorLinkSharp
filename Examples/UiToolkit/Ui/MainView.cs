@@ -75,6 +75,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
             _accountLabel = Root.Q<Label>("account-label");
             _loginTitleLabel = Root.Q<Label>("anchor-link-title-label");
             _subtitleLabel = Root.Q<Label>("anchor-link-subtitle-label");
+
             _toTextField = Root.Q<TextField>("to-account-text-field");
             _fromTextField = Root.Q<TextField>("from-account-text-field");
             _memoTextField = Root.Q<TextField>("memo-text-field");

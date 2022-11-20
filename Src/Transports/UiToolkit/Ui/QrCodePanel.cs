@@ -10,15 +10,18 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
     [RequireComponent(typeof(QrCodePanel))]
     public class QrCodePanel : PanelBase
     {
-        
-        public LoadingPanel LoadingPanel;
-        public SigningTimerPanel SigningTimerPanel;
-
         /*
          * Fields, Properties
          */
+        public bool IsWhiteTheme;
         private readonly Vector3 _qrCurrentSize = new(1, 1);
         private SigningRequest _request;
+
+        [SerializeField] internal StyleSheet DarkTheme;
+        [SerializeField] internal StyleSheet WhiteTheme;
+
+        [SerializeField] internal LoadingPanel LoadingPanel;
+        [SerializeField] internal SigningTimerPanel SigningTimerPanel;
 
         /*
          * Child-Controls
@@ -30,6 +33,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private VisualElement _readyToCopy;
         private VisualElement _alreadyCopied;
         private VisualElement _anchorFootnote;
+        private VisualElement _anchorLinkCopy;
 
         private Label _subtitleLabel;
         private Label _copyLabel;
@@ -49,11 +53,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _alreadyCopied = Root.Q<VisualElement>("already-copied");
             _readyToCopy = Root.Q<VisualElement>("ready-to-copy");
             _anchorFootnote = Root.Q<VisualElement>("anchor-link-footnote");
+            _anchorLinkCopy = Root.Q<VisualElement>("anchor-link-copy");
 
+            if (IsWhiteTheme) _anchorLinkCopy.Hide();
+                
             OnStart();
             BindButtons();
+            CheckTheme();
         }
-
 
         #region Button Binding
 
@@ -104,9 +111,16 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         public void Rebind(SigningRequest request, bool isLogin)
         {
             _request = request;
-            var qrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
+            var whiteQrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
+                new Color32(0, 0, 0, 255), Color.white);
+
+            var darkQrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
                 new Color32(19, 27, 51, 255), Color.white);
-            _qrCodeBox.style.backgroundImage = qrCodeTexture;
+
+            if (IsWhiteTheme)
+                _qrCodeBox.style.backgroundImage = whiteQrCodeTexture;
+            else _qrCodeBox.style.backgroundImage = darkQrCodeTexture;
+
 
             if (isLogin)
             {
@@ -162,8 +176,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /// <param name="textureWidth">How wide the new texture should be</param>
         /// <param name="textureHeight">How high the new texture should be</param>
         /// <returns></returns>
-        public Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth = 256,
-            int textureHeight = 256, Color32 baseColor = new(), Color32 pixelColor = new())
+        public Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth,
+            int textureHeight, Color32 baseColor = new(), Color32 pixelColor = new())
         {
             Texture2D newTexture2D = new(textureWidth, textureHeight);
 
@@ -213,6 +227,23 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         public void CopyToClipboard(string targetString)
         {
             GUIUtility.systemCopyBuffer = targetString;
+        }
+
+        private void CheckTheme()
+        {
+            Root.styleSheets.Clear();
+
+            if (IsWhiteTheme)
+            {
+                Root.styleSheets.Remove(DarkTheme);
+                Root.styleSheets.Add(WhiteTheme);
+            }
+            else
+            {
+
+                Root.styleSheets.Remove(WhiteTheme);
+                Root.styleSheets.Add(DarkTheme);
+            }
         }
 
         #endregion

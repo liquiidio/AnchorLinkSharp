@@ -626,9 +626,81 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1253693387}
     m_Modifications:
+    - target: {fileID: 7828644621158132760, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: DarkTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+    - target: {fileID: 7828644621158132760, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: WhiteTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
+    - target: {fileID: 7828644621158132760, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsWhiteTheme
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644621199537391, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: DarkTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+    - target: {fileID: 7828644621199537391, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: WhiteTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
+    - target: {fileID: 7828644621199537391, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsWhiteTheme
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644621323565626, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: DarkTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+    - target: {fileID: 7828644621323565626, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644621323565626, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: WhiteTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
+    - target: {fileID: 7828644621323565626, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsDarkTheme
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644621323565626, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsWhiteTheme
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644621629816842, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: DarkTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+    - target: {fileID: 7828644621629816842, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: WhiteTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
+    - target: {fileID: 7828644621629816842, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsWhiteTheme
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7828644621766742935, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
       propertyPath: m_Name
       value: UiToolkitTransport
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644621903909045, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: DarkTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+    - target: {fileID: 7828644621903909045, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: WhiteTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
+    - target: {fileID: 7828644621903909045, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsWhiteTheme
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644621958486371, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsDarkTheme
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7828644621958486396, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
       propertyPath: m_RootOrder
@@ -672,6 +744,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7828644621958486396, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828644622817441497, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: DarkTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 90d8c5ad47eb87147941c55dff626289, type: 3}
+    - target: {fileID: 7828644622817441497, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: WhiteTheme
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: c0908df941ee4f943beebd56486e841f, type: 3}
+    - target: {fileID: 7828644622817441497, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsWhiteTheme
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

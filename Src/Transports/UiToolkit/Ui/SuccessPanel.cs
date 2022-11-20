@@ -13,6 +13,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
     [RequireComponent(typeof(SuccessPanel))]
     public class SuccessPanel : PanelBase
     {
+
+        public bool IsWhiteTheme;
+        [SerializeField] internal StyleSheet DarkTheme;
+        [SerializeField] internal StyleSheet WhiteTheme;
+
         /*
          * Child-Controls
          */
@@ -23,6 +28,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _subTitleLabel = Root.Q<Label>("anchor-link-subtitle-label");
 
             OnStart();
+            CheckTheme();
         }
 
         #region Rebind
@@ -51,6 +57,23 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                 yield return null;
             }
             this.Hide();
+        }
+
+        private void CheckTheme()
+        {
+            Root.styleSheets.Clear();
+
+            if (IsWhiteTheme)
+            {
+                Root.styleSheets.Remove(DarkTheme);
+                Root.styleSheets.Add(WhiteTheme);
+            }
+            else
+            {
+
+                Root.styleSheets.Remove(WhiteTheme);
+                Root.styleSheets.Add(DarkTheme);
+            }
         }
         #endregion
     }

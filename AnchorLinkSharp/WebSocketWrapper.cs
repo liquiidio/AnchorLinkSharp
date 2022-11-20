@@ -53,6 +53,7 @@ namespace AnchorLinkSharp
         {
             if (_newRequest)
             {
+                Debug.Log("Initializing new Websocket for new Request");
                 _webSocket = new WebSocket(_uri);
                 _newRequest = false;
             }

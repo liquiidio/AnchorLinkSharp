@@ -648,81 +648,75 @@ namespace AnchorLinkSharp
          * Connect to a WebSocket channel and wait for a message.
          * @internal
          */
-        public Task<CallbackPayload> WaitForCallback(string url, CancellationTokenSource cts)
+        public async Task<CallbackPayload> WaitForCallback(string url, CancellationTokenSource cts)
         {
             Debug.Log("WaitForCallback");
 
-            return Task.Run(async () =>
+            var active = true;
+            var retries = 0;
+            var socketUrl = url.Replace("http", "ws");
+            
+            CallbackPayload cbp = null;
+
+            await _socket.Create(socketUrl);
+
+            _socket.OnMessage += async (data) =>
             {
-                var active = true;
-                var retries = 0;
-                var socketUrl = url.Replace("http", "ws");
-                
-                Console.WriteLine(socketUrl);
-
-                CallbackPayload cbp = null;
-
-                await _socket.Create(socketUrl);
-
-                _socket.OnMessage += async (data) =>
+                try
                 {
-                    try
+                    active = false;
+                    if (_socket.State == WebSocketState.Open)
                     {
-                        active = false;
-                        if (_socket.State == WebSocketState.Open)
-                        {
-                            await _socket.CloseAsync();
-                            _socket.Clear();
-                        }
-
-                        cbp = JsonConvert.DeserializeObject<CallbackPayload>(data);
-                        if (cbp.Data == null)
-                            cbp.Data = new Dictionary<string, string>();
+                        await _socket.CloseAsync();
+                        _socket.Clear();
                     }
-                    catch (Exception ex)
-                    {
-                        cts.Cancel();
-                        Console.WriteLine(data.ToString());
-                        throw new Exception("Unable to parse callback JSON: " + ex.Message);
-                    }
-                };
-                _socket.OnOpen += () =>
-                {
-                    Console.WriteLine($"connected");
-                    retries = 0;
-                };
-                _socket.OnError += (errormsg) =>
-                {
-                    Console.WriteLine(errormsg);
-                };
-                //socket.OnError += Console.WriteLine;
-                _socket.OnClose += async (code) =>
-                {
-                    Console.WriteLine($"closed with code {code} {code.ToString()}");
-                    //if (active)
-                    //{
-                    //    // I have no idea if this backoff-thing makes sense :D
-                    //    await Task.Delay(100);
-                    //    //await _socket.ConnectAsync();
-                    //}
-                };
-                await _socket.ConnectAsync();
 
-                while (cbp == null && !cts.IsCancellationRequested && retries < 100)
-                {
-                    Console.WriteLine(_socket.State);
-
-#if UnityWEB
-                    await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: true);
-#else
-                    await Task.Delay(100, cts.Token);
-#endif
+                    cbp = JsonConvert.DeserializeObject<CallbackPayload>(data);
+                    if (cbp.Data == null)
+                        cbp.Data = new Dictionary<string, string>();
                 }
+                catch (Exception ex)
+                {
+                    cts.Cancel();
+                    Console.WriteLine(data.ToString());
+                    throw new Exception("Unable to parse callback JSON: " + ex.Message);
+                }
+            };
+            _socket.OnOpen += () =>
+            {
+                Debug.Log($"Websocket connected");
+                retries = 0;
+            };
+            _socket.OnError += (errormsg) =>
+            {
+                Debug.Log($"WebsocketError: {errormsg}");
+            };
+            //socket.OnError += Console.WriteLine;
+            _socket.OnClose += async (code) =>
+            {
+                Debug.Log(($"closed with code {code} {code.ToString()}");
+                //if (active)
+                //{
+                //    // I have no idea if this backoff-thing makes sense :D
+                //    await Task.Delay(100);
+                //    //await _socket.ConnectAsync();
+                //}
+            };
+            await _socket.ConnectAsync();
 
-                active = false;
-                return cbp;
+            while (cbp == null && !cts.IsCancellationRequested && retries < 100)
+            {
+                Debug.Log($"SocketState: {_socket.State}" );
 
-            }, cts.Token);
+#if UNITY_WEBGL
+                await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: true);
+#else
+                await Task.Delay(100, cts.Token);
+#endif
+            }
+
+            active = false;
+            return cbp;
         }
 
         public void PollForCallback(string url, CancellationToken ctl)

@@ -167,6 +167,7 @@ namespace AnchorLinkSharp
             var t = transport ?? Transport;
             try
             {
+
                 var linkUrl = request.Data.Callback;
                 if (!linkUrl.StartsWith(_serviceAddress))
                 {

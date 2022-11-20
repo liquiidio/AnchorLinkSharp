@@ -724,45 +724,42 @@ namespace AnchorLinkSharp
             return cbp;
         }
 
-        public void PollForCallback(string url, CancellationToken ctl)
+        public async Task PollForCallback(string url, CancellationToken ctl)
         {
-            Task.Run(async () =>
+            var active = true;
+            while (active)
             {
-                var active = true;
-                while (active)
+                try
                 {
-                    try
+                    using (var httpClient = new HttpClient())
                     {
-                        using (var httpClient = new HttpClient())
+                        var response = await httpClient.GetAsync(new Uri(url), ctl);
+                        if (response.StatusCode == HttpStatusCode.RequestTimeout)
                         {
-                            var response = await httpClient.GetAsync(new Uri(url), ctl);
-                            if (response.StatusCode == HttpStatusCode.RequestTimeout)
-                            {
-                                continue;
-                            }
-                            else if (response.StatusCode == HttpStatusCode.OK)
-                            {
-                                /*return */
-                                Console.WriteLine(await response.Content.ReadAsStringAsync());
-                            }
-                            else
-                            {
-                                throw new Exception($"HTTP {response.StatusCode}: {response.ReasonPhrase}");
-                            }
+                            continue;
+                        }
+                        else if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            /*return */
+                            Console.WriteLine(await response.Content.ReadAsStringAsync());
+                        }
+                        else
+                        {
+                            throw new Exception($"HTTP {response.StatusCode}: {response.ReasonPhrase}");
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Unexpected hyperbuoy error {ex.Message}");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected hyperbuoy error {ex.Message}");
+                }
 
 #if UNITY_WEBGL
-                    await UniTask.Delay(100);
+                await UniTask.Delay(100);
 #else
-                    await Task.Delay(100, ctl);
+                await Task.Delay(100, ctl);
 #endif
-                }
-            }, ctl);
+            }
         }
     }
 }

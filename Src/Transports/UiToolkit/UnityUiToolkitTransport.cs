@@ -16,11 +16,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 
         private static ScreenBase _activeScreen;
         private static bool _transitioningPanel;
-        public bool IsDarkTheme;
 
-        [SerializeField] internal StyleSheet DarkTheme;
-        [SerializeField] internal StyleSheet WhiteTheme;
-        
         [SerializeField] internal FailurePanel FailurePanel;
         [SerializeField] internal LoadingPanel LoadingPanel;
         [SerializeField] internal QrCodePanel QrCodePanel;
@@ -37,8 +33,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             LoadingPanel = FindObjectOfType<LoadingPanel>();
             SigningTimerPanel = FindObjectOfType<SigningTimerPanel>();
             TimeoutPanel = FindObjectOfType<TimeoutPanel>();
-            DarkTheme = FindObjectOfType<StyleSheet>();
-            WhiteTheme = FindObjectOfType<StyleSheet>();
         }
 
         public static IEnumerator<float> TransitionPanels(ScreenBase to)
@@ -62,23 +56,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             _transitioningPanel = false;
 
             if (to == null) Debug.Log("missing the panel");
-        }
-
-        void CheckTheme()
-        {
-            _activeScreen.Root.styleSheets.Clear();
-
-            IsDarkTheme = false;
-            if (IsDarkTheme)
-            {
-                _activeScreen.Root.styleSheets.Remove(WhiteTheme);
-                _activeScreen.Root.styleSheets.Add(DarkTheme);
-            }
-            else
-            {
-                _activeScreen.Root.styleSheets.Remove(DarkTheme);
-                _activeScreen.Root.styleSheets.Add(WhiteTheme);
-            }
         }
 
         //open anchor link version on chrome page
@@ -123,6 +100,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         public override void DisplayRequest(SigningRequest request)
         {
             Debug.Log("DisplayRequest");
+
             StartCoroutine(TransitionPanels(QrCodePanel));
             QrCodePanel.Rebind(request, request.IsIdentity());
         }

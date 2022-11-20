@@ -159,9 +159,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
 
         public abstract void ShowDialog(string title = null, string subtitle = null, string type = null, Action action = null, object content = null);
 
-        public void StartAnchorDesktop()
+        public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
         {
-            Application.OpenURL(_activeRequest.Encode());
+            throw new NotImplementedException();
         }
+
+        //public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

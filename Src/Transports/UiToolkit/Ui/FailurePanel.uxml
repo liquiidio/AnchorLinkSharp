@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Packages/anchorlinktransportsharp/Src/Transports/UiToolkit/Stylesheets/DarkAnchorLinkStyle.uss?fileID=7433441132597879392&amp;guid=90d8c5ad47eb87147941c55dff626289&amp;type=3#DarkAnchorLinkStyle" />
+    <ui:VisualElement name="screen" style="align-items: center; justify-content: center; height: 100%; width: 100%; flex-direction: row;">
+        <ui:VisualElement name="anchor-link-failure-panel" class="success-inner-background">
+            <ui:Button display-tooltip-when-elided="true" name="close-view-button" class="anchor-close-button" />
+            <ui:VisualElement name="anchor-link-version" class="version-visibility" style="opacity: 1; width: 66px; align-items: center; background-color: rgba(84, 106, 175, 0); position: absolute; top: 19px; left: 20px;">
+                <ui:Label text="3.3.0 (3.4.1)" display-tooltip-when-elided="true" name="version-label" class="version-visibility version-label" />
+            </ui:VisualElement>
+            <ui:VisualElement name="anchor-link-request" class="outer-background outer-background-color" style="width: 100%; height: 100%;">
+                <ui:VisualElement name="anchor-link-failure-logo" style="background-image: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/failureIcon.png?fileID=2800000&amp;guid=4fcc0166fed6fc344a82fe1f8f4d7bf3&amp;type=3#failureIcon&apos;); width: 70px; height: 70px; margin-top: -56px; margin-right: auto; margin-left: auto;" />
+                <ui:VisualElement name="anchor-link-info" style="align-items: center; justify-content: center;">
+                    <ui:Label text="Failure!" display-tooltip-when-elided="true" name="anchor-link-title-label" class="anchor-link-title-label" />
+                    <ui:Label text="Error try again." display-tooltip-when-elided="true" name="anchor-link-subtitle-label" class="anchor-link-subtitle-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

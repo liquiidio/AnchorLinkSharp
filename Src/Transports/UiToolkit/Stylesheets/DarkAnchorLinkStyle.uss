@@ -1,0 +1,278 @@
+VisualElement {
+}
+
+.anchor-close-button {
+    background-image: url('project://database/Packages/com.unity.collab-proxy/Editor/Collaborate/Assets/Icons/clear-dark@2x.png?fileID=2800000&guid=c98f350e47082844fa2954de4d2d5ff9&type=3#clear-dark@2x');
+    background-color: rgba(88, 88, 88, 0);
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 11px;
+    right: 16px;
+    -unity-text-align: upper-center;
+}
+
+.anchor-close-button:hover {
+    background-color: rgb(0, 0, 0);
+    width: 28px;
+    height: 28px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.anchor-launch-button {
+    width: 300px;
+    height: 59px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 21px;
+    margin-bottom: 1px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: rgb(38, 45, 67);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    -unity-font-style: bold;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 255);
+}
+
+.anchor-launch-button:hover {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(255, 254, 255);
+    border-right-color: rgb(255, 254, 255);
+    border-top-color: rgb(255, 254, 255);
+    border-bottom-color: rgb(255, 254, 255);
+    width: 300px;
+    height: 59px;
+    flex-grow: 0;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    transition-duration: 0s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+
+.version-visibility {
+    opacity: 1;
+    color: rgb(56, 60, 70);
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.version-visibility:hover {
+    color: rgb(84, 106, 175);
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.anchor-link-label-click {
+}
+
+.anchor-link-label-click:hover {
+    color: rgb(255, 252, 252);
+}
+
+.inner-background-color {
+    width: 340px;
+    height: 300px;
+    background-image: none;
+    background-color: rgb(38, 45, 67);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+}
+
+.outer-background-color {
+    background-color: rgb(19, 27, 51);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 12px;
+    width: 100%;
+    height: 100%;
+}
+
+.anchor-link-title-label {
+    color: rgb(252, 252, 252);
+    -unity-font-style: bold;
+    font-size: 25px;
+    margin-top: 14px;
+    letter-spacing: 0.5px;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.anchor-link-subtitle-label {
+    color: rgb(184, 192, 218);
+    -unity-font-style: bold;
+    font-size: 16px;
+    margin-top: 14px;
+    letter-spacing: 0;
+    -unity-text-align: upper-center;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    white-space: normal;
+}
+
+.version-label {
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.close-view-button {
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/Textures/Icons/x-button.png?fileID=2800000&guid=c4ce4a00c6faad445a6a56b68da9373d&type=3#x-button');
+    background-color: rgba(88, 88, 88, 0);
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 11px;
+    right: 8px;
+}
+
+.anchor-link-version-box {
+    width: 66px;
+    position: absolute;
+    top: 20px;
+    right: auto;
+    left: 20px;
+}
+
+.inner-qr-panel-background {
+    background-color: rgb(38, 45, 67);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: 340px;
+    height: 599.4px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+}
+
+.outer-qr-panel-background {
+    background-color: rgb(19, 27, 51);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.success-inner-background {
+    background-color: rgba(38, 45, 67, 255);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    width: 340px;
+    height: 200px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+}
+
+.sign-timer-background {
+    width: 340px;
+    height: 250px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+    background-color: rgba(38, 45, 67, 255);
+}
+
+.anchor-launch-button-box {
+    width: 300px;
+    height: 80px;
+}
+
+.qr-code-box {
+    width: 300px;
+    height: 300px;
+    border-left-color: rgb(38, 45, 67);
+    border-right-color: rgb(38, 45, 67);
+    border-top-color: rgb(38, 45, 67);
+    border-bottom-color: rgb(38, 45, 67);
+    background-color: rgb(19, 27, 51);
+    margin-top: 21px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    transition-timing-function: ease-in-out;
+    transition-duration: 400ms;
+    translate: 1px 0;
+}
+
+.copy-request-link-box {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 293px;
+    align-items: center;
+    opacity: 1;
+    -unity-text-align: upper-center;
+    height: 17.67px;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+    transition-delay: 400ms;
+}
+
+.link-box {
+    width: 270px;
+    height: 270px;
+    background-color: rgb(19, 27, 51);
+    scale: 1 1;
+    position: relative;
+    transition-duration: 400ms;
+    transition-timing-function: ease-in-out;
+}

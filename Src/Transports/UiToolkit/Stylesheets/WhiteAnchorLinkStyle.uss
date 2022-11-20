@@ -1,0 +1,286 @@
+VisualElement {
+}
+
+.anchor-close-button {
+    background-image: url('project://database/Packages/com.unity.collab-proxy/Editor/Collaborate/Assets/Icons/clear-dark@2x.png?fileID=2800000&guid=c98f350e47082844fa2954de4d2d5ff9&type=3#clear-dark@2x');
+    background-color: rgba(88, 88, 88, 0);
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 11px;
+    right: 16px;
+    -unity-text-align: middle-center;
+}
+
+.anchor-close-button:hover {
+    background-color: rgb(0, 0, 0);
+    width: 28px;
+    height: 28px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.anchor-launch-button {
+    width: 300px;
+    height: 59px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 21px;
+    margin-bottom: 1px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: rgba(0, 122, 255, 255);
+    background-color: rgba(116, 116, 128, 0.25);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.anchor-launch-button:hover {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(255, 254, 255);
+    border-right-color: rgb(255, 254, 255);
+    border-top-color: rgb(255, 254, 255);
+    border-bottom-color: rgb(255, 254, 255);
+    width: 300px;
+    height: 59px;
+    flex-grow: 0;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    transition-duration: 0s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+
+.version-visibility {
+    opacity: 1;
+    color: rgb(56, 60, 70);
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.version-visibility:hover {
+    color: rgb(84, 106, 175);
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.anchor-link-label-click {
+    color: rgb(0, 122, 255);
+    padding-top: 14px;
+    width: 212px;
+    height: 13px;
+    padding-left: 1px;
+    padding-right: 2px;
+    margin-top: 14px;
+}
+
+.anchor-link-label-click:hover {
+    color: rgb(255, 252, 252);
+}
+
+.inner-background-color {
+    width: 340px;
+    height: 250px;
+    background-image: none;
+    background-color: rgb(241, 241, 241);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+}
+
+.outer-background-color {
+    background-color: rgb(255, 255, 255);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+.anchor-link-title-label {
+    color: rgb(0, 0, 0);
+    -unity-font-style: bold;
+    font-size: 25px;
+    margin-top: 14px;
+    letter-spacing: 0.5px;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.anchor-link-subtitle-label {
+    color: rgb(92, 92, 92);
+    -unity-font-style: bold;
+    font-size: 16px;
+    margin-top: 14px;
+    letter-spacing: 0;
+    -unity-text-align: upper-center;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    white-space: normal;
+}
+
+.version-label {
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+}
+
+.close-view-button {
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/Textures/Icons/x-button.png?fileID=2800000&guid=c4ce4a00c6faad445a6a56b68da9373d&type=3#x-button');
+    background-color: rgba(88, 88, 88, 0);
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    left: auto;
+    top: 10px;
+    right: 8px;
+}
+
+.anchor-link-version-box {
+    opacity: 1;
+    width: 66px;
+    align-items: center;
+    background-color: rgba(84, 106, 175, 0);
+    position: absolute;
+    top: 19px;
+    left: 20px;
+}
+
+.inner-qr-panel-background {
+    width: 340px;
+    height: 599.4px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+    background-color: rgba(210, 210, 210, 255);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.outer-qr-panel-background {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 255);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.qr-box {
+    width: 300px;
+    height: 300px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    background-color: rgb(255, 254, 255);
+    margin-top: 21px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    transition-timing-function: ease-in-out;
+    transition-duration: 400ms;
+    translate: 1px 0;
+}
+
+.success-inner-background {
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+    background-color: rgba(241, 241, 241, 255);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    width: 300px;
+    height: 200px;
+}
+
+.sign-timer-background {
+    width: 340px;
+    height: 250px;
+    padding-top: 50px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgba(241, 241, 241, 255);
+}
+
+.info-box {
+    width: 300px;
+    height: 401px;
+    flex-direction: column-reverse;
+}
+
+.link-box {
+    transition-duration: 400ms;
+    transition-timing-function: ease-in-out;
+}
+
+.qr-code-box {
+    width: 300px;
+    height: 300px;
+    margin-top: 21px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+}
+
+.copy-request-link-box {
+    background-color: rgba(255, 255, 255, 255);
+}

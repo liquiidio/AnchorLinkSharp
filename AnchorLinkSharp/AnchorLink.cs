@@ -14,6 +14,7 @@ using EosSharp;
 using NativeWebSocket;
 using Newtonsoft.Json;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace AnchorLinkSharp
 {
@@ -707,7 +708,11 @@ namespace AnchorLinkSharp
                 {
                     Console.WriteLine(_socket.State);
 
+#if UnityWEB
+                    await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: true);
+#else
                     await Task.Delay(100, cts.Token);
+#endif
                 }
 
                 active = false;
@@ -748,7 +753,11 @@ namespace AnchorLinkSharp
                         Console.WriteLine($"Unexpected hyperbuoy error {ex.Message}");
                     }
 
-                    await Task.Delay(1000, ctl);
+#if UNITY_WEBGL
+                    await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: true);
+#else
+                    await Task.Delay(100, ctl);
+#endif
                 }
             }, ctl);
         }

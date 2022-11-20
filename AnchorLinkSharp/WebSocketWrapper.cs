@@ -74,7 +74,11 @@ namespace AnchorLinkSharp
             var i = 0;
             while (_webSocket == null && i < 100)
             {
+#if UNITY_WEBGL
+                await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: true);
+#else
                 await Task.Delay(100);
+#endif
                 i++;
             }
 

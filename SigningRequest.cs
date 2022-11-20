@@ -98,6 +98,11 @@ namespace EosioSigningRequest
     //    RequestSignature sign(string message);// => {signer: string; signature: string}  // TODO
     //}
 
+    public class RejectedPayload
+    {
+        public string Rejected;
+    }
+
     /**
      * The callback payload sent to background callbacks.
      */

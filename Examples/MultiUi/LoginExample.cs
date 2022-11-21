@@ -33,10 +33,14 @@ public class LoginExample : MonoBehaviour
             Rpc = "https://api.wax.liquidstudios.io",
             ZlibProvider = new NetZlibProvider(),
 <<<<<<< HEAD
+<<<<<<< HEAD
             Storage = new PlayerPrefsStorage()
 =======
             Storage = new JsonLocalStorage()
 >>>>>>> 80967f8 (changed RPC-address)
+=======
+            Storage = new PlayerPrefsStorage()
+>>>>>>> bb0a952 (changing to PlayerPrefsStorage)
         });
     }
 

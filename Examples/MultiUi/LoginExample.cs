@@ -29,16 +29,10 @@ public class LoginExample : MonoBehaviour
         _link = new AnchorLink(new LinkOptions
         {
             Transport = Transport,
-            //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906", 
-            //Rpc = "https://eos.greymass.com",
             ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
-            Rpc = "https://wax.greymass.com",
+            Rpc = "https://api.wax.liquidstudios.io",
             ZlibProvider = new NetZlibProvider(),
             Storage = new JsonLocalStorage()
-            //chains: [{
-            //    chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-            //    nodeUrl: 'https://eos.greymass.com',
-            //}]
         });
     }
 

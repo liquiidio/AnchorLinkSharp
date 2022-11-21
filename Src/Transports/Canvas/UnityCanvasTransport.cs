@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Linq;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using EosioSigningRequest;
 using TMPro;
 using UnityEngine;

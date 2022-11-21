@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using EosioSigningRequest;
 using EosSharp.Core;
@@ -187,19 +186,12 @@ namespace AnchorLinkSharp
                 }
 
                 // wait for callback or user cancel
-                var cts = new CancellationTokenSource();
-                var socket = WaitForCallback(linkUrl, cts);
-                var token = cts.Token;
+                var socket = WaitForCallback(linkUrl);
 
                 t.OnRequest(request, (reason) =>
                 {
-                    if(!cts.IsCancellationRequested)
-                        cts.Cancel();
-
                     if (reason is string sreason)
                     {
-                        // TODO, hm
-                        cts.Cancel();
                         throw new CancelException(sreason);
                     }
                 });
@@ -648,7 +640,7 @@ namespace AnchorLinkSharp
          * Connect to a WebSocket channel and wait for a message.
          * @internal
          */
-        public async Task<CallbackPayload> WaitForCallback(string url, CancellationTokenSource cts)
+        public async Task<CallbackPayload> WaitForCallback(string url)
         {
             Debug.Log("WaitForCallback");
 
@@ -680,7 +672,6 @@ namespace AnchorLinkSharp
                 }
                 catch (Exception ex)
                 {
-                    cts.Cancel();
                     Console.WriteLine(data.ToString());
                     throw new Exception("Unable to parse callback JSON: " + ex.Message);
                 }
@@ -707,13 +698,13 @@ namespace AnchorLinkSharp
             };
             await _socket.ConnectAsync();
 
-            while (cbp == null && rp == null && !cts.IsCancellationRequested && retries < 100)
+            while (cbp == null && rp == null && retries < 100)
             {
                 Debug.Log($"SocketState: {_socket.State}" );
 #if UNITY_WEBGL
                 await UniTask.Delay(100);
 #else
-                await Task.Delay(100, cts.Token);
+                await Task.Delay(100);
 #endif
             }
 
@@ -724,7 +715,7 @@ namespace AnchorLinkSharp
             return cbp;
         }
 
-        public async Task PollForCallback(string url, CancellationToken ctl)
+        public async Task PollForCallback(string url)
         {
             var active = true;
             while (active)
@@ -733,7 +724,7 @@ namespace AnchorLinkSharp
                 {
                     using (var httpClient = new HttpClient())
                     {
-                        var response = await httpClient.GetAsync(new Uri(url), ctl);
+                        var response = await httpClient.GetAsync(new Uri(url));
                         if (response.StatusCode == HttpStatusCode.RequestTimeout)
                         {
                             continue;
@@ -757,7 +748,7 @@ namespace AnchorLinkSharp
 #if UNITY_WEBGL
                 await UniTask.Delay(100);
 #else
-                await Task.Delay(100, ctl);
+                await Task.Delay(100);
 #endif
             }
         }

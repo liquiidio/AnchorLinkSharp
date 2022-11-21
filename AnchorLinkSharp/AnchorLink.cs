@@ -71,7 +71,7 @@ namespace AnchorLinkSharp
                     ChainId = ChainId,
                     ExpireSeconds = 10,
                     HttpEndpoint = (string) options.Rpc,
-#if Unity
+#if UNITY_WEBGL
                 }, new EosSharp.Unity3D.HttpHandler());
 #else
                 }, new HttpHandler());

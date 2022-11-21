@@ -71,7 +71,11 @@ namespace AnchorLinkSharp
                     ChainId = ChainId,
                     ExpireSeconds = 10,
                     HttpEndpoint = (string) options.Rpc,
+#if Unity
+                }, new EosSharp.Unity3D.HttpHandler());
+#else
                 }, new HttpHandler());
+#endif
             }
             else if(options.Rpc is EosApi eosApi)
             {

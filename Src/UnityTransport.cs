@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using EosioSigningRequest;
 using UnityEngine;
 using ZXing;

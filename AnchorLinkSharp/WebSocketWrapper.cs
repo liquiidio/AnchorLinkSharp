@@ -35,8 +35,6 @@ namespace AnchorLinkSharp
         /// <returns></returns>
         public async Task Create(string uri)
         {
-            Debug.Log("Websocket Create");
-
             OnOpen = null;
             OnMessage = null;
             OnClose = null;
@@ -52,7 +50,6 @@ namespace AnchorLinkSharp
         {
             if (_newRequest)
             {
-                Debug.Log("Initializing new Websocket for new Request");
                 _webSocket = new WebSocket(_uri);
                 _newRequest = false;
             }
@@ -62,18 +59,6 @@ namespace AnchorLinkSharp
                 _webSocket?.DispatchMessageQueue();      
 #endif
         }
-
-        /// <summary>
-        /// Connects to the WebSocket server.
-        /// </summary>
-        /// <returns></returns>
-        //public WebSocketWrapper Connect()
-        //{
-        //    ConnectAsync();
-        //    InvokeRepeating("SendWebSocketMessage", 0.0f, 0.5f);
-        //    return this;
-        //}
-
         public async Task ConnectAsync()
         {
             // wait max 10 seconds
@@ -87,8 +72,6 @@ namespace AnchorLinkSharp
 #endif
                 i++;
             }
-
-            Debug.Log("Websocket ConnectAsync");
 
             if (_webSocket != null)
             {
@@ -119,8 +102,6 @@ namespace AnchorLinkSharp
         {
             try
             {
-                Debug.Log("Websocket MessageReceived");
-
                 var message = Encoding.UTF8.GetString(data ?? throw new ApplicationException("data = null"));
                 OnMessage?.Invoke(message);
             }

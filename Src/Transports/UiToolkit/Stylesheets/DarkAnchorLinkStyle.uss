@@ -53,7 +53,7 @@ VisualElement {
     border-bottom-right-radius: 12px;
     -unity-font-style: bold;
     font-size: 18px;
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
 }
 
 .anchor-launch-button:hover {
@@ -141,6 +141,8 @@ VisualElement {
     -unity-text-align: upper-center;
     -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
     white-space: normal;
+    width: 300px;
+    height: 36.4px;
 }
 
 .version-label {
@@ -162,11 +164,16 @@ VisualElement {
 }
 
 .anchor-link-version-box {
-    width: 66px;
+    width: 64.73px;
     position: absolute;
     top: 20px;
     right: auto;
     left: 20px;
+    height: 13px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .inner-qr-panel-background {
@@ -190,14 +197,14 @@ VisualElement {
     padding-right: 20px;
     padding-top: 20px;
     padding-bottom: 20px;
-    width: 100%;
-    height: 100%;
+    width: 340px;
+    height: 549.4px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 }
 
 .success-inner-background {
-    background-color: rgba(38, 45, 67, 255);
+    background-color: rgb(38, 45, 67);
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
     border-top-right-radius: 12px;
@@ -219,7 +226,7 @@ VisualElement {
     margin-top: 20px;
     margin-bottom: 20px;
     padding-top: 50px;
-    background-color: rgba(38, 45, 67, 255);
+    background-color: rgb(38, 45, 67);
 }
 
 .anchor-launch-button-box {
@@ -275,4 +282,13 @@ VisualElement {
     position: relative;
     transition-duration: 400ms;
     transition-timing-function: ease-in-out;
+}
+
+.anchor-logo {
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/anchorIcon.png?fileID=2800000&guid=5eb519987fa4cc34e8ed09c02a5a9a1b&type=3#anchorIcon');
+    width: 70px;
+    height: 70px;
+    margin-top: -56px;
+    margin-left: auto;
+    margin-right: auto;
 }

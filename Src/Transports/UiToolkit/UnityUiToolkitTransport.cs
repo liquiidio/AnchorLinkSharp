@@ -12,7 +12,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
     {
         public const string VersionUrl = "https://github.com/greymass/anchor-link";
         public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
-        public const string Version = "3.3.0 (3.4.1)";
+        public const string Version = "3.5.1 (3.5.1)";
 
         private static ScreenBase _activeScreen;
         private static bool _transitioningPanel;

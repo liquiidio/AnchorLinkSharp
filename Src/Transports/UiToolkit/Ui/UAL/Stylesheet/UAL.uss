@@ -1,0 +1,8 @@
+.wallet-button {
+}
+
+.wallet-button:hover {
+    transition-duration: 0.3s;
+    scale: 1.03 1.03;
+    transition-timing-function: ease;
+}

@@ -150,7 +150,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         #region other
 
-        public IEnumerator SetText(float counterDuration = 0.5f)
+        private IEnumerator SetText(float counterDuration = 0.5f)
         {
             _readyToCopy.Hide();
             _alreadyCopied.Show();
@@ -170,13 +170,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
 
         /// <summary>
-        ///     Call this to generate a QR code based on the parameters passed
+        /// Call this to generate a QR code based on the parameters passed
         /// </summary>
         /// <param name="textForEncoding">The actual texture that will be encoded into a QRCode</param>
         /// <param name="textureWidth">How wide the new texture should be</param>
         /// <param name="textureHeight">How high the new texture should be</param>
         /// <returns></returns>
-        public Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth,
+        private Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth,
             int textureHeight, Color32 baseColor = new(), Color32 pixelColor = new())
         {
             Texture2D newTexture2D = new(textureWidth, textureHeight);
@@ -224,7 +224,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         ///     Puts the passed string into the clipboard buffer to be pasted elsewhere.
         /// </summary>
         /// <param name="targetString">Text to be copied to the buffer</param>
-        public void CopyToClipboard(string targetString)
+        private void CopyToClipboard(string targetString)
         {
             GUIUtility.systemCopyBuffer = targetString;
         }

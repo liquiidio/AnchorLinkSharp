@@ -164,9 +164,5 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
             throw new NotImplementedException();
         }
 
-        //public void OnSessionRequest(LinkSession session, SigningRequest request, object cancel)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

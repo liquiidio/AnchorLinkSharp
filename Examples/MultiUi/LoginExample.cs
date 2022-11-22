@@ -13,7 +13,7 @@ using Action = EosSharp.Core.Api.v1.Action;
 public class LoginExample : MonoBehaviour
 {
     // app identifier, should be set to the eosio contract account if applicable
-    private const string Identifier = "example";
+    private const string Identifier = "unityexample";
 
     // initialize the link
     private AnchorLink _link;

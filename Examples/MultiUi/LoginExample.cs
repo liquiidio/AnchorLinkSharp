@@ -32,15 +32,10 @@ public class LoginExample : MonoBehaviour
             ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
             Rpc = "https://api.wax.liquidstudios.io",
             ZlibProvider = new NetZlibProvider(),
-<<<<<<< HEAD
-<<<<<<< HEAD
+
             Storage = new PlayerPrefsStorage()
-=======
-            Storage = new JsonLocalStorage()
->>>>>>> 80967f8 (changed RPC-address)
-=======
-            Storage = new PlayerPrefsStorage()
->>>>>>> bb0a952 (changing to PlayerPrefsStorage)
+
+            //Storage = new JsonLocalStorage()
         });
     }
 

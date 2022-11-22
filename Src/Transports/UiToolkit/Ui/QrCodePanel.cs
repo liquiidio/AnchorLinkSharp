@@ -87,7 +87,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _launchAnchorButton.clickable.clicked += () =>
             {
-                var esrLinkUri = _request.Encode(false, false);
+                var esrLinkUri = _request.Encode(false, true);
 
                 if (_request.IsIdentity())
                 {

@@ -102,7 +102,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
-            var ESRLinkUrl = request.Encode(false, false);  // This returns ESR link to be converted
+            var ESRLinkUrl = request.Encode(false, true);  // This returns ESR link to be converted
 
             if (request.IsIdentity())
             {

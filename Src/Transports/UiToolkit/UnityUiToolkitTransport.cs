@@ -57,13 +57,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             if (to == null) Debug.Log("missing the panel");
         }
 
-        //open anchor link version on chrome page
+        //open anchor link version on browser page
         public static void OpenVersion()
         {
             Application.OpenURL(VersionUrl);
         }
 
-        //open Download anchor on chrome page
+        //open Download anchor on browser page
         public static void OpenDownloadAnchorLink()
         {
             Application.OpenURL(DownloadAnchorUrl);
@@ -100,8 +100,23 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         {
             Debug.Log("DisplayRequest");
 
-            StartCoroutine(TransitionPanels(QrCodePanel));
-            QrCodePanel.Rebind(request, request.IsIdentity());
+            var esrLinkUri = request.Encode(false, true);
+
+            if (request.IsIdentity())
+            {
+                StartCoroutine(UnityUiToolkitTransport.TransitionPanels(LoadingPanel));
+                StartCoroutine(TransitionPanels(QrCodePanel));
+                QrCodePanel.Rebind(request, request.IsIdentity());
+            }
+            else
+            {
+                StartCoroutine(UnityUiToolkitTransport.TransitionPanels(LoadingPanel));
+                Application.OpenURL(esrLinkUri);
+                StartCoroutine(UnityUiToolkitTransport.TransitionPanels(SigningTimerPanel));
+                SigningTimerPanel.StartCountdownTimer();
+                QrCodePanel.Rebind(request, request.IsIdentity());
+
+            }
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226

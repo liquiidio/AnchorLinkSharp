@@ -88,19 +88,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _launchAnchorButton.clickable.clicked += () =>
             {
                 var esrLinkUri = _request.Encode(false, true);
-
-                if (_request.IsIdentity())
-                {
-                    Application.OpenURL(esrLinkUri);
-                }
-                else
-                {
-                    StartCoroutine(UnityUiToolkitTransport.TransitionPanels(LoadingPanel));
-                    Application.OpenURL(esrLinkUri);
-                    StartCoroutine(UnityUiToolkitTransport.TransitionPanels(SigningTimerPanel));
-                    SigningTimerPanel.StartCountdownTimer();
-                    
-                }
+                Application.OpenURL(esrLinkUri);
             };
         }
 

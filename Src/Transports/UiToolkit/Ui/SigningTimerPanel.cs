@@ -16,11 +16,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
-        public bool IsWhiteTheme;
         public QrCodePanel QrCodePanel;
         public TimeoutPanel TimeoutPanel;
-        [SerializeField] internal StyleSheet DarkTheme;
-        [SerializeField] internal StyleSheet WhiteTheme;
         private Coroutine _counterCoroutine;
 
         public string CountdownText
@@ -37,7 +34,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             OnStart();
             BindButtons();
-            CheckTheme();
         }
 
         #region Button Binding
@@ -77,24 +73,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             StartCoroutine(UnityUiToolkitTransport.TransitionPanels(TimeoutPanel));
         }
-
-        private void CheckTheme()
-        {
-            Root.styleSheets.Clear();
-
-            if (IsWhiteTheme)
-            {
-                Root.styleSheets.Remove(DarkTheme);
-                Root.styleSheets.Add(WhiteTheme);
-            }
-            else
-            {
-
-                Root.styleSheets.Remove(WhiteTheme);
-                Root.styleSheets.Add(DarkTheme);
-            }
-        }
-
         #endregion
     }
 }

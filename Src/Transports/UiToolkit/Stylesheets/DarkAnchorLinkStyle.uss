@@ -87,7 +87,7 @@ VisualElement {
 
 .anchor-link-label-click {
     margin-top: 10px;
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
     -unity-font-style: bold;
 }
 
@@ -177,6 +177,7 @@ VisualElement {
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+    bottom: 20px;
 }
 
 .inner-qr-panel-background {
@@ -304,4 +305,39 @@ VisualElement {
 .link-box:active {
     width: 570px;
     height: 570px;
+}
+
+.copied-link-label {
+    width: 206px;
+    transition-timing-function: ease-in-out;
+    transition-delay: 400ms;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 255);
+    transition-duration: 200ms;
+    background-color: rgb(19, 27, 51);
+    -unity-text-align: upper-right;
+    padding-left: 20px;
+    padding-right: 10px;
+}
+
+.copied-icon {
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/good.png?fileID=2800000&guid=a5230a99e0f8adb42937446d99cca39a&type=3#good');
+    width: 20px;
+    height: 20px;
+}
+
+.copy-link-label {
+    color: rgba(255, 255, 255, 255);
+    font-size: 10px;
+    width: 152px;
+    background-color: rgb(19, 27, 51);
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.copy-icon {
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/copy%20(1).png?fileID=2800000&guid=c84047d66ad79fd499bffe08d19ab469&type=3#copy (1)');
+    background-color: rgba(255, 255, 255, 0);
+    width: 20px;
+    height: 20px;
 }

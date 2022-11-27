@@ -150,6 +150,7 @@ VisualElement {
 
 .version-label {
     -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    color: rgba(195, 192, 192, 255);
 }
 
 .close-view-button {
@@ -269,6 +270,8 @@ VisualElement {
 .link-box {
     transition-duration: 400ms;
     transition-timing-function: ease-in-out;
+    width: 270px;
+    height: 270px;
 }
 
 .qr-code-box {
@@ -283,4 +286,55 @@ VisualElement {
 
 .copy-request-link-box {
     background-color: rgb(255, 255, 255);
+}
+
+.copy-link-label {
+    width: 167px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: rgba(255, 255, 255, 255);
+    color: rgba(0, 0, 0, 255);
+    -unity-text-align: upper-right;
+    -unity-font-style: bold;
+}
+
+.copy-icon {
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/copy%20(3).png?fileID=2800000&guid=e6661a9328398e54a9f35092edf17630&type=3#copy (3)');
+    width: 20px;
+    height: 20px;
+}
+
+.copied-link-label {
+    width: 206px;
+    height: auto;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding-right: 20px;
+    padding-left: 10px;
+    font-size: 10px;
+    justify-content: space-between;
+    -unity-text-align: middle-right;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+    transition-delay: 400ms;
+    display: flex;
+    visibility: visible;
+    align-items: stretch;
+    -unity-font-style: bold;
+}
+
+.copied-icon {
+    width: 20px;
+    height: 20px;
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/checked.png?fileID=2800000&guid=180adac4b3905a346bd16f0e48bdfe68&type=3#checked');
+    background-color: rgba(255, 255, 255, 0);
+    top: 2px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    align-items: flex-start;
+    margin-right: 0;
 }

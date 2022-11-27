@@ -4,6 +4,7 @@ using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosioSigningRequest;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 {
@@ -16,12 +17,17 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         private static ScreenBase _activeScreen;
         private static bool _transitioningPanel;
 
+        [SerializeField] public bool IsWhiteTheme;
+
         [SerializeField] internal FailurePanel FailurePanel;
         [SerializeField] internal LoadingPanel LoadingPanel;
         [SerializeField] internal QrCodePanel QrCodePanel;
         [SerializeField] internal SigningTimerPanel SigningTimerPanel;
         [SerializeField] internal SuccessPanel SuccessPanel;
         [SerializeField] internal TimeoutPanel TimeoutPanel;
+
+        [SerializeField] internal StyleSheet DarkTheme;
+        [SerializeField] internal StyleSheet WhiteTheme;
 
 
         public UnityUiToolkitTransport(TransportOptions options) : base(options)
@@ -32,6 +38,26 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             LoadingPanel = FindObjectOfType<LoadingPanel>();
             SigningTimerPanel = FindObjectOfType<SigningTimerPanel>();
             TimeoutPanel = FindObjectOfType<TimeoutPanel>();
+        }
+
+        private  void CheckTheme()
+        {
+            if (_activeScreen != null)
+            {
+                _activeScreen.Root.styleSheets.Clear();
+
+                if (IsWhiteTheme)
+                {
+                    _activeScreen.Root.styleSheets.Remove(DarkTheme);
+                    _activeScreen.Root.styleSheets.Add(WhiteTheme);
+                }
+                else
+                {
+                    _activeScreen.Root.styleSheets.Remove(WhiteTheme);
+                    _activeScreen.Root.styleSheets.Add(DarkTheme);
+                }
+            }
+            else Debug.Log("screen is null");
         }
 
         public static IEnumerator<float> TransitionPanels(ScreenBase to)
@@ -76,6 +102,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             Debug.Log("ShowLoading");
 
             StartCoroutine(TransitionPanels(LoadingPanel));
+            CheckTheme();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
@@ -84,37 +111,43 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             Debug.Log("OnSuccess");
 
             StartCoroutine(TransitionPanels(SuccessPanel));
+            CheckTheme();
             SuccessPanel.Rebind(request);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
         public override void OnFailure(SigningRequest request, Exception exception)
         {
-            Debug.Log("OnFailure");
+            Debug.Log("");
 
             StartCoroutine(TransitionPanels(FailurePanel));
+            CheckTheme();
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
+
+            
             Debug.Log("DisplayRequest");
 
             var esrLinkUri = request.Encode(false, true);
 
             if (request.IsIdentity())
             {
-                StartCoroutine(UnityUiToolkitTransport.TransitionPanels(LoadingPanel));
+                StartCoroutine(TransitionPanels(LoadingPanel));
                 StartCoroutine(TransitionPanels(QrCodePanel));
-                QrCodePanel.Rebind(request, request.IsIdentity());
+                CheckTheme();
+                QrCodePanel.Rebind(request, request.IsIdentity(), IsWhiteTheme);
             }
             else
             {
-                StartCoroutine(UnityUiToolkitTransport.TransitionPanels(LoadingPanel));
+                StartCoroutine(TransitionPanels(LoadingPanel));
                 Application.OpenURL(esrLinkUri);
-                StartCoroutine(UnityUiToolkitTransport.TransitionPanels(SigningTimerPanel));
+                StartCoroutine(TransitionPanels(SigningTimerPanel));
                 SigningTimerPanel.StartCountdownTimer();
-                QrCodePanel.Rebind(request, request.IsIdentity());
+                CheckTheme();
+                QrCodePanel.Rebind(request, request.IsIdentity(), IsWhiteTheme);
 
             }
         }

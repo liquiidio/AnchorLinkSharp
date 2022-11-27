@@ -17,7 +17,7 @@ using Action = EosSharp.Core.Api.v1.Action;
 
 namespace EosioSigningRequest
 {
-    public static class Constants
+    public static class SigningRequestConstants
     {
         public static readonly Dictionary<ChainName, string> ChainIdLookup = new Dictionary<ChainName, string>() {
             {ChainName.Eos, "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"},
@@ -369,7 +369,7 @@ namespace EosioSigningRequest
             }
 
             // set the chain id
-            data.ChainId = Constants.VariantId(args.ChainId);
+            data.ChainId = SigningRequestConstants.VariantId(args.ChainId);
             data.Flags = AbiConstants.RequestFlagsNone;
 
             var broadcast = args.Broadcast ?? data.Req.Key != "identity" && data.Req.Key != "identity_v3";
@@ -443,12 +443,12 @@ namespace EosioSigningRequest
         {
             var permission = new PermissionLevel()
             {
-                actor = args.Account ?? Constants.PlaceholderName,
-                permission = args.Permission ?? Constants.PlaceholderPermission
+                actor = args.Account ?? SigningRequestConstants.PlaceholderName,
+                permission = args.Permission ?? SigningRequestConstants.PlaceholderPermission
             };
 
-            if (permission.actor == Constants.PlaceholderName &&
-                permission.permission == Constants.PlaceholderPermission)
+            if (permission.actor == SigningRequestConstants.PlaceholderName &&
+                permission.permission == SigningRequestConstants.PlaceholderPermission)
             {
                 // TODO ?
 //                permission = null;
@@ -484,7 +484,7 @@ namespace EosioSigningRequest
             using (var buf = new MemoryStream())
             {
                 buf.WriteByte(2); // header
-                var id= Constants.VariantId(chainId);
+                var id= SigningRequestConstants.VariantId(chainId);
                 if (id.Key == "chain_alias")
                 {
                     buf.WriteByte(0);
@@ -640,7 +640,7 @@ namespace EosioSigningRequest
             var signatureData = signatureProvider.Sign(GetChainId(), message);
             Signature = new RequestSignature()
             {
-                Signer = Constants.PlaceholderName,
+                Signer = SigningRequestConstants.PlaceholderName,
                 Signature = signatureData
             };
         }
@@ -827,7 +827,7 @@ namespace EosioSigningRequest
         /** ABI definitions required to resolve request. */
         public List<string> GetRequiredAbis()
         {
-            return GetRawActions().Where(a => !Constants.IsIdentity(a)).Select(a => a.account).ToList();
+            return GetRawActions().Where(a => !SigningRequestConstants.IsIdentity(a)).Select(a => a.account).ToList();
 
 /*            return this.getRawActions()
                 .filter((action) => !Constants.isIdentity(action))
@@ -839,7 +839,7 @@ namespace EosioSigningRequest
         public bool RequiresTapos()
         {
             var tx = GetRawTransaction();
-            return !IsIdentity() && !Constants.HasTapos(tx);
+            return !IsIdentity() && !SigningRequestConstants.HasTapos(tx);
         }
 
         /** Resolve required ABI definitions. */
@@ -890,7 +890,7 @@ namespace EosioSigningRequest
 //                var type = abi.actions.FirstOrDefault(a => a.name == rawAction.name);
 
                 Abi contractAbi = null; //: any | undefined
-                if (Constants.IsIdentity(rawAction))
+                if (SigningRequestConstants.IsIdentity(rawAction))
                 {
                     contractAbi = SigningRequestAbi.Abi;
                     rawAction.account = "";
@@ -928,12 +928,12 @@ namespace EosioSigningRequest
                 {
                     foreach (var auth in rawAction.authorization)
                     {
-                        if ((auth.actor == Constants.PlaceholderName || auth.actor == null) && signer.actor != null)  
+                        if ((auth.actor == SigningRequestConstants.PlaceholderName || auth.actor == null) && signer.actor != null)  
                         {
                             auth.actor = signer.actor;
                         }
 
-                        if ((auth.permission == Constants.PlaceholderPermission || auth.permission == null) && signer.permission != null)
+                        if ((auth.permission == SigningRequestConstants.PlaceholderPermission || auth.permission == null) && signer.permission != null)
                         {
                             auth.permission = signer.permission;
                         }
@@ -959,18 +959,18 @@ namespace EosioSigningRequest
                     {
                         var actor = auth.actor;
                         var permission = auth.permission;
-                        if (actor == Constants.PlaceholderName || actor == null)
+                        if (actor == SigningRequestConstants.PlaceholderName || actor == null)
                         {
                             actor = signer.actor;
                         }
 
-                        if (permission == Constants.PlaceholderPermission || permission == null)
+                        if (permission == SigningRequestConstants.PlaceholderPermission || permission == null)
                         {
                             permission = signer.permission;
                         }
 
                         // backwards compatibility, actor placeholder will also resolve to permission when used in auth
-                        if (permission == Constants.PlaceholderName)
+                        if (permission == SigningRequestConstants.PlaceholderName)
                         {
                             permission = signer.permission;
                         }
@@ -993,16 +993,16 @@ namespace EosioSigningRequest
             {
                 if (dataDict[dataDictKey] is string sVal)
                 {
-                    if (sVal == Constants.PlaceholderName && signer.actor != null)
+                    if (sVal == SigningRequestConstants.PlaceholderName && signer.actor != null)
                     {
                         dataDict[dataDictKey] = signer.actor;
                     }
-                    else if (sVal == Constants.PlaceholderPermission && signer.permission != null)
+                    else if (sVal == SigningRequestConstants.PlaceholderPermission && signer.permission != null)
                     {
                         dataDict[dataDictKey] = signer.permission;
                     }
                 }
-                else if (dataDict[dataDictKey] is PermissionLevel pVal && pVal == Constants.PlaceholderAuth && signer.permission != null && signer.actor != null)
+                else if (dataDict[dataDictKey] is PermissionLevel pVal && pVal == SigningRequestConstants.PlaceholderAuth && signer.permission != null && signer.actor != null)
                 {
                     dataDict[dataDictKey] = signer;
                 }
@@ -1031,7 +1031,7 @@ namespace EosioSigningRequest
             }
 
             var tx = GetRawTransaction();
-            if (!IsIdentity() && !Constants.HasTapos(tx))
+            if (!IsIdentity() && !SigningRequestConstants.HasTapos(tx))
             {
                 if (ctx.Expiration != null && ctx.RefBlockNum != null && ctx.RefBlockPrefix != null)
                 {
@@ -1141,9 +1141,9 @@ namespace EosioSigningRequest
                 case "chain_id":
                     return (string)id.Value;
                 case "chain_alias":
-                    if (Constants.ChainIdLookup.ContainsKey((ChainName)id.Value))
+                    if (SigningRequestConstants.ChainIdLookup.ContainsKey((ChainName)id.Value))
                     {
-                        return Constants.ChainIdLookup[(ChainName)id.Value];
+                        return SigningRequestConstants.ChainIdLookup[(ChainName)id.Value];
                     }
                     else
                     {
@@ -1218,7 +1218,7 @@ namespace EosioSigningRequest
                     return (Action[]) req.Value;
                 case "identity":
                     var data = "0101000000000000000200000000000000"; // placeholder permission
-                    var authorization = Constants.PlaceholderAuth;
+                    var authorization = SigningRequestConstants.PlaceholderAuth;
 
                     if (req.Value is Dictionary<string, object> valueDict)
                     {
@@ -1307,7 +1307,7 @@ namespace EosioSigningRequest
         public string GetIdentity() {
             if (Data.Req.Key == "identity")
             {
-                var actor = Constants.PlaceholderName;
+                var actor = SigningRequestConstants.PlaceholderName;
                 if (Data.Req.Value is Dictionary<string, object> valueDict)
                 {
                     if (valueDict.TryGetValue("permission", out var permission))
@@ -1321,7 +1321,7 @@ namespace EosioSigningRequest
                             }
                         }
                     }
-                    return actor == Constants.PlaceholderName ? null : actor;
+                    return actor == SigningRequestConstants.PlaceholderName ? null : actor;
                 }
             }
             return null;
@@ -1335,7 +1335,7 @@ namespace EosioSigningRequest
         public string GetIdentityPermission() {
             if (Data.Req.Key == "identity")
             {
-                var permission = Constants.PlaceholderPermission;
+                var permission = SigningRequestConstants.PlaceholderPermission;
                 if (Data.Req.Value is Dictionary<string, object> valueDict)
                 {
                     if (valueDict.TryGetValue("permission", out var permissionObj))
@@ -1349,7 +1349,7 @@ namespace EosioSigningRequest
                             }
                         }
                     }
-                    return permission == Constants.PlaceholderPermission ? null : permission;
+                    return permission == SigningRequestConstants.PlaceholderPermission ? null : permission;
                 }
             }
             return null;

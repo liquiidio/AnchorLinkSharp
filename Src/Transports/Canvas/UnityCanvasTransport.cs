@@ -4,6 +4,7 @@ using System.Linq;
 using AnchorLinkSharp;
 using EosioSigningRequest;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
         internal Coroutine counterCoroutine = null;
 
         internal GameObject currentPanel;
+
+        [SerializeField] internal bool useLightTheme = false;
 
         #region Login-Panel
         [Header("Login Panel Panel Components")]
@@ -63,9 +66,79 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         private void Awake()
         {
+           if (useLightTheme)
+                SwitchToLightTheme();
+
             ClearAllLinks();
 
             DisableAllPanels();
+        }
+
+        private void SwitchToLightTheme()
+        {
+            foreach (var _childImage in GetComponentsInChildren<Image>(true))
+            {
+                if (_childImage.gameObject.name == "HeaderBorder")
+                    _childImage.color = new Color(241, 241, 241);
+
+                else if (_childImage.GetComponent<Animator>())
+                    _childImage.enabled = false;
+
+                else
+                    _childImage.color = Color.white;
+            }
+
+            foreach (var _childText in GetComponentsInChildren<TextMeshProUGUI>(true))
+            {
+                if (!_childText.GetComponentInParent<Button>(true))
+                    _childText.color = Color.black;
+            }
+
+            foreach (var _childButton in GetComponentsInChildren<Button>(true))
+            {
+                if (_childButton.transition == Selectable.Transition.ColorTint)
+                {
+                    if (_childButton.targetGraphic.GetType() == typeof(TextMeshProUGUI) && _childButton.GetComponent<Image>())
+                        _childButton.GetComponent<Image>().color = Color.clear;
+
+                    else if (_childButton.targetGraphic.GetType() == typeof(Image))
+                    {
+                        _childButton.image.color = Color.clear;
+
+                        _childButton.targetGraphic = _childButton.GetComponentInChildren<TextMeshProUGUI>(true);
+                    }
+
+                    if (_childButton.transform.GetChild(0).GetComponentInChildren<Image>(true))
+                    {
+                        _childButton.transform.GetChild(0).GetComponentInChildren<Image>(true).enabled = false;
+                        print("working!");
+                    }
+
+                    var _clrs = _childButton.colors;
+
+                    _clrs.normalColor = new Color(0.2352941f, 0.3104641f, 0.5686275f);
+                    _clrs.highlightedColor = new Color(0.4386792f, 0.5750751f, 1.0f);
+
+                    _childButton.colors = _clrs;
+                }
+
+                else
+                {
+                    if (!_childButton.name.Contains("QR") && _childButton.GetComponent<Image>())
+                    {
+                        _childButton.GetComponent<Image>().color = Color.clear;
+
+                      _childButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+                        if (_childButton.name == "HyperlinkCopyButton")
+                            _childButton.transform.Find("CopyHyperlinkImage").GetComponentInChildren<Image>(true).color = Color.black;
+                    }
+                }
+
+                
+
+                //LaunchAnchorButton.transform.GetChild(0).GetComponentInChildren<Image>(true).enabled = false;
+            }
         }
 
         public UnityCanvasTransport(TransportOptions options) : base(options)
@@ -110,8 +183,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
                 ManuallySignSubpanel.SetActive(false);
                 SwitchToNewPanel(LoginPanel);
                 ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
-                
-                var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, new Color32(19, 27, 51, 255), Color.white);
+
+                Color _targetBaseColor = useLightTheme ? Color.white : new Color32(19, 27, 51, 255);
+                var _targetPixelColor = useLightTheme ? Color.black : Color.white;
+
+                var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, _targetBaseColor, _targetPixelColor);
 
                 StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
                    ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = true;
@@ -124,7 +200,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             {
                 Application.OpenURL(ESRLinkUrl);
 
-                var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, new Color32(19, 27, 51, 255), Color.white);
+                Color _targetBaseColor = useLightTheme ? Color.white : new Color32(19, 27, 51, 255);
+                var _targetPixelColor = useLightTheme ? Color.black :  Color.white;
+
+                var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, _targetBaseColor, _targetPixelColor);
 
                 StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite =
                     ResizableQRCodeHolderTargetButton.GetComponent<Image>().sprite =

@@ -318,8 +318,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Logout
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1683,8 +1683,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Log In
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3573,8 +3573,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Transfer
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4187,8 +4187,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Restore session
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 3e24d36c93e69944b89a4c3c014dc065, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6207,6 +6207,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2756333022981077762, guid: 0b20077abaca25145b2560b5426295aa, type: 3}
+      propertyPath: useLightTheme
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2756333022981077772, guid: 0b20077abaca25145b2560b5426295aa, type: 3}
       propertyPath: m_Name
       value: CanvasTransport
@@ -6311,14 +6315,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2756333023378681373, guid: 0b20077abaca25145b2560b5426295aa, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-    - target: {fileID: 2756333023378681373, guid: 0b20077abaca25145b2560b5426295aa, type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 2756333023470478097, guid: 0b20077abaca25145b2560b5426295aa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

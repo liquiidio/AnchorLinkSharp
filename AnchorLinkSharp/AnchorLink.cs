@@ -182,8 +182,6 @@ namespace AnchorLinkSharp
         public async Task<TransactResult> SendRequest(SigningRequest request, ILinkTransport transport,
             bool broadcast = false)
         {
-            Debug.Log("SendRequest");
-
             var t = transport ?? Transport;
             try
             {
@@ -320,8 +318,6 @@ namespace AnchorLinkSharp
          */
         public async Task<IdentifyResult> Identify(/*TODO Scope */PermissionLevel requestPermission, object info /*, info?: {[key: string]: string | Uint8Array}*/)
         {
-            Debug.Log("Identify");
-
             var request = await CreateRequest(new SigningRequestCreateArguments()
             {
                 Identity = new IdentityV2()
@@ -495,7 +491,7 @@ namespace AnchorLinkSharp
             var key = "";
             if (auth != null)
             {
-                key = SessionKey(identifier, LinkConstants.FormatAuth(auth));
+                key = SessionKey(identifier, new[] { LinkConstants.FormatAuth(auth), ChainId });
             }
             else
             {
@@ -508,7 +504,7 @@ namespace AnchorLinkSharp
                         return null;
                     }
 
-                    key = SessionKey(identifier, LinkConstants.FormatAuth(latest));
+                    key = SessionKey(identifier, new[] { LinkConstants.FormatAuth(latest), ChainId});
                 }
             }
 
@@ -550,18 +546,22 @@ namespace AnchorLinkSharp
                 throw new Exception("Unable to list sessions: No storage adapter configured");
             }
 
-            var key = SessionKey(identifier, "list");
-            List<PermissionLevel> list;
+            var key = SessionKey(identifier, new[] { "list" });
             try
             {
-                list = JsonConvert.DeserializeObject<List<PermissionLevel>>((await Storage.Read(key)) ?? "{}") ?? new List<PermissionLevel>();
+                var data = (await Storage.Read(key));
+                if (data != null)
+                {
+                    var sessionData = JsonConvert.DeserializeObject<List<PermissionLevel>>(data ?? "{}") ?? null;
+                    return sessionData;
+                }
+                return new List<PermissionLevel>();
+
             }
             catch (Exception ex)
             {
                 throw new Exception($"Unable to list sessions: Stored JSON invalid ({ex.Message ?? ex.ToString()})");
             }
-
-            return list;
         }
 
         /**
@@ -575,7 +575,7 @@ namespace AnchorLinkSharp
                 throw new Exception("Unable to remove session: No storage adapter configured");
             }
 
-            var key = SessionKey(identifier, LinkConstants.FormatAuth(auth));
+            var key = SessionKey(identifier, new[] { LinkConstants.FormatAuth(auth), ChainId });
             await Storage.Remove(key);
             await TouchSession(identifier, auth, true);
         }
@@ -629,23 +629,23 @@ namespace AnchorLinkSharp
                 auths.Insert(0, auth);
             }
 
-            var key = SessionKey(identifier, "list");
+            var key = SessionKey(identifier, new []{ "list" });
             await Storage.Write(key, JsonConvert.SerializeObject(auths));
         }
 
         /** Makes sure session is in storage list of sessions and moves it to top (most recently used). */
         private async Task StoreSession(string identifier, LinkSession session)
         {
-            var key = SessionKey(identifier, LinkConstants.FormatAuth(session.Auth));
+            var key = SessionKey(identifier, new []{ LinkConstants.FormatAuth(session.Auth), session.AnchorLink.ChainId });
             var data = JsonConvert.SerializeObject(session.Serialize());
             await Storage.Write(key, data);
             await TouchSession(identifier, session.Auth);
         }
 
         /** Session storage key for identifier and suffix. */
-        private string SessionKey(string identifier, string suffix)
+        private string SessionKey(string identifier, string[] suffixes)
         {
-            return $"{ChainId}-{identifier}-{suffix}";
+            return $"{identifier}-{string.Join("--", suffixes)}";
         }
 
         private WebSocketWrapper _socket;
@@ -656,8 +656,6 @@ namespace AnchorLinkSharp
          */
         public async Task<CallbackPayload> WaitForCallback(string url)
         {
-            Debug.Log("WaitForCallback");
-
             var active = true;
             var retries = 0;
             var socketUrl = url.Replace("http", "ws");
@@ -692,7 +690,6 @@ namespace AnchorLinkSharp
             };
             _socket.OnOpen += () =>
             {
-                Debug.Log($"Websocket connected");
                 retries = 0;
             };
             _socket.OnError += (errormsg) =>
@@ -702,7 +699,7 @@ namespace AnchorLinkSharp
             //socket.OnError += Console.WriteLine;
             _socket.OnClose += async (code) =>
             {
-                Debug.Log($"closed with code {code} {code.ToString()}");
+                Debug.Log($"Websocket closed with code {code} {code.ToString()}");
                 //if (active)
                 //{
                 //    // I have no idea if this backoff-thing makes sense :D
@@ -714,7 +711,6 @@ namespace AnchorLinkSharp
 
             while (cbp == null && rp == null && retries < 100)
             {
-                Debug.Log($"SocketState: {_socket.State}" );
 #if UNITY_WEBGL
                 await UniTask.Delay(100);
 #else

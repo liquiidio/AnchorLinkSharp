@@ -111,7 +111,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
                     if (_childButton.transform.GetChild(0).GetComponentInChildren<Image>(true))
                     {
                         _childButton.transform.GetChild(0).GetComponentInChildren<Image>(true).enabled = false;
-                        print("working!");
                     }
 
                     var _clrs = _childButton.colors;
@@ -198,8 +197,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             }
             else
             {
-                Application.OpenURL(ESRLinkUrl);
-
                 Color _targetBaseColor = useLightTheme ? Color.white : new Color32(19, 27, 51, 255);
                 var _targetPixelColor = useLightTheme ? Color.black :  Color.white;
 

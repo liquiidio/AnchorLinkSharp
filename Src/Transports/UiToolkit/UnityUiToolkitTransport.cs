@@ -36,11 +36,12 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             FailurePanel = FindObjectOfType<FailurePanel>();
             QrCodePanel = FindObjectOfType<QrCodePanel>();
             LoadingPanel = FindObjectOfType<LoadingPanel>();
-            SigningTimerPanel = FindObjectOfType<SigningTimerPanel>();
             TimeoutPanel = FindObjectOfType<TimeoutPanel>();
+            SigningTimerPanel = FindObjectOfType<SigningTimerPanel>();
+            
         }
 
-        private  void CheckTheme()
+        private void CheckTheme()
         {
             if (_activeScreen != null)
             {

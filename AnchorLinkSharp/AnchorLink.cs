@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Assets.Packages.AnchorLinkTransportSharp.Src;
+using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using EosioSigningRequest;
 using EosSharp.Core;
 using EosSharp.Core.Api.v1;
@@ -52,7 +54,15 @@ namespace AnchorLinkSharp
 
             if (options.ZlibProvider == null)
             {
-                throw new Exception("options.ZlibProvider is required");
+                options.ZlibProvider = new NetZlibProvider();
+            }
+
+            if (options.Storage == null)
+            {
+#if UNITY_ANDROID || UNITY_IOS
+                options.Storage = new PlayerPrefsStorage(Application.identifier);
+#endif
+                options.Storage = new PlayerPrefsStorage(Application.productName);
             }
 
             if (options.ChainId == null)
@@ -365,8 +375,8 @@ namespace AnchorLinkSharp
 
             if (requestPermission != null)
             {
-                if ((requestPermission.actor != Constants.PlaceholderName && requestPermission.actor != signer.actor) ||
-                    (requestPermission.permission != Constants.PlaceholderPermission &&
+                if ((requestPermission.actor != SigningRequestConstants.PlaceholderName && requestPermission.actor != signer.actor) ||
+                    (requestPermission.permission != SigningRequestConstants.PlaceholderPermission &&
                      requestPermission.permission != signer.permission)
                 )
                 {
@@ -406,7 +416,7 @@ namespace AnchorLinkSharp
             };
             _requestOptions.SignatureProvider = new DefaultSignProvider(privateKey);
 
-            var res = await Identify(Constants.PlaceholderAuth, LinkUtils.AbiEncode(createInfo, "link_create"));
+            var res = await Identify(SigningRequestConstants.PlaceholderAuth, LinkUtils.AbiEncode(createInfo, "link_create"));
             var metadata = new Dictionary<string, object>();
             var rawInfo = res.Request.GetRawInfo();
             if(rawInfo.ContainsKey("return_path"))

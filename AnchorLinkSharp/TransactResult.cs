@@ -27,6 +27,6 @@ namespace AnchorLinkSharp
         public byte[] SerializedTransaction { get; set; }
 
         /** Push transaction response from api node, only present if transaction was broadcast. */
-        public object Processed;//: {[key: string]: any}  // TODO
+        public ProcessedTransaction Processed;//: {[key: string]: any}  // TODO
     }
 }

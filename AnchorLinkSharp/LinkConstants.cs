@@ -14,11 +14,11 @@ namespace AnchorLinkSharp
             var actor = auth.actor;
             var permission = auth.permission;
 
-            if (actor == Constants.PlaceholderName)
+            if (actor == SigningRequestConstants.PlaceholderName)
             {
                 actor = "<any>";
             }
-            if (permission == Constants.PlaceholderName || permission == Constants.PlaceholderPermission)
+            if (permission == SigningRequestConstants.PlaceholderName || permission == SigningRequestConstants.PlaceholderPermission)
             {
                 permission = "<any>";
             }

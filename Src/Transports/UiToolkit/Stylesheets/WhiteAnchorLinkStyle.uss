@@ -289,7 +289,7 @@ VisualElement {
 }
 
 .copy-link-label {
-    width: 167px;
+    width: 194px;
     padding-left: 20px;
     padding-right: 20px;
     background-color: rgba(255, 255, 255, 255);
@@ -325,8 +325,8 @@ VisualElement {
 }
 
 .copied-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/checked.png?fileID=2800000&guid=180adac4b3905a346bd16f0e48bdfe68&type=3#checked');
     background-color: rgba(255, 255, 255, 0);
     top: 2px;

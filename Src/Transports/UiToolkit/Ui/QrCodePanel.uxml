@@ -14,11 +14,11 @@
                     <ui:VisualElement name="anchor-link-button" class="anchor-launch-button-box">
                         <ui:Button text="Launch Anchor" display-tooltip-when-elided="true" name="launch-anchor-button" class="anchor-launch-button" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="anchor-link-qr" class="qr-code-box" style="flex-direction: column-reverse;">
+                    <ui:VisualElement name="anchor-link-qr-code" class="qr-code-box" style="flex-direction: column-reverse;">
                         <ui:VisualElement name="anchor-link-copy" class="copy-request-link-box" style="flex-direction: column-reverse; display: flex;">
                             <ui:VisualElement style="flex-direction: row; justify-content: center; align-items: center; width: auto;">
                                 <ui:VisualElement name="ready-to-copy" style="display: flex; visibility: visible; align-items: auto;">
-                                    <ui:Label text="Copy request link" display-tooltip-when-elided="true" name="anchor-link-copy-label" class="copy-link-label" style="-unity-text-align: upper-right; width: 167px;">
+                                    <ui:Label text="Copy request link" display-tooltip-when-elided="true" name="anchor-link-copy-label" class="copy-link-label" style="align-items: stretch;">
                                         <ui:VisualElement name="copy-image" class="copy-icon" />
                                     </ui:Label>
                                 </ui:VisualElement>
@@ -32,9 +32,9 @@
                         <ui:VisualElement name="qr-code-box" class="link-box" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="anchor-link-footnote" style="width: 340px; height: 13px; -unity-text-align: upper-center; position: absolute; bottom: -26px; left: 0; flex-direction: row; justify-content: center;">
+                <ui:VisualElement name="anchor-link-footnote" style="width: 340px; height: 25px; -unity-text-align: upper-center; position: absolute; bottom: -38px; left: 0; flex-direction: row; justify-content: center;">
                     <ui:Label text="Don&apos;t have Anchor yet? " display-tooltip-when-elided="true" name="question-label" style="color: rgb(255, 255, 255); -unity-font: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1cd74a0089e942a4ba2129d8eb6be746&amp;type=3#NotInter-Regular&apos;);" />
-                    <ui:Label text="&lt;u&gt;Download now &lt;/u&gt;" display-tooltip-when-elided="true" name="download-now-link-label" style="color: rgb(255, 255, 255); -unity-font: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1cd74a0089e942a4ba2129d8eb6be746&amp;type=3#NotInter-Regular&apos;);" />
+                    <ui:Label text="&lt;u&gt;Download now &lt;/u&gt;" display-tooltip-when-elided="true" name="download-now-link-label" style="color: rgb(255, 255, 255); -unity-font: url(&apos;project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1cd74a0089e942a4ba2129d8eb6be746&amp;type=3#NotInter-Regular&apos;); height: 25px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

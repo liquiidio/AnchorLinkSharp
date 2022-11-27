@@ -481,6 +481,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UiToolkitTransport
       objectReference: {fileID: 0}
+    - target: {fileID: 7828644621958486371, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
+      propertyPath: IsWhiteTheme
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7828644621958486396, guid: f9decbccc2d159941b5dc8dbb4894dd6, type: 3}
       propertyPath: m_RootOrder
       value: 1

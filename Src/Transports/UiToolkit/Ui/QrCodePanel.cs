@@ -60,8 +60,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _downloadNowLabel.RegisterCallback<ClickEvent>(evt => { UnityUiToolkitTransport.OpenDownloadAnchorLink(); });
 
-            _anchorFootnote.RegisterCallback<ClickEvent>(evt => { UnityUiToolkitTransport.OpenDownloadAnchorLink(); });
-
             _copyLabel.RegisterCallback<ClickEvent>(evt =>
             {
                 CopyToClipboard(_request.Encode());
@@ -199,7 +197,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
 
         /// <summary>
-        ///     Puts the passed string into the clipboard buffer to be pasted elsewhere.
+        /// Puts the passed string into the clipboard buffer to be pasted elsewhere.
         /// </summary>
         /// <param name="targetString">Text to be copied to the buffer</param>
         private void CopyToClipboard(string targetString)

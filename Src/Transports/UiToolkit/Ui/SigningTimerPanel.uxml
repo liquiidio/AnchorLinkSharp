@@ -14,7 +14,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="anchor-link-info" style="align-items: center; justify-content: flex-end; width: 300px; height: 61px; flex-direction: column;">
                     <ui:VisualElement name="border-box" style="width: 300px; height: 1px; background-color: rgb(38, 45, 67); margin-top: 24px; margin-bottom: 0; justify-content: center;" />
-                    <ui:Label text="Sign manually or with another device" display-tooltip-when-elided="true" name="anchor-link-manual-label" class="anchor-link-label-click" style="display: flex; visibility: visible;" />
+                    <ui:Label text="&lt;u&gt;Sign manually or with another device" display-tooltip-when-elided="true" name="anchor-link-manual-label" class="anchor-link-label-click" style="display: flex; visibility: visible;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

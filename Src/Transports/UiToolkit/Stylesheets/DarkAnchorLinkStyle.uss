@@ -312,7 +312,7 @@ VisualElement {
     transition-timing-function: ease-in-out;
     transition-delay: 400ms;
     font-size: 10px;
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
     transition-duration: 200ms;
     background-color: rgb(19, 27, 51);
     -unity-text-align: upper-right;
@@ -327,15 +327,16 @@ VisualElement {
 }
 
 .copy-link-label {
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
     font-size: 10px;
-    width: 194px;
+    width: 154px;
     background-color: rgb(19, 27, 51);
     padding-left: 20px;
     padding-right: 20px;
     transition-duration: 0ms;
     transition-timing-function: ease;
     transition-delay: 0ms;
+    -unity-text-align: upper-right;
 }
 
 .copy-icon {

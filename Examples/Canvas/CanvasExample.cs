@@ -72,7 +72,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
                 Rpc = "https://wax.greymass.com",
                 ZlibProvider = new NetZlibProvider(),
-                Storage = new JsonLocalStorage()
+                Storage = new PlayerPrefsStorage()
             });
 
             await Login();
@@ -140,7 +140,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                     _toAcc = _inputField.text;
 
                 else if (_inputField.name == "QuantityAccountInputField(TMP)")
+                {
                     _qnty = $"{_inputField.text} WAX";
+
+                    _qnty = _qnty.Replace(",", ".");
+                }
 
                 else if (_inputField.name == "MemoAccountInputField(TMP)")
                     _memo = _inputField.text;

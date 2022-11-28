@@ -553,7 +553,7 @@ namespace AnchorLinkSharp
                 if (data != null)
                 {
                     var sessionData = JsonConvert.DeserializeObject<List<PermissionLevel>>(data ?? "{}") ?? null;
-                    return sessionData;
+                    return sessionData ?? new List<PermissionLevel>();
                 }
                 return new List<PermissionLevel>();
 
@@ -618,7 +618,7 @@ namespace AnchorLinkSharp
         {
             var auths = await ListSessions(identifier);
             var formattedAuth = LinkConstants.FormatAuth(auth);
-            var existing = auths.IndexOf(auths.SingleOrDefault(a => LinkConstants.FormatAuth(a) == formattedAuth));
+            var existing = auths?.IndexOf(auths.SingleOrDefault(a => LinkConstants.FormatAuth(a) == formattedAuth)) ?? -1;
             if (existing >= 0)
             {
                 auths.RemoveAt(existing);

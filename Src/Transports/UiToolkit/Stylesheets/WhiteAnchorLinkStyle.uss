@@ -46,7 +46,7 @@ VisualElement {
     padding-right: 18px;
     padding-top: 20px;
     padding-bottom: 20px;
-    color: rgba(0, 122, 255, 255);
+    color: rgb(0, 122, 255);
     background-color: rgba(116, 116, 128, 0.25);
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
@@ -85,7 +85,7 @@ VisualElement {
 
 .anchor-link-label-click {
     color: rgb(0, 122, 255);
-    padding-top: 14px;
+    padding-top: 10px;
     width: 212px;
     height: 13px;
     padding-left: 1px;
@@ -150,6 +150,7 @@ VisualElement {
 
 .version-label {
     -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    color: rgba(195, 192, 192, 255);
 }
 
 .close-view-button {
@@ -185,7 +186,7 @@ VisualElement {
     margin-top: 20px;
     margin-bottom: 20px;
     padding-top: 50px;
-    background-color: rgba(210, 210, 210, 255);
+    background-color: rgb(210, 210, 210);
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border-top-right-radius: 20px;
@@ -195,7 +196,7 @@ VisualElement {
 .outer-qr-panel-background {
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 255);
+    background-color: rgb(255, 255, 255);
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 20px;
@@ -238,7 +239,7 @@ VisualElement {
     margin-top: 20px;
     margin-bottom: 20px;
     padding-top: 50px;
-    background-color: rgba(241, 241, 241, 255);
+    background-color: rgb(241, 241, 241);
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     width: 300px;
@@ -257,7 +258,7 @@ VisualElement {
     border-bottom-left-radius: 20px;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    background-color: rgba(241, 241, 241, 255);
+    background-color: rgb(241, 241, 241);
 }
 
 .info-box {
@@ -269,6 +270,8 @@ VisualElement {
 .link-box {
     transition-duration: 400ms;
     transition-timing-function: ease-in-out;
+    width: 270px;
+    height: 270px;
 }
 
 .qr-code-box {
@@ -282,5 +285,56 @@ VisualElement {
 }
 
 .copy-request-link-box {
+    background-color: rgb(255, 255, 255);
+}
+
+.copy-link-label {
+    width: 194px;
+    padding-left: 20px;
+    padding-right: 20px;
     background-color: rgba(255, 255, 255, 255);
+    color: rgba(0, 0, 0, 255);
+    -unity-text-align: upper-right;
+    -unity-font-style: bold;
+}
+
+.copy-icon {
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/copy%20(3).png?fileID=2800000&guid=e6661a9328398e54a9f35092edf17630&type=3#copy (3)');
+    width: 20px;
+    height: 20px;
+}
+
+.copied-link-label {
+    width: 206px;
+    height: auto;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding-right: 20px;
+    padding-left: 10px;
+    font-size: 10px;
+    justify-content: space-between;
+    -unity-text-align: middle-right;
+    -unity-font: url('project://database/Assets/Packages/anchorlinktransportsharp/Examples/UiToolkit/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=1cd74a0089e942a4ba2129d8eb6be746&type=3#NotInter-Regular');
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+    transition-delay: 400ms;
+    display: flex;
+    visibility: visible;
+    align-items: stretch;
+    -unity-font-style: bold;
+}
+
+.copied-icon {
+    width: 18px;
+    height: 18px;
+    background-image: url('project://database/Assets/Packages/anchorlinktransportsharp/Assets/icons/checked.png?fileID=2800000&guid=180adac4b3905a346bd16f0e48bdfe68&type=3#checked');
+    background-color: rgba(255, 255, 255, 0);
+    top: 2px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    align-items: flex-start;
+    margin-right: 0;
 }

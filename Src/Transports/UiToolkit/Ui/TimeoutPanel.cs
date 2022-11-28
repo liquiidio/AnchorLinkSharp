@@ -10,14 +10,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
          */
         private Button _signManuallyButton;
 
-
         /*
          * Fields, Properties
          */
-        public bool IsWhiteTheme;
         public QrCodePanel QrCodePanel;
-        [SerializeField] internal StyleSheet DarkTheme;
-        [SerializeField] internal StyleSheet WhiteTheme;
 
         private void Start()
         {
@@ -25,7 +21,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             OnStart();
             BindButtons();
-            CheckTheme();
         }
 
         #region Button Binding
@@ -41,23 +36,5 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         #endregion
 
-        #region Others
-        private void CheckTheme()
-        {
-            Root.styleSheets.Clear();
-
-            if (IsWhiteTheme)
-            {
-                Root.styleSheets.Remove(DarkTheme);
-                Root.styleSheets.Add(WhiteTheme);
-            }
-            else
-            {
-
-                Root.styleSheets.Remove(WhiteTheme);
-                Root.styleSheets.Add(DarkTheme);
-            }
-        }
-        #endregion
     }
 }

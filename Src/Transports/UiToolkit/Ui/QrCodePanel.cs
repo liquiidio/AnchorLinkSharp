@@ -13,15 +13,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
-        public bool IsWhiteTheme;
         private readonly Vector3 _qrCurrentSize = new(1, 1);
         private SigningRequest _request;
-
-        [SerializeField] internal StyleSheet DarkTheme;
-        [SerializeField] internal StyleSheet WhiteTheme;
-
-        [SerializeField] internal LoadingPanel LoadingPanel;
-        [SerializeField] internal SigningTimerPanel SigningTimerPanel;
 
         /*
          * Child-Controls
@@ -55,11 +48,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _anchorFootnote = Root.Q<VisualElement>("anchor-link-footnote");
             _anchorLinkCopy = Root.Q<VisualElement>("anchor-link-copy");
 
-            if (IsWhiteTheme) _anchorLinkCopy.Hide();
-                
             OnStart();
             BindButtons();
-            CheckTheme();
         }
 
         #region Button Binding
@@ -88,19 +78,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _launchAnchorButton.clickable.clicked += () =>
             {
                 var esrLinkUri = _request.Encode(false, true);
-
-                if (_request.IsIdentity())
-                {
-                    Application.OpenURL(esrLinkUri);
-                }
-                else
-                {
-                    StartCoroutine(UnityUiToolkitTransport.TransitionPanels(LoadingPanel));
-                    Application.OpenURL(esrLinkUri);
-                    StartCoroutine(UnityUiToolkitTransport.TransitionPanels(SigningTimerPanel));
-                    SigningTimerPanel.StartCountdownTimer();
-                    
-                }
+                Application.OpenURL(esrLinkUri);
             };
         }
 
@@ -108,7 +86,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         #region Rebind
 
-        public void Rebind(SigningRequest request, bool isLogin)
+        public void Rebind(SigningRequest request, bool isLogin, bool isWhiteTheme)
         {
             _request = request;
             var whiteQrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
@@ -117,7 +95,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             var darkQrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
                 new Color32(19, 27, 51, 255), Color.white);
 
-            if (IsWhiteTheme)
+            if (isWhiteTheme)
                 _qrCodeBox.style.backgroundImage = whiteQrCodeTexture;
             else _qrCodeBox.style.backgroundImage = darkQrCodeTexture;
 
@@ -227,23 +205,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private void CopyToClipboard(string targetString)
         {
             GUIUtility.systemCopyBuffer = targetString;
-        }
-
-        private void CheckTheme()
-        {
-            Root.styleSheets.Clear();
-
-            if (IsWhiteTheme)
-            {
-                Root.styleSheets.Remove(DarkTheme);
-                Root.styleSheets.Add(WhiteTheme);
-            }
-            else
-            {
-
-                Root.styleSheets.Remove(WhiteTheme);
-                Root.styleSheets.Add(DarkTheme);
-            }
         }
 
         #endregion

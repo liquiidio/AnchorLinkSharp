@@ -11,7 +11,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
     public class UiToolkitExample : MonoBehaviour
     {
         // app identifier, should be set to the eosio contract account if applicable
-        private const string Identifier = "example";
+        private const string Identifier = "uitoolkitexample";
 
         // Assign UnityTransport through the Editor
         [SerializeField] internal UnityUiToolkitTransport Transport;
@@ -37,7 +37,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
                 ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
                 Rpc = "https://wax.greymass.com",
                 ZlibProvider = new NetZlibProvider(),
-                Storage = new JsonLocalStorage()
+                Storage = new PlayerPrefsStorage()
                 //chains: [{
                 //    chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
                 //    nodeUrl: 'https://eos.greymass.com',
@@ -58,7 +58,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             }
             catch (Exception ex)
             {
-                Debug.LogError(ex);
+                Debug.LogError(ex.Message);
             }
         }
 
@@ -100,11 +100,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         public async Task SellOrBuyRam(EosSharp.Core.Api.v1.Action action)
         {
             var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
-
-            //_anchorLink.Transact(new TransactArgs() { Action = action }).ContinueWith(transactTask =>
-            //{
-            //    Debug.Log($"Thank you {transactTask.Result.Signer.actor}");
-            //});
         }
     }
 

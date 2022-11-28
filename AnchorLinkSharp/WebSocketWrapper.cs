@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Packages.eossharp.EosSharp.EosSharp.Unity3D;
 using NativeWebSocket;
 using UnityEngine;
 using WebSocket = NativeWebSocket.WebSocket;
@@ -65,13 +66,16 @@ namespace AnchorLinkSharp
             var i = 0;
             while (_webSocket == null && i < 100)
             {
-#if UNITY_WEBGL
-                await UniTask.Delay(100);
-#else
-                await Task.Delay(100);
-#endif
+//#if UNITY_WEBGL
+//                            //await UniTask.Delay(100);
+//                            await Task.Yield();
+//#else
+//                await Task.Delay(100);
+//#endif
+                await AsyncHelper.Delay(1);
                 i++;
             }
+
 
             if (_webSocket != null)
             {

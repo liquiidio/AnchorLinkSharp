@@ -158,6 +158,7 @@ namespace AnchorLinkSharp
                 new SigningRequestCreateArguments()
                 {
                     Action = args.Action,
+                    Actions = args.Actions,
                     Transaction = args.Transaction,
                     ChainId = ChainId,
                     Broadcast = false,

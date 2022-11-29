@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
+using Assets.Packages.eossharp.EosSharp.EosSharp.Unity3D;
 using EosioSigningRequest;
 using EosSharp.Core;
 using EosSharp.Core.Api.v1;
@@ -15,7 +16,6 @@ using EosSharp;
 using NativeWebSocket;
 using Newtonsoft.Json;
 using UnityEngine;
-using Assets.Packages.eossharp.EosSharp.EosSharp.Unity3D;
 
 #if UNITY_WEBGL
 // ReSharper disable once RedundantUsingDirective

@@ -15,6 +15,7 @@ using EosSharp;
 using NativeWebSocket;
 using Newtonsoft.Json;
 using UnityEngine;
+using Assets.Packages.eossharp.EosSharp.EosSharp.Unity3D;
 
 #if UNITY_WEBGL
 // ReSharper disable once RedundantUsingDirective
@@ -554,7 +555,7 @@ namespace AnchorLinkSharp
                 if (data != null)
                 {
                     var sessionData = JsonConvert.DeserializeObject<List<PermissionLevel>>(data ?? "{}") ?? null;
-                    return sessionData;
+                    return sessionData ?? new List<PermissionLevel>();
                 }
                 return new List<PermissionLevel>();
 
@@ -619,7 +620,7 @@ namespace AnchorLinkSharp
         {
             var auths = await ListSessions(identifier);
             var formattedAuth = LinkConstants.FormatAuth(auth);
-            var existing = auths.IndexOf(auths.SingleOrDefault(a => LinkConstants.FormatAuth(a) == formattedAuth));
+            var existing = auths?.IndexOf(auths.SingleOrDefault(a => LinkConstants.FormatAuth(a) == formattedAuth)) ?? -1;
             if (existing >= 0)
             {
                 auths.RemoveAt(existing);
@@ -712,11 +713,13 @@ namespace AnchorLinkSharp
 
             while (cbp == null && rp == null && retries < 100)
             {
-#if UNITY_WEBGL
-                await UniTask.Delay(100);
-#else
-                await Task.Delay(100);
-#endif
+                //#if UNITY_WEBGL
+                //                await UniTask.Delay(100);
+                //#else
+                //                await Task.Delay(100);
+                //#endif
+
+                await AsyncHelper.Delay(1);
             }
 
             if (!string.IsNullOrEmpty(rp?.Rejected))
@@ -756,11 +759,12 @@ namespace AnchorLinkSharp
                     Console.WriteLine($"Unexpected hyperbuoy error {ex.Message}");
                 }
 
-#if UNITY_WEBGL
-                await UniTask.Delay(100);
-#else
-                await Task.Delay(100);
-#endif
+                //#if UNITY_WEBGL
+                //                await UniTask.Delay(100);
+                //#else
+                //                await Task.Delay(100);
+                //#endif
+                await AsyncHelper.Delay(1);
             }
         }
     }

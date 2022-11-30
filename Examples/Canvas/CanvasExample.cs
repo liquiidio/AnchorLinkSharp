@@ -7,6 +7,7 @@ using AnchorLinkSharp;
 using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas;
+using Assets.Packages.eossharp.EosSharp.EosSharp.Unity3D;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json.Bson;
 using TMPro;
@@ -145,7 +146,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
 
                     _qnty = _qnty.Replace(",", ".");
                 }
-
                 else if (_inputField.name == "MemoAccountInputField(TMP)")
                     _memo = _inputField.text;
             }
@@ -167,7 +167,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 account = "eosio.token",
                 name = "transfer",
                 authorization = new List<PermissionLevel>() { _session.Auth },
-                data = new Dictionary<string, object>()
+                data = new Dictionary<string, object>
                 {
                     {"from", frmAcc},
                     {"to", toAcc},
@@ -176,11 +176,16 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 }
             };
 
+            //Debug.Log($"Session {_session.Identifier}");
+            //Debug.Log($"Link: {_link.ChainId}");
 
             try
             {
-                var transactResult = await _session.Transact(new TransactArgs() { Action = action });
+                var transactResult = await _link.Transact(new TransactArgs() { Action = action });
+                //var transactResult = await _session.Transact(new TransactArgs() { Action = action });
                 Debug.Log($"Transaction broadcast! {transactResult.Processed}");
+
+                //await Transfer(action);
 
                 waitCoroutine = StartCoroutine(SwitchPanels(Transport.currentPanel, CustomActionsPanel, 1.5f));
 
@@ -191,6 +196,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 throw;
             }
         }
+
+        //// transfer tokens using a session  
+        //public async Task Transfer(EosSharp.Core.Api.v1.Action action)
+        //{
+        //    var transactResult = await _session.Transact(new TransactArgs() { Action = action });
+
+        //    print($"Transaction broadcast! {transactResult.Processed}");
+        //}
 
         private IEnumerator SwitchPanels(GameObject fromPanel, GameObject toPanel, float SecondsToWait = 0.1f)
         {

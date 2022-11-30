@@ -206,6 +206,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
                         Sprite.Create(_tex, new Rect(0.0f, 0.0f, _tex.width, _tex.height), new Vector2(0.5f, 0.5f), 100.0f);
 
                 StartTimer();
+
+                Application.OpenURL(ESRLinkUrl);
+
             }
 
             HyperlinkCopyButton.onClick.RemoveAllListeners();

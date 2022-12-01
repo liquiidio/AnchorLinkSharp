@@ -71,7 +71,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
 
                 // WAX session
                 ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
-                Rpc = "https://wax.greymass.com",
+                Rpc = "https://api.wax.liquidstudios.io",
                 ZlibProvider = new NetZlibProvider(),
                 Storage = new PlayerPrefsStorage()
             });

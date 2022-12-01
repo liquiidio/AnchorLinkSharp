@@ -53,15 +53,5 @@ public class Examples : MonoBehaviour
         {
             Debug.Log(e);
         }
-
-        //try
-        //{
-        //    TransactExample.Vote();
-        //}
-        //catch (Exception e)
-        //{
-        //    Debug.Log(e);
-        //    throw;
-        //}
     }
 }

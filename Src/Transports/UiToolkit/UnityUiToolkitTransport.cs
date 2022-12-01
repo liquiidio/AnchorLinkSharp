@@ -119,7 +119,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
         public override void OnFailure(SigningRequest request, Exception exception)
         {
-            Debug.Log("");
+            Debug.Log("OnFailure");
 
             StartCoroutine(TransitionPanels(FailurePanel));
             CheckTheme();

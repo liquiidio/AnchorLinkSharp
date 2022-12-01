@@ -30,12 +30,9 @@ public class LoginExample : MonoBehaviour
         {
             Transport = Transport,
             ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
-            Rpc = "https://api.wax.liquidstudios.io",
+            Rpc = "https://wax.greymass.com",
             ZlibProvider = new NetZlibProvider(),
-
             Storage = new PlayerPrefsStorage()
-
-            //Storage = new JsonLocalStorage()
         });
     }
 

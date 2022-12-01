@@ -282,21 +282,6 @@ namespace AnchorLinkSharp
             // Initialize the loading state of the transport
             t.ShowLoading();
 
-            // eosjs transact compat: upgrade to transaction if args have any header field
-            // TODO
-            //if (args.action != null || args.actions != null)
-            //{
-            //    args.transaction = new EosSharp.Core.Api.v1.Transaction()
-            //    {
-            //        expiration = new DateTime(1970, 1, 1),
-            //        ref_block_num = 0,
-            //        ref_block_prefix = 0,
-            //        max_net_usage_words = 0,
-            //        max_cpu_usage_ms = 0,
-            //        delay_sec = 0
-            //    };
-            //}
-
             var signingRequestCreateArguments = new SigningRequestCreateArguments()
             {
                 Transaction = args.Transaction,
@@ -713,13 +698,7 @@ namespace AnchorLinkSharp
 
             while (cbp == null && rp == null && retries < 100)
             {
-                //#if UNITY_WEBGL
-                //                await UniTask.Delay(100);
-                //#else
-                //                await Task.Delay(100);
-                //#endif
-
-                await AsyncHelper.Delay(1);
+                await AsyncHelper.Delay(100);
             }
 
             if (!string.IsNullOrEmpty(rp?.Rejected))
@@ -758,13 +737,7 @@ namespace AnchorLinkSharp
                 {
                     Console.WriteLine($"Unexpected hyperbuoy error {ex.Message}");
                 }
-
-                //#if UNITY_WEBGL
-                //                await UniTask.Delay(100);
-                //#else
-                //                await Task.Delay(100);
-                //#endif
-                await AsyncHelper.Delay(1);
+                await AsyncHelper.Delay(100);
             }
         }
     }

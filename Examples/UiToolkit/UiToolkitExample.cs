@@ -28,22 +28,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             _anchorLink = new AnchorLink(new LinkOptions()
             {
                 Transport = this.Transport,
-
-                //EOSIO.Token
-                //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-                //Rpc = "https://eos.greymass.com",
-
-                //WAX.Token
                 ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
                 Rpc = "https://wax.greymass.com",
                 ZlibProvider = new NetZlibProvider(),
                 Storage = new PlayerPrefsStorage()
-                //chains: [{
-                //    chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-                //    nodeUrl: 'https://eos.greymass.com',
-                //}]
-
- 
             });
         }
 

@@ -1,8 +1,6 @@
 using System;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Newtonsoft.Json;
@@ -55,15 +53,5 @@ public class Examples : MonoBehaviour
         {
             Debug.Log(e);
         }
-
-        //try
-        //{
-        //    TransactExample.Vote();
-        //}
-        //catch (Exception e)
-        //{
-        //    Debug.Log(e);
-        //    throw;
-        //}
     }
 }

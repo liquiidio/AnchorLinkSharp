@@ -362,9 +362,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 
         private void SetTransferAccountText()
         {
-            var toName = "???";
-            var memoComment = "Anchor is the best! Thank you.";
-            var quantityAmount = "0.0000 EOS OR WAX";
+            var toName = "liquidstudio";
+            var memoComment = "Greymass & Liquiid are the best! Thank you.";
+            var quantityAmount = "0.00001000 WAX";
 
             _toTextField.SetValueWithoutNotify(toName);
             _memoTextField.SetValueWithoutNotify(memoComment);
@@ -390,7 +390,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         private void SetBidNameText()
         {
             var name = "new name";
-            var amount = "0 WAX";
+            var amount = "0.00000000 WAX";
 
             _nameToBidTextField.SetValueWithoutNotify(name);
             _bidAmountTextField.SetValueWithoutNotify($"{amount}");

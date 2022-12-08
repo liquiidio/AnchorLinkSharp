@@ -6,9 +6,9 @@ namespace AnchorLinkSharp
      */
     internal class SessionException : LinkException
     {
-        public new LinkErrorCode Code;// TODO //E_DELIVERY' | 'E_TIMEOUT'
+        public new LinkErrorCode Code;
 
-        public SessionException(string reason, LinkErrorCode code /* 'E_DELIVERY' | 'E_TIMEOUT'*/) : base(reason)
+        public SessionException(string reason, LinkErrorCode code) : base(reason)
         {
             Code = code;
         }

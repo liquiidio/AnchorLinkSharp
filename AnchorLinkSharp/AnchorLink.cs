@@ -17,11 +17,6 @@ using NativeWebSocket;
 using Newtonsoft.Json;
 using UnityEngine;
 
-#if UNITY_WEBGL
-// ReSharper disable once RedundantUsingDirective
-using Cysharp.Threading.Tasks;
-#endif
-
 namespace AnchorLinkSharp
 {
     /**
@@ -219,7 +214,7 @@ namespace AnchorLinkSharp
                     permission = payload.Sp,
                 };
 
-                var signatures = new List<string>(){ payload.Sig }; // TODO, multiple sigs?
+                var signatures = new List<string>(){ payload.Sig };
 
                 // recreate transaction from request response
                 var resolved = await ResolvedSigningRequest.FromPayload(
@@ -245,8 +240,7 @@ namespace AnchorLinkSharp
                     {
                         signatures = result.Signatures,
                         transaction = transaction,
-                        compression = 0, // TODO ?
-                        // TODO ! pass other properties
+                        compression = 0
                     });
                     result.Processed = res.processed;
                 }
@@ -303,7 +297,7 @@ namespace AnchorLinkSharp
          * @param info Metadata to add to the request.
          * @note This is for advanced use-cases, you probably want to use [[AnchorLink.login]] instead.
          */
-        public async Task<IdentifyResult> Identify(/*TODO Scope */PermissionLevel requestPermission, object info /*, info?: {[key: string]: string | Uint8Array}*/)
+        public async Task<IdentifyResult> Identify(PermissionLevel requestPermission, object info)
         {
             var request = await CreateRequest(new SigningRequestCreateArguments()
             {
@@ -311,7 +305,7 @@ namespace AnchorLinkSharp
                 {
                     Permission = requestPermission,
                 },
-                Info = info// (List<InfoPair>)info,
+                Info = info
             });
 
             // TODO pollForCallback(request.data.callback, CancellationToken.None);*/
@@ -321,16 +315,7 @@ namespace AnchorLinkSharp
                 throw new IdentityException("Unexpected response");
             }
 
-            //var memStream = new MemoryStream();
-
-            //var chainIdBuff = SerializationHelper.HexStringToByteArray(request.getChainId());
-            //memStream.Write(chainIdBuff, 0, chainIdBuff.Length);
-            //memStream.Write(res.serializedTransaction, 0, res.serializedTransaction.Length);
-            //memStream.Write(new byte[32], 0, 32);
-            //var message = memStream.ToArray();  // TODO
-
             var signer = res.Signer;
-            //string signerKey = ""; //  ecc.recover(res.signatures[0], message)   // TODO
             var account = await Api.GetAccount(new GetAccountRequest() {account_name = signer.actor});
             if (account == null)
             {
@@ -342,20 +327,7 @@ namespace AnchorLinkSharp
             {
                 throw new IdentityException($"{signer.actor} signed for unknown permission: {signer.permission}");
             }
-
-            //var auth = permission.required_auth;
-            //var keyAuth = auth.keys.SingleOrDefault(key => key.key == signerKey); // TODO key-equal-func
-            //if (keyAuth == null)
-            //{
-            //    throw new IdentityException($"{LinkConstants.formatAuth(signer)} has no key matching id signature");
-            //}
-
-            //if (auth.threshold > keyAuth.weight)
-            //{
-            //    throw new IdentityException(
-            //        $"{LinkConstants.formatAuth(signer)} signature does not reach auth threshold");
-            //}
-
+            
             if (requestPermission != null)
             {
                 if ((requestPermission.actor != SigningRequestConstants.PlaceholderName && requestPermission.actor != signer.actor) ||
@@ -377,8 +349,7 @@ namespace AnchorLinkSharp
                 Request = res.Request,
                 Transaction = res.Transaction,
                 SerializedTransaction = res.SerializedTransaction,
-                Account = account,
-                //signerKey = signerKey
+                Account = account
             };
         }
 
@@ -683,16 +654,9 @@ namespace AnchorLinkSharp
             {
                 Debug.Log($"WebsocketError: {errormsg}");
             };
-            //socket.OnError += Console.WriteLine;
             _socket.OnClose += async (code) =>
             {
                 Debug.Log($"Websocket closed with code {code} {code.ToString()}");
-                //if (active)
-                //{
-                //    // I have no idea if this backoff-thing makes sense :D
-                //    await Task.Delay(100);
-                //    //await _socket.ConnectAsync();
-                //}
             };
             await _socket.ConnectAsync();
 

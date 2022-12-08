@@ -62,9 +62,7 @@ namespace AnchorLinkSharp
             {
                 return key;
             }
-
-            return "";
-// TODO            return Numeric.publicKeyToString(Numeric.stringToPublicKey('EOS' + key.substr(-50)))
+            return key;
         }
 
         /**
@@ -84,13 +82,6 @@ namespace AnchorLinkSharp
         public static string GeneratePrivateKey()
         {
             return CryptoHelper.GenerateKeyPair().PrivateKey;
-/*            if (typeof window != = 'undefined' && window.crypto) {
-                const data  = new Uint32Array(32)
-                window.crypto.getRandomValues(data)
-                return ecc.PrivateKey.fromBuffer(Buffer.from(data)).toString()
-            } else {
-                return await ecc.randomKey()
-            }*/
         }
     }
 }

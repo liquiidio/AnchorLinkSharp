@@ -50,7 +50,6 @@ namespace AnchorLinkSharp
         public Task<SigningRequest> Prepare(SigningRequest request, LinkSession session = null)
         {
             return AnchorLink.Transport.Prepare(request, this);
-            // TODO hm   return Promise.resolve(request);
         }
 
         public void ShowLoading()

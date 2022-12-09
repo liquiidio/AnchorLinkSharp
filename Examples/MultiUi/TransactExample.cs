@@ -15,7 +15,7 @@ public class TransactExample : MonoBehaviour
     // initialize the link
     private AnchorLink _link;
 
-    public void Awake()
+    private void Awake()
     {
         _link = new AnchorLink(new LinkOptions
         {
@@ -49,7 +49,7 @@ public class TransactExample : MonoBehaviour
     };
 
     // ask the user to sign the transaction and then broadcast to chain
-    public void Vote()
+    internal void Vote()
     {
         _link.Transact(new TransactArgs() { Action = Action }).ContinueWith(transactTask =>
         {

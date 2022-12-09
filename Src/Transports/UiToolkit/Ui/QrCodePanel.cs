@@ -53,7 +53,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         }
 
         #region Button Binding
-
+        // assign UI toolkit interaction events
         private void BindButtons()
         {
             _qrCodeBox.transform.scale = new Vector3(1, 1);
@@ -84,26 +84,24 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         #region Rebind
 
-        public void Rebind(SigningRequest request, bool isLogin, bool isWhiteTheme)
+        internal void Rebind(SigningRequest request, bool isLogin, bool isWhiteTheme)
         {
             _request = request;
-            var whiteQrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
-                new Color32(0, 0, 0, 255), Color.white);
-
-            var darkQrCodeTexture = StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
+            // create and get the QR code image
+            _qrCodeBox.style.backgroundImage = isWhiteTheme
+                ? (StyleBackground)StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
+                new Color32(0, 0, 0, 255), Color.white)
+                : (StyleBackground)StringToQrCodeTexture2D(_request?.Encode(false, true), 512, 512,
                 new Color32(19, 27, 51, 255), Color.white);
 
-            if (isWhiteTheme)
-                _qrCodeBox.style.backgroundImage = whiteQrCodeTexture;
-            else _qrCodeBox.style.backgroundImage = darkQrCodeTexture;
-
-
+            // user logging in
             if (isLogin)
             {
                 _loginTitleLabel.text = "Login";
                 _subtitleLabel.text =
                     "Scan the QR-code with Anchor on another device or use the button to open it here.";
             }
+            // user trying to sign
             else
             {
                 _loginTitleLabel.text = "Sign";
@@ -111,8 +109,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                     "Scan the QR-code with Anchor on another device or use the button to open it here.";
             }
         }
-
-        public void Rebind(bool isSignManually)
+        // if the user needs to sign manually
+        internal void Rebind(bool isSignManually)
         {
             if (isSignManually)
             {
@@ -125,7 +123,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region other
-
+        // when the copy ESRLinkUrl button is interacted with
         private IEnumerator SetText(float counterDuration = 0.5f)
         {
             _readyToCopy.Hide();
@@ -168,7 +166,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             return newTexture2D;
         }
-
+        // convert string information into a color32 array which is used to create the QR code
         private Color32[] StringEncoder(string textForEncoding, int width, int height, Color32 baseColor,
             Color32 pixelColor)
         {

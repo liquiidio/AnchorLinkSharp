@@ -102,7 +102,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         }
 
         #region Button Binding
-
+        // assign UI toolkit interaction events
         private void BindButtons()
         {
             _changeToTransferButton.clickable.clicked += () =>
@@ -348,8 +348,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         #endregion
 
         #region Rebind
-
-        public void Rebind()
+        // Re-assign UI toolkit values after a successful login 
+        internal void Rebind()
         {
             _fromTextField.value = UiToolkitExample.LinkSession.Auth.actor;
             _accountLabel.text = _fromTextField.value;
@@ -359,7 +359,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         #endregion
 
         #region other
-
+        // assign default values to the currency transfer window variables
         private void SetTransferAccountText()
         {
             var toName = "liquidstudio";
@@ -371,6 +371,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
             _quantityTextField.SetValueWithoutNotify(quantityAmount);
         }
 
+        // assign default values to the sell RAM transfer window variables
         private void SetSellRamText()
         {
             var amount = "0";
@@ -378,6 +379,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
             _sellRamAmountTextField.SetValueWithoutNotify(amount);
         }
 
+        // assign default values to the buy RAM transfer window variables
         private void SetBuyRamText()
         {
             var name = "";
@@ -387,6 +389,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
             _amountToBuyTextField.SetValueWithoutNotify(quantityAmount);
         }
 
+        // assign default values to the bid window variables
         private void SetBidNameText()
         {
             var name = "new name";

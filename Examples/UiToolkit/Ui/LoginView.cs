@@ -38,6 +38,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         }
 
         #region Button Binding
+        // assign UI toolkit interaction events
         private void BindButtons()
         { 
             _loginButton.clickable.clicked +=  async () =>

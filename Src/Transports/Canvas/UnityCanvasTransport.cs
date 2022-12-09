@@ -11,7 +11,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 {
     public class UnityCanvasTransport : UnityTransport
     {
-        internal Coroutine counterCoroutine = null;
+        private Coroutine counterCoroutine = null;
 
         internal GameObject currentPanel;
 
@@ -19,28 +19,29 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         #region Login-Panel
         [Header("Login Panel Panel Components")]
-        public GameObject LoginPanel;   // The holding panel for the login details
-        public GameObject HyperlinkCopiedNotificationPanel; // Confirmation panel for when the link has been successfully copied
+        [SerializeField] internal GameObject LoginPanel;   // The holding panel for the login details
+        [SerializeField] private GameObject HyperlinkCopiedNotificationPanel; // Confirmation panel for when the link has been successfully copied
 
-        public GameObject LoginSubpanel;
-        public GameObject ManuallySignSubpanel;
+        [SerializeField] private GameObject LoginSubpanel;
+        [SerializeField] private GameObject ManuallySignSubpanel;
 
         //Buttons
-        public Button CloseLoginPanelButton;
-        public Button StaticQRCodeHolderTargetButton;
-        public Button ResizableQRCodeHolderTargetButton;
-        public Button HyperlinkCopyButton;
-        public Button LaunchAnchorButton;
+        [SerializeField] private Button CloseLoginPanelButton;
+        [SerializeField] private Button StaticQRCodeHolderTargetButton;
+        [SerializeField] private Button ResizableQRCodeHolderTargetButton;
+        [SerializeField] private Button HyperlinkCopyButton;
+        [SerializeField] private Button LaunchAnchorButton;
 
-        const string VersionURL = "https://www.github.com/greymass/anchor-link";    // Link that will show the url for the version
-        const string DownloadURL = "https://www.greymass.com/en/anchor/download";   // Link that will go to the download page for anchor
+        private const string VersionURL = "https://www.github.com/greymass/anchor-link";    // Link that will show the url for the version
+        private const string DownloadURL = "https://www.greymass.com/en/anchor/download";   // Link that will go to the download page for anchor
         #endregion
 
         #region Sign and countdown timer
         [Header("Countdown timer")]
-        public GameObject SignPanel;
-        public TextMeshProUGUI CountdownTextGUI;
-        public string CountdownText
+        [SerializeField] internal GameObject SignPanel;
+        [SerializeField] private TextMeshProUGUI CountdownTextGUI;
+        
+        private string CountdownText
         {
             get
             {
@@ -57,10 +58,10 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         #region Other panels
         [Header("Other panels")]
-        public GameObject LoadingPanel;
-        public GameObject SuccessPanel;
-        public GameObject FailurePanel;
-        public GameObject TimeoutPanel;
+        [SerializeField] internal GameObject LoadingPanel;
+        [SerializeField] internal GameObject SuccessPanel;
+        [SerializeField] internal GameObject FailurePanel;
+        [SerializeField] internal GameObject TimeoutPanel;
         #endregion
 
         private void Awake()
@@ -73,6 +74,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             DisableAllPanels();
         }
 
+        // Toggle between the light and dark theme (default is dark)
         private void SwitchToLightTheme()
         {
             foreach (var _childImage in GetComponentsInChildren<Image>(true))
@@ -282,8 +284,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
             HyperlinkCopiedNotificationPanel.SetActive(true);
 
-            //CopyToClipboard(ESRLinkUrl);
-
             StopCoroutine(nameof(ToggleHyperlinkCopyButton_Delayed));
             StartCoroutine(ToggleHyperlinkCopyButton_Delayed());
         }
@@ -314,7 +314,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             DisableTargetPanel(TimeoutPanel);
         }
 
-        public void StartTimer()
+        private void StartTimer()
         {
             if (counterCoroutine != null)
                 StopCoroutine(counterCoroutine);
@@ -324,7 +324,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             counterCoroutine = StartCoroutine(CountdownTimer(2));
         }
 
-        public IEnumerator CountdownTimer(float counterDuration = 3.5f)
+        private IEnumerator CountdownTimer(float counterDuration = 3.5f)
         {
             float _newCounter = 0;
             while (_newCounter < counterDuration * 60)
@@ -373,10 +373,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             DisableTargetPanel(FailurePanel);
         }
 
+        // remove all links from the QR code to avoid double/wrong sign links/actions/transactions
         private void ClearAllLinks()
         {
-            //ESRLinkUrl = "";
-
             StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite =
                    ResizableQRCodeHolderTargetButton.GetComponent<Image>().sprite = null;
 
@@ -384,6 +383,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
                    ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = false;
         }
 
+        // hide any displayed panel and switch to the new supplied one
         internal void SwitchToNewPanel(GameObject toPanel)
         {
             currentPanel?.SetActive(false);
@@ -394,6 +394,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             currentPanel.SetActive(true);
         }
 
+        // if there is any panel being displayed, hide it
         internal void DisableCurrentPanel(GameObject fallbackPanel = null)
         {
             currentPanel?.SetActive(false);
@@ -402,6 +403,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             currentPanel= fallbackPanel;
         }
 
+        // if there is a specific panel being displayed hide it and show the fallback one if supplied
         internal void DisableTargetPanel(GameObject targetPanel, GameObject fallbackPanel = null)
         {
             targetPanel.SetActive(false);
@@ -412,6 +414,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             }
         }
 
+        // Hide all panels
         internal void DisableAllPanels()
         {
             LoginPanel.SetActive(false);

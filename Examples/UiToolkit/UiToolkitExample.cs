@@ -13,18 +13,18 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         // app identifier, should be set to the eosio contract account if applicable
         private const string Identifier = "uitoolkitexample";
 
-        // Assign UnityTransport through the Editor
+        // assign UnityTransport through the editor
         [SerializeField] internal UnityUiToolkitTransport Transport;
 
         // initialize the link
         private AnchorLink _anchorLink;
 
         // the session instance, either restored using link.restoreSession() or created with link.login()
-        public LinkSession LinkSession;
+        internal LinkSession LinkSession;
 
-
-        public void Start()
+        private void Start()
         {
+            // create a new anchor link instance
             _anchorLink = new AnchorLink(new LinkOptions()
             {
                 Transport = this.Transport,
@@ -35,7 +35,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             });
         }
 
-        public async Task StartSession()
+        // initialize a new session
+        internal async Task StartSession()
         {
             try
             {
@@ -50,15 +51,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
             }
         }
 
-
         // logout and remove session from storage
-        public async Task Logout()
+        internal async Task Logout()
         {
             await LinkSession.Remove();
         }
 
         // tries to restore session, called when document is loaded
-        public async Task RestoreSession()
+        internal async Task RestoreSession()
         {
             var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
             LinkSession = restoreSessionResult;
@@ -68,7 +68,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         }
 
         // transfer tokens using a session  
-        public async Task Transfer(EosSharp.Core.Api.v1.Action action)
+        internal async Task Transfer(EosSharp.Core.Api.v1.Action action)
         {
             var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
 
@@ -76,7 +76,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         }
 
         // ask the user to sign the transaction and then broadcast to chain
-        public void Vote(EosSharp.Core.Api.v1.Action action)
+        internal void Vote(EosSharp.Core.Api.v1.Action action)
         {
             _anchorLink.Transact(new TransactArgs() { Action = action }).ContinueWith(transactTask =>
             {
@@ -85,9 +85,11 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
         }
 
         // ask the user to sign the transaction and then broadcast to chain
-        public async Task SellOrBuyRam(EosSharp.Core.Api.v1.Action action)
+        internal async Task SellOrBuyRam(EosSharp.Core.Api.v1.Action action)
         {
             var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
+
+            print($"Transaction broadcast! {transactResult.Processed}");
         }
     }
 

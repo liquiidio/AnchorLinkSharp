@@ -10,14 +10,20 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
 {
     public class UnityUiToolkitTransport : UnityTransport
     {
-        public const string VersionUrl = "https://github.com/greymass/anchor-link";
-        public const string DownloadAnchorUrl = "https://greymass.com/anchor/";
-        public const string Version = "3.5.1 (3.5.1)";
+        // link to anchor version
+        private const string VersionUrl = "https://github.com/greymass/anchor-link";
+        // link to anchor download
+        private const string DownloadAnchorUrl = "https://greymass.com/anchor/";
+        // current version number
+        internal const string Version = "3.5.1 (3.5.1)";
 
+        // current screen that is being displayed
         private static ScreenBase _activeScreen;
+        // screen that we want to load into
         private static bool _transitioningPanel;
 
-        [SerializeField] public bool IsWhiteTheme;
+        // Toggle dark and light themes
+        [SerializeField] internal bool IsWhiteTheme;    
 
         [SerializeField] internal FailurePanel FailurePanel;
         [SerializeField] internal LoadingPanel LoadingPanel;
@@ -61,7 +67,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             else Debug.Log("screen is null");
         }
 
-        public static IEnumerator<float> TransitionPanels(ScreenBase to)
+        internal static IEnumerator<float> TransitionPanels(ScreenBase to)
         {
             if (_activeScreen == to)
                 yield break;
@@ -85,13 +91,13 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         }
 
         //open anchor link version on browser page
-        public static void OpenVersion()
+        internal static void OpenVersion()
         {
             Application.OpenURL(VersionUrl);
         }
 
         //open Download anchor on browser page
-        public static void OpenDownloadAnchorLink()
+        internal static void OpenDownloadAnchorLink()
         {
             Application.OpenURL(DownloadAnchorUrl);
         }
@@ -128,8 +134,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
         public override void DisplayRequest(SigningRequest request)
         {
-
-            
             Debug.Log("DisplayRequest");
 
             var esrLinkUri = request.Encode(false, true);

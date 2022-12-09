@@ -19,17 +19,17 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
     public class CanvasExample : MonoBehaviour
     {
         // Assign UnityTransport through the Editor
-        [SerializeField] internal UnityCanvasTransport Transport;
+        [SerializeField] private UnityCanvasTransport Transport;
 
         [Header("Panels")]
-        public GameObject CustomActionsPanel;
-        public GameObject CustomTransferPanel;
+        [SerializeField] private GameObject CustomActionsPanel;
+        [SerializeField] private GameObject CustomTransferPanel;
 
         [Header("Buttons")]
-        public Button LoginButton;
-        public Button RestoreSessionButton;
-        public Button TransferButton;
-        public Button LogoutButton;
+        [SerializeField] private Button LoginButton;
+        [SerializeField] private Button RestoreSessionButton;
+        [SerializeField] private Button TransferButton;
+        [SerializeField] private Button LogoutButton;
 
         private Coroutine waitCoroutine;
         // app identifier, should be set to the eosio contract account if applicable
@@ -60,6 +60,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
            );
         }
 
+        // initialize a new session
         public async void StartSession()
         {
             _link = new AnchorLink(new LinkOptions()
@@ -80,13 +81,14 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
         }
 
         // login and store session if sucessful
-        public async Task Login()
+        private async Task Login()
         {
             var loginResult = await _link.Login(Identifier);
             _session = loginResult.Session;
             DidLogin();
         }
 
+        // call from UI button
         public async void RestoreASession()
         {
             await RestoreSession();
@@ -101,6 +103,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
                 DidLogin();
         }
 
+        // call from UI button
         public async void DoLogout()
         {
             await Logout();
@@ -119,6 +122,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
             waitCoroutine = StartCoroutine(SwitchPanels(CustomActionsPanel, CustomTransferPanel, 1.5f));
         }
 
+        // use this to toggle on a new rect (or a gameobject) in the canvas
         public void ShowTargetPanel(GameObject targetPanel)
         {
             Transport.SwitchToNewPanel(targetPanel);
@@ -182,10 +186,9 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
             try
             {
                 var transactResult = await _link.Transact(new TransactArgs() { Action = action });
+                // OR (see next line)
                 //var transactResult = await _session.Transact(new TransactArgs() { Action = action });
                 Debug.Log($"Transaction broadcast! {transactResult.Processed}");
-
-                //await Transfer(action);
 
                 waitCoroutine = StartCoroutine(SwitchPanels(Transport.currentPanel, CustomActionsPanel, 1.5f));
 
@@ -197,14 +200,6 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
             }
         }
 
-        //// transfer tokens using a session  
-        //public async Task Transfer(EosSharp.Core.Api.v1.Action action)
-        //{
-        //    var transactResult = await _session.Transact(new TransactArgs() { Action = action });
-
-        //    print($"Transaction broadcast! {transactResult.Processed}");
-        //}
-
         private IEnumerator SwitchPanels(GameObject fromPanel, GameObject toPanel, float SecondsToWait = 0.1f)
         {
             Debug.Log("Start counter");
@@ -214,4 +209,3 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
         }
     }
 }
-

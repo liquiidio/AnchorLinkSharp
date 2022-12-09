@@ -5,6 +5,7 @@ using UnityEngine;
 using Assets.Packages.AnchorLinkTransportSharp.Src;
 using Newtonsoft.Json;
 
+
 public class Examples : MonoBehaviour
 {
     [SerializeField] internal UnityUiToolkitTransport UnityUiToolkitTransport;
@@ -17,10 +18,12 @@ public class Examples : MonoBehaviour
 
     private UnityTransport _transport;
 
-    public bool UseCanvas;
+    // toggle between UIToolkit and Canvas displays
+    [SerializeField] internal bool UseCanvas;
 
-    public void Awake()
+    private void Awake()
     {
+        // Assign appropriate transport according to the display used
         if (UseCanvas)
             _transport = UnityCanvasTransport;
         else
@@ -30,7 +33,8 @@ public class Examples : MonoBehaviour
         TransactExample.Transport = _transport;
     }
 
-    public async void Start()
+    // When the level loads, login and attempt a predefined transfer of tokens
+    private async void Start()
     {
         try
         {
@@ -43,7 +47,6 @@ public class Examples : MonoBehaviour
             catch (Exception e)
             {
                 Debug.Log(JsonConvert.SerializeObject(e));
-                throw;
             }
             // logout removes the session so it's not restorable
             //                await loginExample.logout();

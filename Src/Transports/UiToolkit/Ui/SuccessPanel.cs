@@ -18,7 +18,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
          */
         private Label _subTitleLabel;
 
-        void Start()
+        private void Start()
         {
             _subTitleLabel = Root.Q<Label>("anchor-link-subtitle-label");
 
@@ -26,8 +26,8 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         }
 
         #region Rebind
-
-        public void Rebind(SigningRequest request)
+        // display appropriate message if the user is signing in or performing a transaction
+        internal void Rebind(SigningRequest request)
         {
             if (request.IsIdentity())
             {
@@ -41,7 +41,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region other
-
+        // hide this screen after set time
         private IEnumerator SetTimeout(float counterDuration = 0.5f)
         {
             float _newCounter = 0;

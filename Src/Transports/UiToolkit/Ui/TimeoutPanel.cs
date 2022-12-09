@@ -13,7 +13,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
-        public QrCodePanel QrCodePanel;
+        [SerializeField] internal QrCodePanel QrCodePanel;
 
         private void Start()
         {
@@ -24,7 +24,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         }
 
         #region Button Binding
-
+        // assign UI toolkit interaction events
         private void BindButtons()
         {
             _signManuallyButton.clickable.clicked += () =>

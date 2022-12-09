@@ -24,7 +24,7 @@ public class LoginExample : MonoBehaviour
     // Assign UnityTransport through the Editor
     [SerializeField] internal UnityTransport Transport;
 
-    public void Awake()
+    private void Awake()
     {
         _link = new AnchorLink(new LinkOptions
         {
@@ -37,7 +37,7 @@ public class LoginExample : MonoBehaviour
     }
 
     // tries to restore session, called when document is loaded
-    public async Task RestoreSession()
+    internal async Task RestoreSession()
     {
         var restoreSessionResult = await _link.RestoreSession(Identifier);
         _session = restoreSessionResult;
@@ -46,7 +46,7 @@ public class LoginExample : MonoBehaviour
     }
 
     // login and store session if sucessful
-    public async Task Login()
+    internal async Task Login()
     {
         var loginResult = await _link.Login(Identifier);
         _session = loginResult.Session;
@@ -54,19 +54,19 @@ public class LoginExample : MonoBehaviour
     }
 
     // logout and remove session from storage
-    public async Task Logout()
+    internal async Task Logout()
     {
         await _session.Remove();
     }
 
     // called when session was restored or created
-    public void DidLogin()
+    private void DidLogin()
     {
         Debug.Log($"{_session.Auth.actor} logged-in");
     }
 
     // transfer tokens using a session
-    public async Task Transfer()
+    internal async Task Transfer()
     {
         try
         {

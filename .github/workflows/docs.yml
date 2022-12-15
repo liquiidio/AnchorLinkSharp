@@ -1,0 +1,78 @@
+name : Build documents
+
+on: [push]
+jobs:
+    create-docs:    
+       runs-on: ubuntu-18.04
+       container:
+            image: ghcr.io/liquiidio/docker-docs-generator:moxygen
+            credentials:
+               username: liquiidio
+               password: ${{secrets.GITHUB_TOKEN}} 
+       permissions:
+                contents: read
+                packages: write
+                pages: write      
+                id-token: write
+       steps:
+            - uses: actions/checkout@v2
+            
+            - name: generate docs with doxygen
+              shell: bash
+              run: doxygen .github/workflows/documentation/Doxyfile
+            
+            - name: Upload doxygen output to artifacts
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                name: Doxygen output
+                path:  .github/workflows/documentation/xml
+            
+            - name: convert doxygen xml to markdown with moxygen
+              shell: bash
+              run: moxygen --classes --pages --language=cpp --output=.github/workflows/documentation/md/%s.md .github/workflows/documentation/xml
+            
+            - name: Upload moxygen output to artifacts
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                name: Moxygen output
+                path:  .github/workflows/documentation/md
+            
+            - name: copy files to gitbook-folder 
+              shell: bash
+              run: cp -r .github/workflows/documentation/md .github/workflows/documentation/gitbook/docs
+            
+            - name: install gitbook plugins
+              shell: bash
+              run: npm install --prefix .github/workflows/documentation/gitbook gitbook-plugin-github-buttons gitbook-plugin-back-to-top-button gitbook-plugin-copy-code-button gitbook-plugin-cuav-chapters gitbook-plugin-heading-anchors gitbook-plugin-theme-gestalt gitbook-plugin-styles-sass-fix
+
+            - name: build gitbook website
+              shell: bash
+              run: gitbook build .github/workflows/documentation/gitbook .github/workflows/documentation/gitbook_website 
+            
+          #  - name: build gitbook epub
+           #   shell: bash
+            #  run: gitbook epub .github/workflows/documentation/gitbook .github/workflows/documentation/docs.epub 
+            
+            - name: Upload Gitbook Website to artifacts
+              if: always()
+              uses: actions/upload-pages-artifact@v1
+              with:
+                name: github-pages
+                path:  .github/workflows/documentation/gitbook_website 
+            
+            #- name: Upload Gitbook Epub to artifacts
+             # if: always()
+              #uses: actions/upload-artifact@v3
+              #with:
+               # name: Gitbook PDF
+                #path:  .github/workflows/documentation/docs.epub 
+
+            - name : deploy
+              uses : actions/deploy-pages@v1
+              env:
+                 name: github-pages
+                 url: ${{ steps.deployment.outputs.page_url }}
+    
+    

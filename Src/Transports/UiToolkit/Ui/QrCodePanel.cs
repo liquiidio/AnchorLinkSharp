@@ -13,7 +13,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /*
          * Fields, Properties
          */
-        private readonly Vector3 _qrCurrentSize = new(1, 1);
+        private readonly Vector3 _qrCurrentSize = new Vector3(1, 1);
         private SigningRequest _request;
 
         /*
@@ -153,7 +153,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth,
             int textureHeight, Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
         {
-            Texture2D newTexture2D = new(textureWidth, textureHeight);
+            Texture2D newTexture2D = new Texture2D(textureWidth, textureHeight);
 
             if (baseColor == Color.clear)
                 baseColor = Color.white;

@@ -75,7 +75,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src
                                                  int textureWidth = 256, int textureHeight = 256,
                                                  Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
         {
-            Texture2D newTexture2D = new(textureWidth, textureHeight);
+            Texture2D newTexture2D = new Texture2D(textureWidth, textureHeight);
 
             var encodedData = StringEncoder(textForEncoding, newTexture2D.width, newTexture2D.height);
 

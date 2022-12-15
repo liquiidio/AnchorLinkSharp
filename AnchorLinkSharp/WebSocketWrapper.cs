@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using Assets.Packages.eossharp.EosSharp.EosSharp.Unity3D;
+using eossharp.EosSharp.EosSharp.Unity3D;
 using NativeWebSocket;
 using UnityEngine;
 using WebSocket = NativeWebSocket.WebSocket;

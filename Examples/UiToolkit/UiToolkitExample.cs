@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src;
-using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
+using AnchorLinkTransportSharp.Src;
+using AnchorLinkTransportSharp.Src.StorageProviders;
+using AnchorLinkTransportSharp.Src.Transports.UiToolkit;
 using UnityEngine;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit
+namespace AnchorLinkTransportSharp.Examples.UiToolkit
 {
     public class UiToolkitExample : MonoBehaviour
     {

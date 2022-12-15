@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src;
-using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas;
-using Assets.Packages.eossharp.EosSharp.EosSharp.Unity3D;
+using AnchorLinkTransportSharp.Src;
+using AnchorLinkTransportSharp.Src.StorageProviders;
+using AnchorLinkTransportSharp.Src.Transports.Canvas;
+using eossharp.EosSharp.EosSharp.Unity3D;
 using EosSharp.Core.Api.v1;
 using Newtonsoft.Json.Bson;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Examples.Canvas
+namespace AnchorLinkTransportSharp.Examples.Canvas
 {
     public class CanvasExample : MonoBehaviour
     {

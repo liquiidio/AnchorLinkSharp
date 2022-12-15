@@ -1,17 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
-using EosSharp.Core.Api.v1;
-using Newtonsoft.Json;
+using AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
+namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 {
     public class LoginView : ScreenBase
     {

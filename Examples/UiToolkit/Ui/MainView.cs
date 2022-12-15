@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
+using AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosSharp.Core.Api.v1;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Action = EosSharp.Core.Api.v1.Action;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Examples.UiToolkit.Ui
+namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 {
     public class MainView : ScreenBase
     {

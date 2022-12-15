@@ -2,13 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp;
+using AnchorLinkTransportSharp;
 using EosioSigningRequest;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
+namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     [RequireComponent(typeof(SuccessPanel))]
     public class SuccessPanel : PanelBase

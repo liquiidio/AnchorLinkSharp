@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders;
+using AnchorLinkTransportSharp.Src.StorageProviders;
 using EosioSigningRequest;
 using UnityEngine;
 using ZXing;
 using ZXing.QrCode;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src
+namespace AnchorLinkTransportSharp.Src
 {
     public abstract class UnityTransport : MonoBehaviour, ILinkTransport
     {

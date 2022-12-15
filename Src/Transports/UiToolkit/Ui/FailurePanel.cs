@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
+namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     public class FailurePanel : PanelBase
     {

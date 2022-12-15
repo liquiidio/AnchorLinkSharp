@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
+using AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosioSigningRequest;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
+namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
 {
     public class UnityUiToolkitTransport : UnityTransport
     {
@@ -47,6 +47,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             
         }
 
+        // check which theme to use (light and dark)
         private void CheckTheme()
         {
             if (_activeScreen != null)
@@ -67,6 +68,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
             else Debug.Log("screen is null");
         }
 
+        // switch from one panel to a new one
         internal static IEnumerator<float> TransitionPanels(ScreenBase to)
         {
             if (_activeScreen == to)

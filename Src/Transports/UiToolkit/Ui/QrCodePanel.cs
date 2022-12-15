@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 using ZXing;
 using ZXing.QrCode;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
+namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     [RequireComponent(typeof(QrCodePanel))]
     public class QrCodePanel : PanelBase
@@ -83,7 +83,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region Rebind
-
+        // assign and show the qr code 
         internal void Rebind(SigningRequest request, bool isLogin, bool isWhiteTheme)
         {
             _request = request;

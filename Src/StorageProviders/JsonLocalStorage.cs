@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AnchorLinkSharp;
 using Newtonsoft.Json;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders
+namespace AnchorLinkTransportSharp.Src.StorageProviders
 {
     public class JsonLocalStorage : ILinkStorage
     {

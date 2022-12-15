@@ -1,0 +1,6 @@
+[submodule "eosiosigningrequestsharp"]
+	path = eosiosigningrequestsharp
+	url = https://github.com/liquiidio/EosioSigningRequestSharp-Private.git
+[submodule "anchorlinktransportsharp"]
+	path = anchorlinktransportsharp
+	url = https://github.com/liquiidio/AnchorLinkTransportSharp-Private.git

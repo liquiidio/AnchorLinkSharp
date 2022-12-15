@@ -47,6 +47,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             
         }
 
+        // check which theme to use (light and dark)
         private void CheckTheme()
         {
             if (_activeScreen != null)
@@ -67,6 +68,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             else Debug.Log("screen is null");
         }
 
+        // switch from one panel to a new one
         internal static IEnumerator<float> TransitionPanels(ScreenBase to)
         {
             if (_activeScreen == to)

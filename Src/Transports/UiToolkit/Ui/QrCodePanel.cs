@@ -83,7 +83,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region Rebind
-
+        // assign and show the qr code 
         internal void Rebind(SigningRequest request, bool isLogin, bool isWhiteTheme)
         {
             _request = request;

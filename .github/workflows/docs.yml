@@ -16,11 +16,9 @@ jobs:
                 id-token: write
        steps:
             - uses: actions/checkout@v2
+              with:
+                submodules: recursive
 
-            - name: checkout submodules
-              shell: bash
-              run: git config --global --add safe.directory '*' & git submodule update --init --recursive
-            
             - name: generate docs with doxygen
               shell: bash
               run: doxygen .github/workflows/documentation/Doxyfile

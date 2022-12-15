@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using AnchorLinkSharp;
-using Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
+using AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui;
 using EosioSigningRequest;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit
+namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
 {
     public class UnityUiToolkitTransport : UnityTransport
     {

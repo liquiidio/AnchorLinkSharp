@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
+namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 {
     public class UnityCanvasTransport : UnityTransport
     {

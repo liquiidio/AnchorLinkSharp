@@ -2,7 +2,7 @@
 using AnchorLinkSharp;
 using UnityEngine;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.StorageProviders
+namespace AnchorLinkTransportSharp.Src.StorageProviders
 {
     public class PlayerPrefsStorage : ILinkStorage
     {

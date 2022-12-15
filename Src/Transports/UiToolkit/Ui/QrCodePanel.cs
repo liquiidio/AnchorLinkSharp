@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 using ZXing;
 using ZXing.QrCode;
 
-namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
+namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     [RequireComponent(typeof(QrCodePanel))]
     public class QrCodePanel : PanelBase

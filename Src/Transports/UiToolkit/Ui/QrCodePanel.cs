@@ -151,7 +151,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         /// <param name="textureHeight">How high the new texture should be</param>
         /// <returns></returns>
         private Texture2D StringToQrCodeTexture2D(string textForEncoding, int textureWidth,
-            int textureHeight, Color32 baseColor = new(), Color32 pixelColor = new())
+            int textureHeight, Color32 baseColor = new Color32(), Color32 pixelColor = new Color32())
         {
             Texture2D newTexture2D = new(textureWidth, textureHeight);
 

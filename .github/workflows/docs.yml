@@ -19,7 +19,7 @@ jobs:
 
             - name: checkout submodules
               shell: bash
-              run: git submodule update --init --recursive
+              run: git config --global --add safe.directory '*' & git submodule update --init --recursive
             
             - name: generate docs with doxygen
               shell: bash

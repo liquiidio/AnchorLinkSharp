@@ -66,7 +66,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
 
         private void Awake()
         {
-           if (useLightTheme)
+            if (useLightTheme)
                 SwitchToLightTheme();
 
             ClearAllLinks();
@@ -184,7 +184,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
                 SwitchToNewPanel(LoginPanel);
                 ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
 
-                Color _targetBaseColor = useLightTheme ? Color.white : new Color32(19, 27, 51, 255);
+                Color _targetBaseColor = useLightTheme ? (Color32)Color.white : new Color32(19, 27, 51, 255);
                 var _targetPixelColor = useLightTheme ? Color.black : Color.white;
 
                 var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, _targetBaseColor, _targetPixelColor);
@@ -198,7 +198,7 @@ namespace Assets.Packages.AnchorLinkTransportSharp.Src.Transports.Canvas
             }
             else
             {
-                Color _targetBaseColor = useLightTheme ? Color.white : new Color32(19, 27, 51, 255);
+                Color _targetBaseColor = useLightTheme ? (Color32)Color.white : new Color32(19, 27, 51, 255);
                 var _targetPixelColor = useLightTheme ? Color.black :  Color.white;
 
                 var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, _targetBaseColor, _targetPixelColor);

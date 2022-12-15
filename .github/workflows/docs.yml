@@ -16,6 +16,10 @@ jobs:
                 id-token: write
        steps:
             - uses: actions/checkout@v2
+
+            - name: checkout submodules
+              shell: bash
+              run: git submodule update --init --recursive
             
             - name: generate docs with doxygen
               shell: bash

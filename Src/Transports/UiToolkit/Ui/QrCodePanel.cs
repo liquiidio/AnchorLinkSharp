@@ -68,7 +68,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             _qrCodeBox.RegisterCallback<ClickEvent>(evt =>
             {
-                if (_qrCodeBox.style.scale.value.value == _qrCurrentSize)
+                if ((int)_qrCodeBox.style.width.value.value == (int)_qrCurrentSize.x && (int)_qrCodeBox.style.height.value.value == (int)_qrCurrentSize.y)
                     _qrCodeBox.transform.scale = new Vector3(2, 2);
                 else _qrCodeBox.transform.scale = new Vector3(1, 1);
             });

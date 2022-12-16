@@ -22,7 +22,7 @@ jobs:
               with:
                 repository: liquiidio/UnityPluginSuiteGitbook
                 token: ${{ secrets.FG_L_PAT }}
-                ref: atomicmarketapiclient_auto
+                ref: anchorlinksharp_auto
                 path: .github/workflows/documentation/gitbook
                     
             - name: generate docs with doxygen

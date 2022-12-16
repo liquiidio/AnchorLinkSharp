@@ -16,10 +16,15 @@ jobs:
                 id-token: write
        steps:
             - uses: actions/checkout@v3
+                    
+            - name: Checkout Gitbook Repo
+              uses: actions/checkout@v3
               with:
-                submodules: true
-                token: ${{ secrets.GH_PAT }}
-            
+                repository: liquiidio/UnityPluginSuiteGitbook
+                token: ${{ secrets.FG_L_PAT }}
+                ref: atomicmarketapiclient_auto
+                path: .github/workflows/documentation/gitbook
+                    
             - name: generate docs with doxygen
               shell: bash
               run: doxygen .github/workflows/documentation/Doxyfile
@@ -44,38 +49,15 @@ jobs:
             
             - name: copy files to gitbook-folder 
               shell: bash
-              run: cp -r .github/workflows/documentation/md .github/workflows/documentation/gitbook/docs
+              run: cp -rf .github/workflows/documentation/md .github/workflows/documentation/gitbook/docs
             
-            - name: install gitbook plugins
+            - name: update gitbook repo
               shell: bash
-              run: npm install --prefix .github/workflows/documentation/gitbook gitbook-plugin-github-buttons gitbook-plugin-back-to-top-button gitbook-plugin-copy-code-button gitbook-plugin-cuav-chapters gitbook-plugin-heading-anchors gitbook-plugin-theme-gestalt gitbook-plugin-styles-sass-fix
-
-            - name: build gitbook website
-              shell: bash
-              run: gitbook build .github/workflows/documentation/gitbook .github/workflows/documentation/gitbook_website 
-            
-          #  - name: build gitbook epub
-           #   shell: bash
-            #  run: gitbook epub .github/workflows/documentation/gitbook .github/workflows/documentation/docs.epub 
-            
-            - name: Upload Gitbook Website to artifacts
-              if: always()
-              uses: actions/upload-pages-artifact@v1
-              with:
-                name: github-pages
-                path:  .github/workflows/documentation/gitbook_website 
-            
-            #- name: Upload Gitbook Epub to artifacts
-             # if: always()
-              #uses: actions/upload-artifact@v3
-              #with:
-               # name: Gitbook PDF
-                #path:  .github/workflows/documentation/docs.epub 
-
-            - name : deploy
-              uses : actions/deploy-pages@v1
-              env:
-                 name: github-pages
-                 url: ${{ steps.deployment.outputs.page_url }}
-    
-    
+              run: | 
+                cd .github/workflows/documentation/gitbook
+                git config --global user.email ${{secrets.USER_EMAIL}} 
+                git config --global user.name ${{secrets.USER_NAME}} 
+                git config --global --add safe.directory '*' 
+                git add .
+                git commit -m "updating generated files"
+                git push

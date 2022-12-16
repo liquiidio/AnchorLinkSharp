@@ -6719,6 +6719,7 @@ MonoBehaviour:
   CloseLoginPanelButton: {fileID: 2756333022150542539}
   StaticQRCodeHolderTargetButton: {fileID: 2756333022486201397}
   ResizableQRCodeHolderTargetButton: {fileID: 2756333022575803960}
+  ResizableQRCode_Animator: {fileID: 2756333021506640227}
   HyperlinkCopyButton: {fileID: 2756333022798205226}
   LaunchAnchorButton: {fileID: 2756333023173272002}
   SignPanel: {fileID: 2756333022691677473}

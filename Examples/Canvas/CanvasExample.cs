@@ -44,13 +44,13 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
         private void Start()
         {
             Transport.DisableTargetPanel(CustomTransferPanel, CustomActionsPanel);
-            Transport.FailurePanel.GetComponentsInChildren<Button>(true).First(_btn => _btn.name == "CloseFailurePanelButton").onClick.AddListener(delegate
+            Transport.FailurePanel.gameObject.GetComponentsInChildren<Button>(true).First(_btn => _btn.name == "CloseFailurePanelButton").onClick.AddListener(delegate
             {
                 Transport.SwitchToNewPanel(CustomActionsPanel);
             }
             );
 
-            Transport.SuccessPanel.GetComponentsInChildren<Button>(true).First(_btn => _btn.name == "CloseSuccessPanelButton").onClick.AddListener(delegate
+            Transport.SuccessPanel.gameObject.GetComponentsInChildren<Button>(true).First(_btn => _btn.name == "CloseSuccessPanelButton").onClick.AddListener(delegate
             {
                 if (waitCoroutine != null)
                     StopCoroutine(waitCoroutine);

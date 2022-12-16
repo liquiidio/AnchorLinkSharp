@@ -29,6 +29,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         [SerializeField] private Button CloseLoginPanelButton;
         [SerializeField] private Button StaticQRCodeHolderTargetButton;
         [SerializeField] private Button ResizableQRCodeHolderTargetButton;
+        [SerializeField] private Animator ResizableQRCode_Animator;
         [SerializeField] private Button HyperlinkCopyButton;
         [SerializeField] private Button LaunchAnchorButton;
 
@@ -40,7 +41,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         [Header("Countdown timer")]
         [SerializeField] internal GameObject SignPanel;
         [SerializeField] private TextMeshProUGUI CountdownTextGUI;
-        
+
         private string CountdownText
         {
             get
@@ -77,7 +78,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         // Toggle between the light and dark theme (default is dark)
         private void SwitchToLightTheme()
         {
-            foreach (var _childImage in GetComponentsInChildren<Image>(true))
+            foreach (var _childImage in gameObject.GetComponentsInChildren<Image>(true))
             {
                 if (_childImage.gameObject.name == "HeaderBorder")
                     _childImage.color = new Color(241, 241, 241);
@@ -89,13 +90,13 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
                     _childImage.color = Color.white;
             }
 
-            foreach (var _childText in GetComponentsInChildren<TextMeshProUGUI>(true))
+            foreach (var _childText in gameObject.GetComponentsInChildren<TextMeshProUGUI>(true))
             {
-                if (!_childText.GetComponentInParent<Button>(true))
+                if (!_childText.transform.parent.GetComponentInParent<Button>())
                     _childText.color = Color.black;
             }
 
-            foreach (var _childButton in GetComponentsInChildren<Button>(true))
+            foreach (var _childButton in gameObject.GetComponentsInChildren<Button>(true))
             {
                 if (_childButton.transition == Selectable.Transition.ColorTint)
                 {
@@ -128,14 +129,14 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
                     {
                         _childButton.GetComponent<Image>().color = Color.clear;
 
-                      _childButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+                        _childButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
                         if (_childButton.name == "HyperlinkCopyButton")
                             _childButton.transform.Find("CopyHyperlinkImage").GetComponentInChildren<Image>(true).color = Color.black;
                     }
                 }
 
-                
+
 
                 //LaunchAnchorButton.transform.GetChild(0).GetComponentInChildren<Image>(true).enabled = false;
             }
@@ -150,7 +151,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         public override void ShowLoading()
         {
-           SwitchToNewPanel(LoadingPanel);
+            SwitchToNewPanel(LoadingPanel);
         }
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
@@ -182,7 +183,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
                 LoginSubpanel.SetActive(true);
                 ManuallySignSubpanel.SetActive(false);
                 SwitchToNewPanel(LoginPanel);
-                ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
+                ResizableQRCode_Animator.SetTrigger("doZoomOut");
 
                 Color _targetBaseColor = useLightTheme ? (Color32)Color.white : new Color32(19, 27, 51, 255);
                 var _targetPixelColor = useLightTheme ? Color.black : Color.white;
@@ -199,7 +200,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             else
             {
                 Color _targetBaseColor = useLightTheme ? (Color32)Color.white : new Color32(19, 27, 51, 255);
-                var _targetPixelColor = useLightTheme ? Color.black :  Color.white;
+                var _targetPixelColor = useLightTheme ? Color.black : Color.white;
 
                 var _tex = StringToQRCodeTexture2D(ESRLinkUrl, 512, 512, _targetBaseColor, _targetPixelColor);
 
@@ -249,7 +250,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 
         public void OnLoginPanelCloseButtonPressed()
         {
-            ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
+            ResizableQRCode_Animator.SetTrigger("doZoomOut");
 
             DisableTargetPanel(LoginPanel);
         }
@@ -347,7 +348,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             ManuallySignSubpanel.SetActive(true);
 
             SwitchToNewPanel(LoginPanel);
-            ResizableQRCodeHolderTargetButton.GetComponentInParent<Animator>(true).SetTrigger("doZoomOut");
+            ResizableQRCode_Animator.SetTrigger("doZoomOut");
 
             StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
                 ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = true;
@@ -400,7 +401,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             currentPanel?.SetActive(false);
             fallbackPanel?.SetActive(true);
 
-            currentPanel= fallbackPanel;
+            currentPanel = fallbackPanel;
         }
 
         // if there is a specific panel being displayed hide it and show the fallback one if supplied

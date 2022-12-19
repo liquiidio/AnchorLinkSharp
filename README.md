@@ -41,17 +41,24 @@ Download the UnityPackage here <<-- (Hyper link this). Then in your Unity projec
 
  3. Navigate to where you downloaded the file and open it.
     
-    
+    ![image](https://user-images.githubusercontent.com/74650011/208430782-871b64c5-fa00-44bf-96c3-685743b77a63.png)
+
  4. Check all the relevant files needed (if this is a first time import, just select ALL) and click on import.
+
+   // ADD THE CORRECT SCREENSHOT FOR IMPORT WINDOW
+   
+   ![image](https://user-images.githubusercontent.com/74650011/208431004-953e07d1-325d-4e9a-a4e1-fc845de06fdd.png)
+
 ---
 ### 3. Install manually.
-Download this project there here. Then in your Unity project:
+Download this project there here <<-- (Hyper link this to the zip download). Then in your Unity project:
 
  1. Copy the sources from `NativeWebSocket/Assets/WebSocket` into your `Assets` directory.
 
 ---
 ### 4. Install via NuGet
-Black magic
+<img src="https://media.tenor.com/SLXlt36s35kAAAAC/scooby-doo-witch-doctor.gif" align="center"
+     alt="Liquiid logo">
 
 # Usage
 

@@ -11,7 +11,7 @@ A native integration compatible with Unity3D and C# allowing users and developer
 
 Link to >>AnchorLinkTransportSharp<< and >>ESR Sharp<<
 
-# Installation
+# Installation (!TODO!)
 **_Requires Unity 2019.1+ with .NET 4.x+ Runtime_**
 
 This package can be included into your project by either:
@@ -44,7 +44,7 @@ Download this project there here. Then in your Unity project:
 Black magic
 
 ---
-## Usage
+## Usage (!TODO!)
 
 .NET and Unity3D-compatible (Desktop, Mobile, WebGL) ApiClient for the different APIs. 
 Endpoints have its own set of parameters that you may build up and pass in to the relevant function.
@@ -71,7 +71,7 @@ Endpoints have its own set of parameters that you may build up and pass in to th
         });
 
 ---
-## Additional examples
+## Additional examples (!TODO!)
 These are examples based on the specific plugin/package usage.
 Achor link - Creating and signing different kinds of transactions.  
 
@@ -118,7 +118,7 @@ Token Transfer
             }
         }
 
-Link?
+Link? (!TODO!)
 
 - --
 - NFT Transfer - link

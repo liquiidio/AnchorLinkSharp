@@ -13,7 +13,7 @@ Connects with EOSIO Signing Request (ESR) protocol library. The full specificati
 
 The ESR protocol allows for an application (dapp) to generate signature requests (transactions) which can then be passed to signers (wallets) for signature creation. These signature requests can be used within URI links, QR Codes, or other transports between applications and signers.
 
-### INSTALLATION (!TODO!)
+# Installation
 
 **_Requires Unity 2019.1+ with .NET 4.x+ Runtime_**
 
@@ -23,67 +23,85 @@ This package can be included into your project by either:
  2. Importing the .unitypackage which you can download here.
  3. Manually add the files in this repo.
  4. Installing it via NuGet.
-
+---
 ### 1. Installing via Unity Package Manager (UPM).
 In your Unity project:
  1. Open the Package Manager Window/Tab
- 2. Click Add Package From Git URL
+
+    ![image](https://user-images.githubusercontent.com/74650011/208429048-37e2277c-3e10-4794-97e7-3ec87f55f8c9.png)
+
+ 2. Click on + icon and then click on "Add Package From Git URL"
+
+    ![image](https://user-images.githubusercontent.com/74650011/208429298-76fe1101-95f3-4ab0-bbd5-f0a32a1cc652.png)
+
  3. Enter URL:  `https://github.com/endel/NativeWebSocket.git#upm`
+    // (!TODO!) ADD CORRECT LINK AND RELEVANT SCREENSHOT
 ---
 ### 2. Importing the Unity Package.
-Download the UnityPackage here. Then in your Unity project:
+Download the UnityPackage here <<-- (Hyper link this). Then in your Unity project:
 
  1. Open up the import a custom package window
- 2. Navigate to where you downloaded the file and open it.
- 3. Check all the relevant files needed (if this is a first time import, just select ALL) and click on import.
+    
+    ![image](https://user-images.githubusercontent.com/74650011/208430044-caf91dd9-111e-4224-8441-95d116dbec3b.png)
+
+ 3. Navigate to where you downloaded the file and open it.
+    
+    ![image](https://user-images.githubusercontent.com/74650011/208430782-871b64c5-fa00-44bf-96c3-685743b77a63.png)
+
+ 4. Check all the relevant files needed (if this is a first time import, just select ALL) and click on import.
+   (!TODO!)
+   // ADD THE CORRECT SCREENSHOT FOR IMPORT WINDOW
+   
+   ![image](https://user-images.githubusercontent.com/74650011/208431004-953e07d1-325d-4e9a-a4e1-fc845de06fdd.png)
+
 ---
-### 3. Install manually.
-Download this project there here. Then in your Unity project:
+### 3. Install manually. (!TODO!)
+Download this project there here <<-- (Hyper link this to the zip download). Then in your Unity project:
 
  1. Copy the sources from `NativeWebSocket/Assets/WebSocket` into your `Assets` directory.
 
 ---
-### 4. Install via NuGet
-Black magic
+### 4. Install via NuGet (!TODO!)
+<img src="https://media.tenor.com/SLXlt36s35kAAAAC/scooby-doo-witch-doctor.gif" align="center"
+     alt="Liquiid logo">
 
----
-## Usage (!TODO!)
+# Usage (!TODO!)
 
 .NET and Unity3D-compatible (Desktop, Mobile, WebGL) ApiClient for the different APIs. 
 Endpoints have its own set of parameters that you may build up and pass in to the relevant function.
 
-### Examples
+### Examples (!TODO!)
 
  Based on the different endpoints
  
-
+```csharp
     new AnchorLink(new LinkOptions()
                 {
                     Transport = this.Transport,
                     // Uncomment this for and EOS session
                     //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
                     //Rpc = "https://eos.greymass.com",
-
+```
 <br>
-
+```csharp
     // WAX session
             ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
             Rpc = "https://api.wax.liquidstudios.io",
             ZlibProvider = new NetZlibProvider(),
             Storage = new PlayerPrefsStorage()
         });
-
+```
 ---
 ## Additional examples (!TODO!)
 These are examples based on the specific plugin/package usage.
 Achor link - Creating and signing different kinds of transactions.  
 
-### An example
+### An example (!TODO!)
 
 AnchorLink
 
 Token Transfer 
-
+```csharp
     // transfer tokens using a session
         private async Task Transfer(string frmAcc, string toAcc, string qnty, string memo)
         {
@@ -120,10 +138,9 @@ Token Transfer
                 throw;
             }
         }
-
+```
 Link? (!TODO!)
 
-- --
 - NFT Transfer - link
 - Create Permission - link
 - Get Balanaces - link
@@ -134,3 +151,4 @@ Link? (!TODO!)
 [build-url]: https://github.com/mkosir/react-parallax-tilt/actions/workflows/build.yml
 [test-badge]: https://github.com/mkosir/react-parallax-tilt/actions/workflows/test.yml/badge.svg
 [test-url]: https://github.com/mkosir/react-parallax-tilt/actions/workflows/test.yml
+

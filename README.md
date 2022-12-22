@@ -11,7 +11,7 @@ A native integration compatible with Unity3D and C# allowing users and developer
 
 Link to >>AnchorLinkTransportSharp<< and >>ESR Sharp<<
 
-### INSTALLATION
+# Installation
 ---
 **_Requires Unity 2019.1+ with .NET 4.x+ Runtime_**
 

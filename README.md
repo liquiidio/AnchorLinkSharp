@@ -30,7 +30,7 @@ In your Unity project:
     ![image](https://user-images.githubusercontent.com/74650011/208429298-76fe1101-95f3-4ab0-bbd5-f0a32a1cc652.png)
 
  3. Enter URL:  `https://github.com/endel/NativeWebSocket.git#upm`
-    // ADD CORRECT LINK AND RELEVANT SCREENSHOT
+    // (!TODO!) ADD CORRECT LINK AND RELEVANT SCREENSHOT
 ---
 ### 2. Importing the Unity Package.
 Download the UnityPackage here <<-- (Hyper link this). Then in your Unity project:
@@ -44,19 +44,19 @@ Download the UnityPackage here <<-- (Hyper link this). Then in your Unity projec
     ![image](https://user-images.githubusercontent.com/74650011/208430782-871b64c5-fa00-44bf-96c3-685743b77a63.png)
 
  4. Check all the relevant files needed (if this is a first time import, just select ALL) and click on import.
-
+   (!TODO!)
    // ADD THE CORRECT SCREENSHOT FOR IMPORT WINDOW
    
    ![image](https://user-images.githubusercontent.com/74650011/208431004-953e07d1-325d-4e9a-a4e1-fc845de06fdd.png)
 
 ---
-### 3. Install manually.
+### 3. Install manually. (!TODO!)
 Download this project there here <<-- (Hyper link this to the zip download). Then in your Unity project:
 
  1. Copy the sources from `NativeWebSocket/Assets/WebSocket` into your `Assets` directory.
 
 ---
-### 4. Install via NuGet
+### 4. Install via NuGet (!TODO!)
 <img src="https://media.tenor.com/SLXlt36s35kAAAAC/scooby-doo-witch-doctor.gif" align="center"
      alt="Liquiid logo">
 
@@ -65,7 +65,7 @@ Download this project there here <<-- (Hyper link this to the zip download). The
 .NET and Unity3D-compatible (Desktop, Mobile, WebGL) ApiClient for the different APIs. 
 Endpoints have its own set of parameters that you may build up and pass in to the relevant function.
 
-### Examples
+### Examples (!TODO!)
 
  Based on the different endpoints
  
@@ -87,11 +87,11 @@ Endpoints have its own set of parameters that you may build up and pass in to th
         });
 ```
 ---
-## Additional examples
+## Additional examples (!TODO!)
 These are examples based on the specific plugin/package usage.
 Achor link - Creating and signing different kinds of transactions.  
 
-### An example
+### An example (!TODO!)
 
 AnchorLink
 
@@ -134,7 +134,7 @@ Token Transfer
             }
         }
 ```
-Link?
+Link? (!TODO!)
 
 - NFT Transfer - link
 - Create Permission - link

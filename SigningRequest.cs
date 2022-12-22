@@ -516,14 +516,17 @@ namespace EosioSigningRequest
                 throw new Exception("Invalid scheme");
             }
 
-            path = path.StartsWith("//") ? path.Substring(2) : path;
-            //if (path.Length % 4 != 0 && !path.EndsWith(padding.ToString()))
-            //    path += padding;
-            //path = path.Replace('-', '+').Replace('_', '/');
-            
-            Console.WriteLine(path);
-            var data = Base64EncodingUtility.FromBase64UrlSafe(path);
-//            byte[] data = Convert.FromBase64String(path);
+            path = (path.StartsWith("//") ? path.Substring(2) : path)
+                .Replace('-', '+')
+                .Replace('_', '/');
+
+            if (path.Length % 4 == 2)
+                path = $"{path}==";
+            else if(path.Length % 4 == 3)
+                path = $"{path}=";
+
+            var data = Convert.FromBase64String(path);
+
             return FromData(data, options);
         }
 
@@ -748,11 +751,9 @@ namespace EosioSigningRequest
             array.CopyTo(output, 1);
             var scheme = "esr:";
             if (slashes != false)
-            {
                 scheme += "//";
-            }
 
-            return scheme + Base64EncodingUtility.ToBase64UrlSafe(output); //Convert.ToBase64String(output).TrimEnd(padding).Replace('+', '-').Replace('/', '_');
+            return $"{scheme}{Convert.ToBase64String(output).Replace('/', '_').Replace('+', '-').TrimEnd('=')}";
         }
 
         /** Get the request data without header or signature. */

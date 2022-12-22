@@ -10,19 +10,19 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
 {
     public class UnityUiToolkitTransport : UnityTransport
     {
-        // link to anchor version
+        //! link to anchor version
         private const string VersionUrl = "https://github.com/greymass/anchor-link";
-        // link to anchor download
+        //! link to anchor download
         private const string DownloadAnchorUrl = "https://greymass.com/anchor/";
-        // current version number
+        //! current version number
         internal const string Version = "3.5.1 (3.5.1)";
 
-        // current screen that is being displayed
+        //! current screen that is being displayed
         private static ScreenBase _activeScreen;
-        // screen that we want to load into
+        //! screen that we want to load into
         private static bool _transitioningPanel;
 
-        // Toggle dark and light themes
+        //! Toggle dark and light themes
         [SerializeField] internal bool IsWhiteTheme;    
 
         [SerializeField] internal FailurePanel FailurePanel;
@@ -47,7 +47,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             
         }
 
-        // check which theme to use (light and dark)
+        //! check which theme to use (light and dark)
         private void CheckTheme()
         {
             if (_activeScreen != null)
@@ -68,7 +68,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             else Debug.Log("screen is null");
         }
 
-        // switch from one panel to a new one
+        //! switch from one panel to a new one
         internal static IEnumerator<float> TransitionPanels(ScreenBase to)
         {
             if (_activeScreen == to)
@@ -92,13 +92,13 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             if (to == null) Debug.Log("missing the panel");
         }
 
-        //open anchor link version on browser page
+        //! open anchor link version on browser page
         internal static void OpenVersion()
         {
             Application.OpenURL(VersionUrl);
         }
 
-        //open Download anchor on browser page
+        //! open Download anchor on browser page
         internal static void OpenDownloadAnchorLink()
         {
             Application.OpenURL(DownloadAnchorUrl);
@@ -157,14 +157,6 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
                 QrCodePanel.Rebind(request, request.IsIdentity(), IsWhiteTheme);
 
             }
-        }
-
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
-        public override void ShowDialog(string title = null, string subtitle = null, string type = null,
-            Action action = null,
-            object content = null)
-        {
-            Debug.Log("ShowDialog");
         }
     }
 }

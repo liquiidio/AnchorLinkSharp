@@ -19,13 +19,14 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 
         #region Login-Panel
         [Header("Login Panel Panel Components")]
-        [SerializeField] internal GameObject LoginPanel;   // The holding panel for the login details
-        [SerializeField] private GameObject HyperlinkCopiedNotificationPanel; // Confirmation panel for when the link has been successfully copied
+        //! The holding panel for the login details
+        [SerializeField] internal GameObject LoginPanel;
+        //! Confirmation panel for when the link has been successfully copied
+        [SerializeField] private GameObject HyperlinkCopiedNotificationPanel;
 
         [SerializeField] private GameObject LoginSubpanel;
         [SerializeField] private GameObject ManuallySignSubpanel;
 
-        //Buttons
         [SerializeField] private Button CloseLoginPanelButton;
         [SerializeField] private Button StaticQRCodeHolderTargetButton;
         [SerializeField] private Button ResizableQRCodeHolderTargetButton;
@@ -33,8 +34,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         [SerializeField] private Button HyperlinkCopyButton;
         [SerializeField] private Button LaunchAnchorButton;
 
-        private const string VersionURL = "https://www.github.com/greymass/anchor-link";    // Link that will show the url for the version
-        private const string DownloadURL = "https://www.greymass.com/en/anchor/download";   // Link that will go to the download page for anchor
+        //! Link that will show the url for the version
+        private const string VersionURL = "https://www.github.com/greymass/anchor-link";
+        //! Link that will go to the download page for anchor
+        private const string DownloadURL = "https://www.greymass.com/en/anchor/download";
         #endregion
 
         #region Sign and countdown timer
@@ -44,15 +47,8 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 
         private string CountdownText
         {
-            get
-            {
-                return CountdownTextGUI.text;
-            }
-
-            set
-            {
-                CountdownTextGUI.text = value;
-            }
+            get => CountdownTextGUI.text;
+            set => CountdownTextGUI.text = value;
         }
 
         #endregion
@@ -65,6 +61,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         [SerializeField] internal GameObject TimeoutPanel;
         #endregion
 
+        public UnityCanvasTransport(TransportOptions options) : base(options)
+        {
+
+        }
+
         private void Awake()
         {
             if (useLightTheme)
@@ -75,7 +76,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             DisableAllPanels();
         }
 
-        // Toggle between the light and dark theme (default is dark)
+        //! Toggle between the light and dark theme (default is dark)
         private void SwitchToLightTheme()
         {
             foreach (var _childImage in gameObject.GetComponentsInChildren<Image>(true))
@@ -135,18 +136,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
                             _childButton.transform.Find("CopyHyperlinkImage").GetComponentInChildren<Image>(true).color = Color.black;
                     }
                 }
-
-
-
                 //LaunchAnchorButton.transform.GetChild(0).GetComponentInChildren<Image>(true).enabled = false;
             }
         }
-
-        public UnityCanvasTransport(TransportOptions options) : base(options)
-        {
-
-        }
-
 
         // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
         public override void ShowLoading()
@@ -228,14 +220,6 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             }
             );
         }
-
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L226
-        public override void ShowDialog(string title = null, string subtitle = null, string type = null, System.Action action = null,
-            object content = null)
-        {
-            Debug.Log("ShowDialog");
-        }
-
 
         #region Canvas function-calls
         public void OnVersionButtonPressed()

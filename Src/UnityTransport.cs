@@ -11,9 +11,13 @@ namespace AnchorLinkTransportSharp.Src
 {
     public abstract class UnityTransport : MonoBehaviour, ILinkTransport
     {
+        //! The Status of the current Request
         private readonly bool _requestStatus;
+        //! The current active Request
         private SigningRequest _activeRequest;
+        //! The activeCancel Delegate (invoked when a Request is cancelled)
         private Action<object> _activeCancel;
+        //! The Storage used for sessions and metadata
         public ILinkStorage Storage { get; }
 
         public UnityTransport(TransportOptions options)
@@ -29,7 +33,6 @@ namespace AnchorLinkTransportSharp.Src
             _activeRequest = request;
             _activeCancel = cancel;
             var uri = request.Encode(false, true);
-            Console.WriteLine(uri);
 
             DisplayRequest(request);
         }
@@ -49,7 +52,6 @@ namespace AnchorLinkTransportSharp.Src
                 ? $"Please open Anchor Wallet on “${session.Metadata["name"]}” to review and sign the transaction."
                 : "Please review and sign the transaction in the linked wallet.";
             var title = "Sign";
-            ShowDialog(title, subTitle);
         }
 
         public async Task<SigningRequest> Prepare(SigningRequest request, LinkSession session = null)
@@ -115,36 +117,6 @@ namespace AnchorLinkTransportSharp.Src
         }
         #endregion
 
-        // Future attempt to add an image overlay
-        //public Bitmap GenerateQR(int width, int height, string text)
-        //{
-        //    var bw = new ZXing.BarcodeWriter();
-
-        //    var encOptions = new ZXing.Common.EncodingOptions
-        //    {
-        //        Width = width,
-        //        Height = height,
-        //        Margin = 0,
-        //        PureBarcode = false
-        //    };
-
-        //    encOptions.Hints.Add(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-
-        //    bw.Renderer = new BitmapRenderer();
-        //    bw.Options = encOptions;
-        //    bw.Format = ZXing.BarcodeFormat.QR_CODE;
-        //    Bitmap bm = bw.Write(text);
-        //    Bitmap overlay = new Bitmap(imagePath);
-
-        //    int deltaHeigth = bm.Height - overlay.Height;
-        //    int deltaWidth = bm.Width - overlay.Width;
-
-        //    Graphics g = Graphics.FromImage(bm);
-        //    g.DrawImage(overlay, new Point(deltaWidth / 2, deltaHeigth / 2));
-
-        //    return bm;
-        //}
-
         public abstract void ShowLoading();
 
         public abstract void OnSuccess(SigningRequest request, TransactResult result);
@@ -152,8 +124,6 @@ namespace AnchorLinkTransportSharp.Src
         public abstract void OnFailure(SigningRequest request, Exception exception);
 
         public abstract void DisplayRequest(SigningRequest request);
-
-        public abstract void ShowDialog(string title = null, string subtitle = null, string type = null, Action action = null, object content = null);
 
     }
 }

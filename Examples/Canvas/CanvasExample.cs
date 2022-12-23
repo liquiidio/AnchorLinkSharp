@@ -18,7 +18,9 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
 {
     public class CanvasExample : MonoBehaviour
     {
-        // Assign UnityTransport through the Editor
+        /// <summary>
+        /// Assign UnityTransport through the Editor
+        /// </summary>
         [SerializeField] private UnityCanvasTransport Transport;
 
         [Header("Panels")]
@@ -32,13 +34,19 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
         [SerializeField] private Button LogoutButton;
 
         private Coroutine waitCoroutine;
-        // app identifier, should be set to the eosio contract account if applicable
+        /// <summary>
+        /// app identifier, should be set to the eosio contract account if applicable
+        /// </summary>
         private const string Identifier = "example";
 
-        // initialize the link
+        /// <summary>
+        /// initialize the link
+        /// </summary>
         private AnchorLink _link;
 
-        // the session instance, either restored using link.restoreSession() or created with link.login()
+        /// <summary>
+        /// the session instance, either restored using link.restoreSession() or created with link.login()
+        /// </summary>
         private LinkSession _session;
 
         private void Start()
@@ -60,15 +68,17 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
            );
         }
 
-        // initialize a new session
+        /// <summary>
+        /// Initialize a new session
+        /// </summary>
         public async void StartSession()
         {
             _link = new AnchorLink(new LinkOptions()
             {
                 Transport = this.Transport,
                 // Uncomment this for and EOS session
-                //ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-                //Rpc = "https://eos.greymass.com",
+                // ChainId = "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+                // Rpc = "https://eos.greymass.com",
 
                 // WAX session
                 ChainId = "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
@@ -80,7 +90,10 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
             await Login();
         }
 
-        // login and store session if sucessful
+        /// <summary>
+        /// Login and store session if sucessful
+        /// </summary>
+        /// <returns></returns>
         private async Task Login()
         {
             var loginResult = await _link.Login(Identifier);
@@ -88,13 +101,18 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
             DidLogin();
         }
 
-        // call from UI button
+        /// <summary>
+        /// Call from UI button
+        /// </summary>
         public async void RestoreASession()
         {
             await RestoreSession();
         }
 
-        // tries to restore session, called when document is loaded
+        /// <summary>
+        /// Tries to restore session, called when document is loaded
+        /// </summary>
+        /// <returns></returns>
         private async Task RestoreSession()
         {
             var restoreSessionResult = await _link.RestoreSession(Identifier);
@@ -103,18 +121,25 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
                 DidLogin();
         }
 
-        // call from UI button
+        /// <summary>
+        /// Call from UI button
+        /// </summary>
         public async void DoLogout()
         {
             await Logout();
         }
-        // logout and remove session from storage
+        /// <summary>
+        /// Logout and remove session from storage
+        /// </summary>
+        /// <returns></returns>
         private async Task Logout()
         {
             await _session.Remove();
         }
 
-        // called when session was restored or created
+        /// <summary>
+        /// Called when session was restored or created
+        /// </summary>
         private void DidLogin()
         {
             Debug.Log($"{_session.Auth.actor} logged-in");
@@ -122,13 +147,19 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
             waitCoroutine = StartCoroutine(SwitchPanels(CustomActionsPanel, CustomTransferPanel, 1.5f));
         }
 
-        // use this to toggle on a new rect (or a gameobject) in the canvas
+        /// <summary>
+        /// Use this to toggle on a new rect (or a gameobject) in the canvas
+        /// </summary>
+        /// <param name="targetPanel"></param>
         public void ShowTargetPanel(GameObject targetPanel)
         {
             Transport.SwitchToNewPanel(targetPanel);
         }
 
-        // Gather data from the custom transfer UI panel
+        /// <summary>
+        /// Gather data from the custom transfer UI panel
+        /// </summary>
+        /// <param name="TransferDetailsPanel"></param>
         public async void TryTransferTokens(GameObject TransferDetailsPanel)
         {
             string _frmAcc = "";
@@ -163,7 +194,14 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
             );
         }
 
-        // transfer tokens using a session
+        /// <summary>
+        /// Transfer tokens using a session
+        /// </summary>
+        /// <param name="frmAcc"></param>
+        /// <param name="toAcc"></param>
+        /// <param name="qnty"></param>
+        /// <param name="memo"></param>
+        /// <returns></returns>
         private async Task Transfer(string frmAcc, string toAcc, string qnty, string memo)
         {
             var action = new EosSharp.Core.Api.v1.Action()
@@ -200,6 +238,7 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
             }
         }
 
+        // Switches from one panel and activates another one. Use the float parameter to delay the next panel from showing immediately
         private IEnumerator SwitchPanels(GameObject fromPanel, GameObject toPanel, float SecondsToWait = 0.1f)
         {
             Debug.Log("Start counter");

@@ -117,12 +117,29 @@ namespace AnchorLinkTransportSharp.Src
         }
         #endregion
 
+        /// <summary>
+        /// Method is invoked when a request is made and user signing on the wallet is required
+        /// </summary>
         public abstract void ShowLoading();
 
+        /// <summary>
+        /// Method is invoked when a succesful signing request is completed
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="result"></param>
         public abstract void OnSuccess(SigningRequest request, TransactResult result);
 
+        /// <summary>
+        /// Method is invoked when a signing request fails or is cancelled
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="exception"></param>
         public abstract void OnFailure(SigningRequest request, Exception exception);
 
+        /// <summary>
+        /// Method is invoked when a request to sign or login is made and the QR code and link are generated and displayed
+        /// </summary>
+        /// <param name="request"></param>
         public abstract void DisplayRequest(SigningRequest request);
 
     }

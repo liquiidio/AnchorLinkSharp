@@ -76,7 +76,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             DisableAllPanels();
         }
 
-        //! Toggle between the light and dark theme (default is dark)
+        /// <summary>
+        /// Toggle between the light and dark theme (default is dark)
+        /// </summary>
         private void SwitchToLightTheme()
         {
             foreach (var _childImage in gameObject.GetComponentsInChildren<Image>(true))

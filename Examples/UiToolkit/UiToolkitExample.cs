@@ -10,16 +10,24 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit
 {
     public class UiToolkitExample : MonoBehaviour
     {
-        // app identifier, should be set to the eosio contract account if applicable
+        /// <summary>
+        /// App identifier, should be set to the eosio contract account if applicable
+        /// </summary>
         private const string Identifier = "uitoolkitexample";
 
-        // assign UnityTransport through the editor
+        /// <summary>
+        /// Assign UnityTransport through the editor
+        /// </summary>
         [SerializeField] internal UnityUiToolkitTransport Transport;
 
-        // initialize the link
+        /// <summary>
+        /// Initialize the link
+        /// </summary>
         private AnchorLink _anchorLink;
 
-        // the session instance, either restored using link.restoreSession() or created with link.login()
+        /// <summary>
+        /// The session instance, either restored using link.restoreSession() or created with link.login()
+        /// </summary>
         internal LinkSession LinkSession;
 
         private void Start()
@@ -35,7 +43,10 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit
             });
         }
 
-        // initialize a new session
+        /// <summary>
+        /// Initialize a new session
+        /// </summary>
+        /// <returns></returns>
         internal async Task StartSession()
         {
             try
@@ -51,13 +62,19 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit
             }
         }
 
-        // logout and remove session from storage
+        /// <summary>
+        /// Logout and remove session from storage
+        /// </summary>
+        /// <returns></returns>
         internal async Task Logout()
         {
             await LinkSession.Remove();
         }
 
-        // tries to restore session, called when document is loaded
+        /// <summary>
+        /// Tries to restore session, called when document is loaded
+        /// </summary>
+        /// <returns></returns>
         internal async Task RestoreSession()
         {
             var restoreSessionResult = await _anchorLink.RestoreSession(Identifier);
@@ -67,7 +84,11 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit
                 Debug.Log($"{LinkSession.Auth.actor} logged-in");
         }
 
-        // transfer tokens using a session  
+        /// <summary>
+        /// Transfer tokens using a session  
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         internal async Task Transfer(EosSharp.Core.Api.v1.Action action)
         {
             var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });
@@ -75,7 +96,10 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit
             print($"Transaction broadcast! {transactResult.Processed}");
         }
 
-        // ask the user to sign the transaction and then broadcast to chain
+        /// <summary>
+        /// Ask the user to sign the transaction and then broadcast to chain
+        /// </summary>
+        /// <param name="action"></param>
         internal void Vote(EosSharp.Core.Api.v1.Action action)
         {
             _anchorLink.Transact(new TransactArgs() { Action = action }).ContinueWith(transactTask =>
@@ -84,7 +108,11 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit
             });
         }
 
-        // ask the user to sign the transaction and then broadcast to chain
+        /// <summary>
+        /// Ask the user to sign the transaction and then broadcast to chain
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         internal async Task SellOrBuyRam(EosSharp.Core.Api.v1.Action action)
         {
             var transactResult = await LinkSession.Transact(new TransactArgs() { Action = action });

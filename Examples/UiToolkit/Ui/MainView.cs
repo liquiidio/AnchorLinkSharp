@@ -10,7 +10,7 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 {
     public class MainView : ScreenBase
     {
-        /*
+        /**
          * Child-Controls
          */
         private Button _changeToBidNameButton;
@@ -49,7 +49,7 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         private Label _loginTitleLabel;
         private Label _accountLabel;
 
-        /*
+        /**
          * Fields, Properties
          */
         [SerializeField] internal UiToolkitExample UiToolkitExample;
@@ -102,7 +102,9 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         }
 
         #region Button Binding
-        // assign UI toolkit interaction events
+        /// <summary>
+        /// Assign UI toolkit interaction events
+        /// </summary>
         private void BindButtons()
         {
             _changeToTransferButton.clickable.clicked += () =>
@@ -348,7 +350,9 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         #endregion
 
         #region Rebind
-        // Re-assign UI toolkit values after a successful login 
+        /// <summary>
+        /// Re-assign UI toolkit values after a successful login 
+        /// </summary>
         internal void Rebind()
         {
             _fromTextField.value = UiToolkitExample.LinkSession.Auth.actor;
@@ -359,7 +363,9 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         #endregion
 
         #region other
-        // assign default values to the currency transfer window variables
+        /// <summary>
+        /// Assign default values to the currency transfer window variables
+        /// </summary>
         private void SetTransferAccountText()
         {
             var toName = "liquidstudio";
@@ -371,7 +377,9 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
             _quantityTextField.SetValueWithoutNotify(quantityAmount);
         }
 
-        // assign default values to the sell RAM transfer window variables
+        /// <summary>
+        /// Assign default values to the sell RAM transfer window variables
+        /// </summary>
         private void SetSellRamText()
         {
             var amount = "0";
@@ -379,7 +387,9 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
             _sellRamAmountTextField.SetValueWithoutNotify(amount);
         }
 
-        // assign default values to the buy RAM transfer window variables
+        /// <summary>
+        /// Assign default values to the buy RAM transfer window variables
+        /// </summary>
         private void SetBuyRamText()
         {
             var name = "";
@@ -389,7 +399,9 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
             _amountToBuyTextField.SetValueWithoutNotify(quantityAmount);
         }
 
-        // assign default values to the bid window variables
+        /// <summary>
+        /// Assign default values to the bid window variables
+        /// </summary>
         private void SetBidNameText()
         {
             var name = "new name";

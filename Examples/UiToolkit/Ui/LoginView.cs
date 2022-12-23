@@ -7,14 +7,14 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 {
     public class LoginView : ScreenBase
     {
-        /*
+        /**
          * Child-Controls
          */
 
         private Button _loginButton;
 
 
-        /*
+        /**
          * Fields, Properties
          */
         [SerializeField]internal UiToolkitExample UiToolkitExample;
@@ -30,7 +30,9 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         }
 
         #region Button Binding
-        // assign UI toolkit interaction events
+        /// <summary>
+        /// Assign UI toolkit interaction events
+        /// </summary>
         private void BindButtons()
         { 
             _loginButton.clickable.clicked +=  async () =>

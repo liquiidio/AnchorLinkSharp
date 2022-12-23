@@ -28,7 +28,7 @@ jobs:
         mkdir temp2
         cp -a anchorlinktransportsharp/. temp1
         cp -a eosiosigningrequestsharp/. temp2
-        git rm -rf .git/modules/anchorlinktransportsharp
+        git rm -rf .git/modules
         git rm -rf anchorlinktransportsharp
         git rm -rf eosiosigningrequestsharp
         mkdir anchorlinktransportsharp

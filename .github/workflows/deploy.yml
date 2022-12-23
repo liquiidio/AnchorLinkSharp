@@ -24,8 +24,14 @@ jobs:
         git config --global user.email 'github-bot@users.noreply.github.com'
         git checkout -b upm                                            # checkout the branch
         git rm .gitmodules
+        mkdir temp1
+        mkdir temp2
+        cp -r anchorlinktransportsharp/. temp1
+        cp -r eosiosigningrequestsharp/. temp2
         git submodule deinit anchorlinktransportsharp
         git submodule deinit eosiosigningrequestsharp
+        git rm anchorlinktransportsharp
+        git rm eosiosigningrequestsharp
         git add .
         git rm -r .github
         git commit -am "removed submodules and merged them to upm"

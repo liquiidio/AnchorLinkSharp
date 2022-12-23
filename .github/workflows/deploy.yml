@@ -28,10 +28,6 @@ jobs:
         mkdir temp2
         cp -a anchorlinktransportsharp/. temp1
         cp -a eosiosigningrequestsharp/. temp2
-        git rm --cached anchorlinktransportsharp
-        git rm --cached eosiosigningrequestsharp
-        cp -a temp1/. anchorlinktransportsharp
-        cp -a temp2/. eosiosigningrequestsharp
         git add .
         git rm -r .github
         git commit -am "removed submodules and merged them to upm"

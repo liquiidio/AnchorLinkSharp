@@ -13,8 +13,16 @@ jobs:
       with:
         ref: unity_develop
         fetch-depth: 0
+    - name: Clone submodule repository
+      uses: actions/checkout@v2
+      with:
         token: ${{ secrets.FG_L_PAT2 }}
-        submodules: recursive
+        repository: https://github.com/submodule-repository-owner/submodule-repository.git
+        path: haron-submodule
+    - name: Print Submodule
+      run: |
+        cd haron-submodule
+        ls
     - name: split upm branch
       run: |
         git branch -d upm &> /dev/null || echo upm branch not found # recreate the upm branch each time

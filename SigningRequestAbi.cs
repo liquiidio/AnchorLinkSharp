@@ -5,6 +5,7 @@ namespace EosioSigningRequest
 {
     public static class SigningRequestAbi
     {
+        //! ABI-Object containing diverse types, structs, variants and actions used with the SigningRequest Package 
         public static readonly Abi Abi = new Abi()
         {
             version = "eosio::abi/1.1",

@@ -17,8 +17,10 @@ using Action = EosSharp.Core.Api.v1.Action;
 
 namespace EosioSigningRequest
 {
+    //! Static Class containing Constants used with the SigningRequest Package
     public static class SigningRequestConstants
     {
+        //! Dictionary with Chain-Names and Chain-IDs
         public static readonly Dictionary<ChainName, string> ChainIdLookup = new Dictionary<ChainName, string>() {
             {ChainName.Eos, "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"},
             {ChainName.Telos, "4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11"},
@@ -34,29 +36,42 @@ namespace EosioSigningRequest
             {ChainName.Fio, "21dcae42c0182200e93f954a074011f9048a7624c6fe81d3c9541a614a88bd1c"} 
         };
 
+        //! Placeholder for an Account-Name, can be used if no Account-Name is specified
         public static readonly string PlaceholderName = "............1";
 
+        //! Placeholder for a Permission-Name, can be used if no Permission-Name is specified
         public static readonly string PlaceholderPermission = "............2";
 
+        //! Version of the Protocol implemented
         public static byte ProtocolVersion = 2;
 
+    	//! Placeholder for a Authorization, can be used if no Authorization is specified
         public static readonly PermissionLevel PlaceholderAuth = new PermissionLevel()
         {
             actor = PlaceholderName,
             permission = PlaceholderPermission
         };
 
+        /// <param name="action">The action to be checked.</param>
+        /// <summary>Checks if an action is an IdentityRequest.</summary>
+        /// <returns>Returns true if the action passed is an IdentityRequest, returns false if not</returns>
         public static bool IsIdentity(Action action)
         {
             return action.account == "" && action.name == "identity";
         }
 
+        /// <param name="tx">The transaction to be checked.</param>
+        /// <summary>Checks if an transaction has TAPOS (Transaction as Proof of Stake) properties set.</summary>
+        /// <returns>Returns true if the transaction passed has TAPOS, returns false if not</returns>
         public static bool HasTapos(Transaction tx)
         {
             return !(tx.expiration == new DateTime(1970, 1, 1) && tx.ref_block_num == 0 && tx.ref_block_prefix == 0);
         }
 
-        public static KeyValuePair<string, object> VariantId(object chainId /*abi.ChainId | abi.ChainAlias*/){
+        /// <param name="chainId">The chainId-Object to be converted, can either be of type string (Chain-Id or Chain-Name), ChainName-Enum, byte.</param>
+        /// <summary>Converts the chainId-Object to a KeyValuePair<string, object>.</summary>
+        /// <returns>Returns a KeyValuePair<string, object> defining the variant-name and the object</returns>
+        public static KeyValuePair<string, object> VariantId(object chainId){
             if (chainId == null)
             {
                 chainId = (byte)ChainName.Eos;
@@ -91,12 +106,6 @@ namespace EosioSigningRequest
         byte[] InflateRaw(byte[] data);
     }
 
-    /** Interface that should be implemented by signature providers. */
-    //public interface ISignatureProvider
-    //{
-    //    /** Sign 32-byte hex-encoded message and return signer name and signature string. */
-    //    RequestSignature sign(string message);// => {signer: string; signature: string}  // TODO
-    //}
 
     public class RejectedPayload
     {
@@ -533,10 +542,6 @@ namespace EosioSigningRequest
         public static SigningRequest FromData(byte[] data, SigningRequestEncodingOptions options ) {
             var header  = data[0];
             var version = (byte)(header & ~(1 << 7));
-            //if (version != Constants.ProtocolVersion)
-            //{
-            //    throw new Exception("Unsupported protocol version");
-            //}
 
             var array = new byte[data.Length-1];
             Array.Copy(data, 1, array, 0, data.Length-1);
@@ -573,15 +578,6 @@ namespace EosioSigningRequest
                 signature = options.AbiSerializationProvider.DeserializeStructData<RequestSignature>("request_signature", array, SigningRequestAbi.Abi, ref readIndex);
             }
 
-            /*            var req = type.deserialize(buffer); // array to buffer
-                        var signature = new RequestSignature();
-
-                        if (buffer.haveReadData())
-                        {
-                            const type = AbiTypes.get("request_signature")!;
-                            signature = type.deserialize(buffer);
-                        }*/
-
             return new SigningRequest(
                 version,
                 requestData,
@@ -603,10 +599,10 @@ namespace EosioSigningRequest
         private readonly IZlibProvider _zlib;
         private readonly IAbiSerializationProvider _abiSerializationProvider;
 
-            /**
-             * Create a new signing request.
-             * Normally not used directly, see the `create` and `from` class methods.
-             */
+        /**
+            * Create a new signing request.
+            * Normally not used directly, see the `create` and `from` class methods.
+            */
         public SigningRequest(byte version, 
             SigningRequestData data,
             IZlibProvider zlib,
@@ -827,11 +823,6 @@ namespace EosioSigningRequest
         public List<string> GetRequiredAbis()
         {
             return GetRawActions().Where(a => !SigningRequestConstants.IsIdentity(a)).Select(a => a.account).ToList();
-
-/*            return this.getRawActions()
-                .filter((action) => !Constants.isIdentity(action))
-                .map((action) => action.account)
-                .filter((value, index, self) => self.indexOf(value) == index)*/
         }
 
         /** Whether TaPoS values are required to resolve request. */
@@ -868,26 +859,6 @@ namespace EosioSigningRequest
         {
             return GetRawActions().Select(rawAction =>
             {
-//                Abi abi;
-//                if (Constants.isIdentity(rawAction))
-//                {
-//                    abi = SigningRequestAbi.Abi;//(this.constructor as typeof SigningRequest).identityAbi(this.version)
-//                }
-//                else
-//                {
-//                    if (!abis.ContainsKey(rawAction.account))
-//                    {
-//                        throw new Exception($"Missing ABI definition for {rawAction.account}");
-//                    }
-//                    abi = abis[rawAction.account];
-////                    abi = ABI.from(rawAbi)
-//                }
-//                if (abi.actions.All(a => a.name != rawAction.name)) {
-//                    throw new Exception($"Missing type for action ${ rawAction.account}:{rawAction.name} in ABI"")
-//                }
-
-//                var type = abi.actions.FirstOrDefault(a => a.name == rawAction.name);
-
                 Abi contractAbi = null; //: any | undefined
                 if (SigningRequestConstants.IsIdentity(rawAction))
                 {
@@ -903,13 +874,6 @@ namespace EosioSigningRequest
                             }
                         }
                     };
-
-
-                    //rawAction.data = new Dictionary<string, object>()
-                    //{
-                    //    { "actor", signer.actor },
-                    //    { "permission", signer.permission },
-                    //};
                     rawAction.authorization = new List<PermissionLevel>(){ signer };
                     rawAction.name = "identity";
                 }
@@ -1017,8 +981,7 @@ namespace EosioSigningRequest
 
             TransactionHeader SerializeTransactionHeader(TransactionContext ctx, uint expireSeconds)
             {
-
-                uint prefix = 1;//SerializationHelper.ReverseHex(ctx.) -- parseInt(reverseHex(refBlock.id.substr(16, 8)), 16); // TODO
+                uint prefix = 1;
 
                 var transactionHeader = new TransactionHeader()
                 {
@@ -1153,15 +1116,6 @@ namespace EosioSigningRequest
                             {
                                 data = dict["data"],
                                 authorization = auths,
-                                //new List<PermissionLevel>()
-                                //{
-                                //    auths
-                                //    //new PermissionLevel()
-                                //    //{
-                                //    //    actor = (string)auth.FirstOrDefault(a => a.Key == "actor").Value,
-                                //    //    permission = (string)auth.FirstOrDefault(a => a.Key == "permission").Value
-                                //    //}
-                                //},
                                 name = (string)dict["name"],
                                 account = (string)dict["account"]
                             }
@@ -1474,9 +1428,13 @@ namespace EosioSigningRequest
             );
         }
 
+        //! The resolved SigningRequest
         public readonly SigningRequest Request;
+        //! The signer Permission of the resolved SigningRequest
         public readonly PermissionLevel Signer;
+        //! The transaction of the resolved SigningRequest
         public readonly Transaction Transaction;
+        // The serializes transaction of the resolved SigningRequest
         public readonly byte[] SerializedTransaction;
 
         public ResolvedSigningRequest(SigningRequest request, PermissionLevel signer, Transaction transaction, byte[] serializedTransaction)
@@ -1487,14 +1445,19 @@ namespace EosioSigningRequest
             SerializedTransaction = serializedTransaction;
         }
 
+        /// <summary>Computes the transactionId of the transaction of the resolved Requestt and returns it as Hex-string.</summary>
+        /// <returns>the transactionId</returns>
         public string GetTransactionId()
         {
             return SerializationHelper.ByteArrayToHexString(Sha256Manager.GetHash(SerializedTransaction));
         }
 
+        /// <param name="signatures">Signature applied to payload and callback-url</param>
+        /// <param name="blockNum">Blocknum applied to payload and callback-url</param>
+        /// <summary>Resolves a Callback</summary>
+        /// <returns>ResolvedCallback-Object containing payload, url and metadata</returns>
         public ResolvedCallback GetCallback(string[] signatures, int? blockNum)
         {
-
             var callback = Request.Data.Callback;
             var flags = Request.Data.Flags;
 

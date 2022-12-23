@@ -37,13 +37,19 @@ Download the UnityPackage here. Then in your Unity project:
 ### 3. Install manually.
 Download this project there here. Then in your Unity project:
 
- 1. Copy the sources from `NativeWebSocket/Assets/WebSocket` into your `Assets` directory.
+ 1. Copy the sources from `NativeWebSocket/Assets/WebSocket` into your `Assets` directory. // Corvin: We should hava a dependencies-section showing how to install dependencies in general, non of our packages includes the WebSocket-Package
 
 ---
 ### 4. Install via NuGet
 Black magic
 
 ---
+
+### Dependencies
+TODO, add WebSocket-Package (if not already installed)
+- Via Upm
+- clone Repo
+
 ## Usage (!TODO!)
 
 .NET and Unity3D-compatible (Desktop, Mobile, WebGL) ApiClient for the different APIs. 

@@ -30,8 +30,6 @@ jobs:
         cp -a eosiosigningrequestsharp/. temp2
         git rm --cached anchorlinktransportsharp
         git rm --cached eosiosigningrequestsharp
-        mkdir anchorlinktransportsharp
-        mkdir eosiosigningrequestsharp
         cp -a temp1/. anchorlinktransportsharp
         cp -a temp2/. eosiosigningrequestsharp
         git add .

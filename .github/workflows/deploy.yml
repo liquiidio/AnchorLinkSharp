@@ -28,6 +28,7 @@ jobs:
         mkdir temp2
         cp -a anchorlinktransportsharp temp1
         cp -a eosiosigningrequestsharp temp2
+        git add .
         git rm --cached anchorlinktransportsharp
         git rm --cached eosiosigningrequestsharp
         git rm -r .github

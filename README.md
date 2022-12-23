@@ -2,8 +2,8 @@
 
 
 <div align="center">
- <img src="https://avatars.githubusercontent.com/u/82725791?s=200&v=4" align="center"
-     alt="Liquiid logo" width="280" height="300">
+ <img src="https://github.com/liquiidio/Misc/blob/main/LiquiidDropLogo.gif?raw=true" align="center"
+     alt="Liquiid logo">
 </div>
 
 # Anchor Link Sharp

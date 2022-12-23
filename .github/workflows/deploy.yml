@@ -5,7 +5,7 @@ on: [push]
 jobs:
   split-upm:
     name: Split UPM branch
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.event_name == 'push'
     steps:
     - name: Checkout
@@ -26,8 +26,9 @@ jobs:
         git rm .gitmodules
         mkdir temp1
         mkdir temp2
-        cp -a anchorlinktransportsharp temp1
-        cp -a eosiosigningrequestsharp temp2
+        cp -a anchorlinktransportsharp/. temp1
+        cp -a eosiosigningrequestsharp/. temp2
+        git rm -rf .git/modules/anchorlinktransportsharp
         git rm -rf anchorlinktransportsharp
         git rm -rf eosiosigningrequestsharp
         mkdir anchorlinktransportsharp

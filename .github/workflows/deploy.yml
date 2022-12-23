@@ -19,12 +19,12 @@ jobs:
       run: |
         git branch -d upm &> /dev/null || echo upm branch not found # recreate the upm branch each time
         echo "********************** ROOT **********************"
+        ls
         git config --global user.name 'github-bot'
         git config --global user.email 'github-bot@users.noreply.github.com'
         git checkout -b upm                                            # checkout the branch
         git rm -r .github
         git commit -am "removed submodules and merged them to upm"
-        echo "********************** ROOT **********************"
         git push -u origin upm --force                              # commit the branch
 
   release:

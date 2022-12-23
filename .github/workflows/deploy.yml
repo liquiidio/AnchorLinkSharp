@@ -14,7 +14,7 @@ jobs:
         ref: unity_develop
         fetch-depth: 0
     - name: Clone submodule repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         token: ${{ secrets.FG_L_PAT2 }}
         repository: https://github.com/liquiidio/AnchorLinkTransportSharp-Private.git

@@ -26,10 +26,10 @@ jobs:
         git rm .gitmodules
         mkdir temp1
         mkdir temp2
-        git submodule deinit anchorlinktransportsharp
-        git submodule deinit eosiosigningrequestsharp
         cp -r anchorlinktransportsharp/. temp1
         cp -r eosiosigningrequestsharp/. temp2
+        git submodule deinit anchorlinktransportsharp
+        git submodule deinit eosiosigningrequestsharp
         git rm anchorlinktransportsharp
         git rm eosiosigningrequestsharp
         git add .

@@ -26,11 +26,15 @@ jobs:
         git rm .gitmodules
         mkdir temp1
         mkdir temp2
-        cp -a anchorlinktransportsharp temp1
-        cp -a eosiosigningrequestsharp temp2
+        cp -a anchorlinktransportsharp/. temp1
+        cp -a eosiosigningrequestsharp/. temp2
+        git rm -r anchorlinktransportsharp
+        git rm -r eosiosigningrequestsharp
+        mkdir anchorlinktransportsharp
+        mkdir eosiosigningrequestsharp
+        cp -a temp1/. anchorlinktransportsharp
+        cp -a temp2/. eosiosigningrequestsharp
         git add .
-        git rm --cached anchorlinktransportsharp
-        git rm --cached eosiosigningrequestsharp
         git rm -r .github
         git commit -am "removed submodules and merged them to upm"
         git push -u origin upm --force                              # commit the branch

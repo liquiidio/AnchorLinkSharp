@@ -30,6 +30,8 @@ jobs:
         cp -a eosiosigningrequestsharp temp2
         git rm -rf anchorlinktransportsharp
         git rm -rf eosiosigningrequestsharp
+        mkdir anchorlinktransportsharp
+        mkdir eosiosigningrequestsharp
         git add .
         git rm -r .github
         git commit -am "removed submodules and merged them to upm"

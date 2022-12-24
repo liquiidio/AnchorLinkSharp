@@ -35,6 +35,7 @@ jobs:
         mkdir eosiosigningrequestsharp
         cp -r temp/anchorlinktransportsharp/. anchorlinktransportsharp
         cp -r temp/eosiosigningrequestsharp/. eosiosigningrequestsharp
+        git rm -rf temp
         git add .
         git commit -m "rearraged the files to their correct folder"
         git push -u origin upm --force                              # commit the branch

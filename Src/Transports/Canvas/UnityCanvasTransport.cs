@@ -11,10 +11,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 {
     public class UnityCanvasTransport : UnityTransport
     {
+        //! Used to manage the countdown timer
         private Coroutine counterCoroutine = null;
-
+        //! The panel that is active/is being displayed
         internal GameObject currentPanel;
-
+        //! Toggle this to use light or dark theme
         [SerializeField] internal bool useLightTheme = false;
 
         #region Login-Panel
@@ -23,15 +24,21 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         [SerializeField] internal GameObject LoginPanel;
         //! Confirmation panel for when the link has been successfully copied
         [SerializeField] private GameObject HyperlinkCopiedNotificationPanel;
-
+        //! Primary panel for the login prompt
         [SerializeField] private GameObject LoginSubpanel;
+        //! Panel to show manual verification details (when the countdown reaches 0)
         [SerializeField] private GameObject ManuallySignSubpanel;
-
+        //! Button to close the login panel (and execute further code)
         [SerializeField] private Button CloseLoginPanelButton;
+        //! Button which displays the ESR link QR code and doubles as a way to scale up the QR code
         [SerializeField] private Button StaticQRCodeHolderTargetButton;
+        //! Button which displays the ESR link QR code and doubles as a way to scale down the QR code
         [SerializeField] private Button ResizableQRCodeHolderTargetButton;
+        //! Animator that transitions the QR code scale size
         [SerializeField] private Animator ResizableQRCode_Animator;
+        //! Button used to copy the current ESR link
         [SerializeField] private Button HyperlinkCopyButton;
+        //! Button used to open Anchor Wallet desktop
         [SerializeField] private Button LaunchAnchorButton;
 
         //! Link that will show the url for the version
@@ -42,9 +49,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 
         #region Sign and countdown timer
         [Header("Countdown timer")]
+        //! Panel used to prompt for signing
         [SerializeField] internal GameObject SignPanel;
+        //! Countdown information in the SignPanel prompt
         [SerializeField] private TextMeshProUGUI CountdownTextGUI;
-
+        //! Property that updates the UI with the relevant time during countdown when assigned to
         private string CountdownText
         {
             get => CountdownTextGUI.text;
@@ -61,6 +70,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         [SerializeField] internal GameObject TimeoutPanel;
         #endregion
 
+        /// <summary>
+        /// Transport constructor
+        /// </summary>
+        /// <param name="options"></param>
         public UnityCanvasTransport(TransportOptions options) : base(options)
         {
 
@@ -142,13 +155,21 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             }
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
+        /// <summary>
+        /// Method is invoked when a request is made and user signing on the wallet is required
+        /// <para>Refer to <see href="https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361">this</see>.</para> 
+        /// </summary>
         public override void ShowLoading()
         {
             SwitchToNewPanel(LoadingPanel);
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
+        /// <summary>
+        /// Method is invoked when a succesful signing request is completed
+        /// <para>Refer to <see href="https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680">this</see>.</para> 
+        /// </summary>
+        /// <param name="request">/></param>
+        /// <param name="result"></param>
         public override void OnSuccess(SigningRequest request, TransactResult result)
         {
             if (counterCoroutine != null)
@@ -159,7 +180,12 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             ClearAllLinks();
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
+        /// <summary>
+        /// Method is invoked when a signing request fails or is cancelled
+        /// <para>Refer to <see href="https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698">this</see>.</para> 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="exception"></param>
         public override void OnFailure(SigningRequest request, Exception exception)
         {
             SwitchToNewPanel(FailurePanel);
@@ -167,7 +193,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             ClearAllLinks();
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
+        /// <summary>
+        /// Method is invoked when a request to sign or login is made and the QR code and link are generated and displayed
+        /// <para>Refer to <see href="https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264">this</see>.</para> 
+        /// </summary>
+        /// <param name="request"></param>
         public override void DisplayRequest(SigningRequest request)
         {
             var ESRLinkUrl = request.Encode(false, true);  // This returns ESR link to be converted
@@ -224,37 +254,54 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         }
 
         #region Canvas function-calls
+        /// <summary>
+        /// Executed when the version button is interacted with (on all panels)
+        /// </summary>
         public void OnVersionButtonPressed()
         {
             Application.OpenURL(VersionURL);
         }
-
+        /// <summary>
+        /// Executed when download Anchor button is interacted with
+        /// </summary>
         public void OnDownloadAnchorButtonPressed()
         {
             Application.OpenURL(DownloadURL);
         }
-
+        /// <summary>
+        /// Executed when the close button on the login panel is interacted with (on available panels)
+        /// </summary>
         public void OnLoginPanelCloseButtonPressed()
         {
             ResizableQRCode_Animator.SetTrigger("doZoomOut");
 
             DisableTargetPanel(LoginPanel);
         }
-
+        /// <summary>
+        /// Executed when the QR code (in the ZOOMED OUT state) is interacted with
+        /// </summary>
+        /// <param name="resizableQRCodePanel">Similar QR panel with the animator component</param>
         public void OnStaticQRCodeHolderTargetButtonPressed(RectTransform resizableQRCodePanel)
         {
             resizableQRCodePanel.gameObject.SetActive(true);
 
             resizableQRCodePanel.GetComponent<Animator>().SetTrigger("doZoomIn");
         }
-
+        /// <summary>
+        /// Executed when the QR code (in the ZOOMED IN state) is interacted with
+        /// </summary>
+        /// <param name="resizableQRCodePanel">QR Panel with the animator component</param>
         public void OnResizableQRCodeHolderTargetButtonPressed(RectTransform resizableQRCodePanel)
         {
             resizableQRCodePanel.GetComponent<Animator>().SetTrigger("doZoomOut");
 
             StartCoroutine(ResizableQRCodePanelZoomOut(resizableQRCodePanel));
         }
-
+        /// <summary>
+        /// Method used to manage the zoom out mechanic
+        /// </summary>
+        /// <param name="resizableQRCodePanel">QR Panel with the animator component</param>
+        /// <returns></returns>
         private IEnumerator ResizableQRCodePanelZoomOut(RectTransform resizableQRCodePanel)
         {
             yield return new WaitForSeconds(0.1f);
@@ -264,7 +311,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             resizableQRCodePanel.gameObject.SetActive(false);
             resizableQRCodePanel.gameObject.SetActive(false);
         }
-
+        /// <summary>
+        /// Executed when the hyperlink button containing the ESR link is interacted with
+        /// </summary>
         public void OnQRHyperlinkButtonPressed()
         {
             HyperlinkCopyButton.gameObject.SetActive(false);
@@ -274,7 +323,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             StopCoroutine(nameof(ToggleHyperlinkCopyButton_Delayed));
             StartCoroutine(ToggleHyperlinkCopyButton_Delayed());
         }
-
+        /// <summary>
+        /// Coroutine to display if the ESR hyperlink button is interacted with to show a success state and revert back to default state
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator ToggleHyperlinkCopyButton_Delayed()
         {
             yield return new WaitForSeconds(3.5f);
@@ -282,25 +334,33 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 
             HyperlinkCopiedNotificationPanel.SetActive(false);
         }
-
+        /// <summary>
+        /// Executed when the launch Anchor button is interacted with (opens Anchor Wallet desktop if installed)
+        /// </summary>
         public void OnLaunchAnchorButtonPressed()
         {
             Debug.LogWarning("Launch Anchor Button pressed!");
             //Application.OpenURL(ESRLinkUrl);
         }
-
+        /// <summary>
+        /// Executed when the close button on the loading panel is interacted with
+        /// </summary>
         public void OnCloseLoadingPanelButtonPressed()
         {
             Debug.LogWarning("Close loading Panel button has been pressed!");
             DisableTargetPanel(LoadingPanel);
         }
-
+        /// <summary>
+        /// Executed when the close button on the timeout panel is interacted with
+        /// </summary>
         public void OnCloseTimeoutPanelButtonPressed()
         {
             Debug.LogWarning("Close timeout Panel button has been pressed!");
             DisableTargetPanel(TimeoutPanel);
         }
-
+        /// <summary>
+        /// Begin the countdown timer to show how much time is left to authorize request
+        /// </summary>
         private void StartTimer()
         {
             if (counterCoroutine != null)
@@ -310,7 +370,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             CountdownTextGUI.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
             counterCoroutine = StartCoroutine(CountdownTimer(2));
         }
-
+        /// <summary>
+        /// Coroutine to manage the countdown timer and update the panel with remaining time
+        /// </summary>
+        /// <param name="counterDuration">Starting time for the countdown timer</param>
+        /// <returns></returns>
         private IEnumerator CountdownTimer(float counterDuration = 3.5f)
         {
             float _newCounter = 0;
@@ -324,7 +388,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 
             SwitchToNewPanel(TimeoutPanel);
         }
-
+        /// <summary>
+        /// Executed whent he manually sign button is interacted with
+        /// </summary>
         public void OnSignManuallyButtonPressed()
         {
             if (counterCoroutine != null)
@@ -339,20 +405,26 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             StaticQRCodeHolderTargetButton.GetComponent<Image>().enabled =
                 ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = true;
         }
-
+        /// <summary>
+        /// Executed when the close sign panel button is interacted with
+        /// </summary>
         public void OnCloseSignPanelButtonPressed()
         {
             Debug.LogWarning("Close sign Panel button has been pressed!");
             DisableTargetPanel(SignPanel);
         }
-
+        /// <summary>
+        /// Executed when the close success panel button is interacted with
+        /// </summary>
         public void OnCloseSuccessPanelButtonPressed()
         {
             Debug.LogWarning("Close success Panel button has been pressed!");
 
             DisableTargetPanel(SuccessPanel);
         }
-
+        /// <summary>
+        /// Executed when the failure panel button is interacted with
+        /// </summary>
         public void OnCloseFailurePanelButtonPressed()
         {
             Debug.LogWarning("Close failure Panel button has been pressed!");
@@ -360,7 +432,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             DisableTargetPanel(FailurePanel);
         }
 
-        // remove all links from the QR code to avoid double/wrong sign links/actions/transactions
+        /// <summary>
+        /// Remove all links from the QR code to avoid double/wrong sign links/actions/transactions
+        /// </summary>
         private void ClearAllLinks()
         {
             StaticQRCodeHolderTargetButton.GetComponent<Image>().sprite =
@@ -370,7 +444,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
                    ResizableQRCodeHolderTargetButton.GetComponent<Image>().enabled = false;
         }
 
-        // hide any displayed panel and switch to the new supplied one
+        /// <summary>
+        /// Hide any displayed panel and switch to the new supplied one
+        /// </summary>
+        /// <param name="toPanel"></param>
         internal void SwitchToNewPanel(GameObject toPanel)
         {
             currentPanel?.SetActive(false);
@@ -381,7 +458,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             currentPanel.SetActive(true);
         }
 
-        // if there is any panel being displayed, hide it
+        /// <summary>
+        /// If there is any panel being displayed, hide it
+        /// </summary>
+        /// <param name="fallbackPanel">A return panel to display if needed</param>
         internal void DisableCurrentPanel(GameObject fallbackPanel = null)
         {
             currentPanel?.SetActive(false);
@@ -390,7 +470,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             currentPanel = fallbackPanel;
         }
 
-        // if there is a specific panel being displayed hide it and show the fallback one if supplied
+        /// <summary>
+        /// If there is a specific panel being displayed hide it and show the fallback one if supplied
+        /// </summary>
+        /// <param name="targetPanel">Panel to hide</param>
+        /// <param name="fallbackPanel">A return panel to display if needed</param>
         internal void DisableTargetPanel(GameObject targetPanel, GameObject fallbackPanel = null)
         {
             targetPanel.SetActive(false);
@@ -401,7 +485,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
             }
         }
 
-        // Hide all panels
+        /// <summary>
+        /// Hide all panels that are declared
+        /// </summary>
         internal void DisableAllPanels()
         {
             LoginPanel.SetActive(false);

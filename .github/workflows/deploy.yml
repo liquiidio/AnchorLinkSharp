@@ -25,8 +25,8 @@ jobs:
         git checkout -b upm                                            # checkout the branch
         git subtree add --prefix=temp/anchorlinktransportsharp anchorlinktransportsharp ee829c9d98a9e596d5ceeb0c5afea4d4587323a0
         git subtree add --prefix=temp/eosiosigningrequestsharp eosiosigningrequestsharp a91c65fa9d0ddec71290ac39a78a2d2fadbe9775
-        git rm anchorlinktransportsharp
-        git rm eosiosigningrequestsharp
+        git rm -rf anchorlinktransportsharp
+        git rm -rf eosiosigningrequestsharp
         git rm .gitmodules
         git add .
         git rm -r .github

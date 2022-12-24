@@ -1,6 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using Cryptography.ECDSA;
 using EosSharp;
+using EosSharp.Core.Api.v1;
+using EosSharp.Core.Helpers;
+using EosSharp.Core.Providers;
 
 namespace EosioSigningRequest
 {

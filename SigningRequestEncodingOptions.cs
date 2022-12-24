@@ -1,14 +1,11 @@
 using EosSharp;
+using EosSharp.Core.Interfaces;
+using EosSharp.Core.Providers;
 
 namespace EosioSigningRequest
 {
     public class SigningRequestEncodingOptions
     {
-        /** UTF-8 text encoder, required when using node.js. */
-        //textEncoder?: any
-        /** UTF-8 text decoder, required when using node.js. */
-        //textDecoder?: any
-        
         /** Optional zlib, if provided the request will be compressed when encoding. */
         public IZlibProvider Zlib;
 

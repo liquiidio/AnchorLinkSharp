@@ -8,7 +8,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cryptography.ECDSA;
 using EosSharp;
+using EosSharp.Core.Api.v1;
+using EosSharp.Core.Helpers;
+using EosSharp.Core.Interfaces;
+using EosSharp.Core.Providers;
 using Action = EosSharp.Core.Api.v1.Action;
 
 namespace EosioSigningRequest

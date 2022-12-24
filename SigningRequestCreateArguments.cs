@@ -1,4 +1,5 @@
 using EosSharp;
+using EosSharp.Core.Api.v1;
 using Action = EosSharp.Core.Api.v1.Action;
 
 namespace EosioSigningRequest

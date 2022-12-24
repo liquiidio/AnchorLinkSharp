@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Action = EosSharp;
+using EosSharp.Core.Api.v1;
 
 namespace EosioSigningRequest
 {
@@ -25,10 +25,10 @@ namespace EosioSigningRequest
         };
 
         //! Placeholder for an Account-Name, can be used if no Account-Name is specified
-        public static readonly string PlaceholderName = "............1";
+        public const string PlaceholderName = "............1";
 
         //! Placeholder for a Permission-Name, can be used if no Permission-Name is specified
-        public static readonly string PlaceholderPermission = "............2";
+        public const string PlaceholderPermission = "............2";
 
         //! Version of the Protocol implemented
         public static byte ProtocolVersion = 2;
@@ -43,7 +43,7 @@ namespace EosioSigningRequest
         /// <param name="action">The action to be checked.</param>
         /// <summary>Checks if an action is an IdentityRequest.</summary>
         /// <returns>Returns true if the action passed is an IdentityRequest, returns false if not</returns>
-        public static bool IsIdentity(Action action)
+        public static bool IsIdentity(EosSharp.Core.Api.v1.Action action)
         {
             return action.account == "" && action.name == "identity";
         }

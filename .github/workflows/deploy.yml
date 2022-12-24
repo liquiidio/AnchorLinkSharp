@@ -31,6 +31,11 @@ jobs:
         git add .
         git rm -r .github
         git commit -am "removed submodules and merged them to upm"
+        mkdir anchorlinktransportsharp
+        mkdir eosiosigningrequestsharp
+        cp -r temp/anchorlinktransportsharp/. anchorlinktransportsharp
+        cp -r temp/eosiosigningrequestsharp/. eosiosigningrequestsharp
+        git commit -am "rearraged the files to their correct folder"
         git push -u origin upm --force                              # commit the branch
 
   release:

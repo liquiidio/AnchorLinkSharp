@@ -10,13 +10,13 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
     [RequireComponent(typeof(QrCodePanel))]
     public class QrCodePanel : PanelBase
     {
-        /*
+        /**
          * Fields, Properties
          */
         private readonly Vector3 _qrCurrentSize = new Vector3(1, 1);
         private SigningRequest _request;
 
-        /*
+        /**
          * Child-Controls
          */
 
@@ -53,7 +53,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         }
 
         #region Button Binding
-        // assign UI toolkit interaction events
+        /// <summary>
+        /// assign UI toolkit interaction events
+        /// </summary>
         private void BindButtons()
         {
             _qrCodeBox.transform.scale = new Vector3(1, 1);
@@ -83,7 +85,13 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region Rebind
-        // assign and show the qr code 
+
+        /// <summary>
+        /// Rebind and assign the qr code to a login or sign in session   
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="isLogin"></param>
+        /// <param name="isWhiteTheme"></param>
         internal void Rebind(SigningRequest request, bool isLogin, bool isWhiteTheme)
         {
             _request = request;
@@ -109,7 +117,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                     "Scan the QR-code with Anchor on another device or use the button to open it here.";
             }
         }
-        // if the user needs to sign manually
+
+        /// <summary>
+        /// Rebind and assign the qr code to a manually sign in session
+        /// </summary>
+        /// <param name="isSignManually"></param>
         internal void Rebind(bool isSignManually)
         {
             if (isSignManually)
@@ -123,7 +135,12 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region other
-        // when the copy ESRLinkUrl button is interacted with
+
+        /// <summary>
+        /// when the copy ESRLinkUrl button is interacted with
+        /// </summary>
+        /// <param name="counterDuration"></param>
+        /// <returns></returns>
         private IEnumerator SetText(float counterDuration = 0.5f)
         {
             _readyToCopy.Hide();
@@ -166,7 +183,16 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             return newTexture2D;
         }
-        // convert string information into a color32 array which is used to create the QR code
+   
+        /// <summary>
+        /// convert string information into a color32 array which is used to create the QR code
+        /// </summary>
+        /// <param name="textForEncoding"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="baseColor"></param>
+        /// <param name="pixelColor"></param>
+        /// <returns></returns>
         private Color32[] StringEncoder(string textForEncoding, int width, int height, Color32 baseColor,
             Color32 pixelColor)
         {
@@ -192,7 +218,6 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
             return color32Array;
         }
-
 
         /// <summary>
         /// Puts the passed string into the clipboard buffer to be pasted elsewhere.

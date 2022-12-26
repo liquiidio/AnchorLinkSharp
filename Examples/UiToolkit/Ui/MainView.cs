@@ -102,6 +102,7 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
         }
 
         #region Button Binding
+
         /// <summary>
         /// Assign UI toolkit interaction events
         /// </summary>

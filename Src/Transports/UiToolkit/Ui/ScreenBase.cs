@@ -6,8 +6,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
     [RequireComponent(typeof(UIDocument))]
     public class ScreenBase : MonoBehaviour
     {
+        //! element that is drawn
         internal VisualElement Root;
 
+        //! panel that grab a reference to the root
         internal UIDocument Screen;
 
         private void Awake()
@@ -18,11 +20,17 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             Hide();
         }
 
+        /// <summary>
+        /// Set the panel visibility to visible
+        /// </summary>
         public void Show()
         {
             Root.Show();
         }
 
+        /// <summary>
+        /// Set the panel visibility to invisible
+        /// </summary>
         public void Hide()
         {
             Root.Hide();
@@ -77,6 +85,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 
         #region Button Binding
 
+        /// <summary>
+        /// Assign UI toolkit interaction events
+        /// </summary>
         private void BindButtons()
         {
             _closeViewButton.clickable.clicked += Hide;

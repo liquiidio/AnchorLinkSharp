@@ -5,12 +5,12 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     public class TimeoutPanel : PanelBase
     {
-        /*
+        /**
          * Child-Controls
          */
         private Button _signManuallyButton;
 
-        /*
+        /**
          * Fields, Properties
          */
         [SerializeField] internal QrCodePanel QrCodePanel;
@@ -24,7 +24,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         }
 
         #region Button Binding
-        // assign UI toolkit interaction events
+
+        /// <summary>
+        /// Assign UI toolkit interaction events
+        /// </summary>
         private void BindButtons()
         {
             _signManuallyButton.clickable.clicked += () =>

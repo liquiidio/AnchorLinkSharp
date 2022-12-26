@@ -7,13 +7,13 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
 {
     public class SigningTimerPanel : PanelBase
     {
-        /*
+        /**
          * Child-Controls
          */
         private Label _signManualLabel;
         private Label _singingTimerLabel;
 
-        /*
+        /**
          * Fields, Properties
          */
         [SerializeField] internal QrCodePanel QrCodePanel;
@@ -38,7 +38,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         }
 
         #region Button Binding
-        // assign UI toolkit interaction events
+
+        /// <summary>
+        /// Assign UI toolkit interaction events
+        /// </summary>
         private void BindButtons()
         {
             _signManualLabel.RegisterCallback<ClickEvent>(evt =>
@@ -51,7 +54,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region other
-        // set the signing timer and begin counting down
+
+        /// <summary>
+        /// Set the signing timer and begin counting down
+        /// </summary>
         internal void StartCountdownTimer()
         {
             if (_counterCoroutine != null)
@@ -61,7 +67,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             _counterCoroutine = StartCoroutine(ScheduleTimer(2));
         }
 
-        // countdown coroutine that exits after timer reaches zero
+        /// <summary>
+        /// Countdown coroutine that exits after timer reaches zero
+        /// </summary>
+        /// <param name="counterDuration"></param>
+        /// <returns></returns>
         private IEnumerator ScheduleTimer(float counterDuration = 3.5f)
         {
             float _newCounter = 0;

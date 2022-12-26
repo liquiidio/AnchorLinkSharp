@@ -13,7 +13,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
     [RequireComponent(typeof(SuccessPanel))]
     public class SuccessPanel : PanelBase
     {
-        /*
+        /**
          * Child-Controls
          */
         private Label _subTitleLabel;
@@ -26,7 +26,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         }
 
         #region Rebind
-        // display appropriate message if the user is signing in or performing a transaction
+        /// <summary>
+        /// Rebind and display appropriate message if the user is signing in or performing a transaction
+        /// </summary>
+        /// <param name="request"></param>
         internal void Rebind(SigningRequest request)
         {
             if (request.IsIdentity())
@@ -41,7 +44,12 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         #endregion
 
         #region other
-        // hide this screen after set time
+
+        /// <summary>
+        /// Hide this screen after set time has reached the counterDuration
+        /// </summary>
+        /// <param name="counterDuration"></param>
+        /// <returns></returns>
         private IEnumerator SetTimeout(float counterDuration = 0.5f)
         {
             float _newCounter = 0;

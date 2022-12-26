@@ -23,19 +23,30 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
         private static bool _transitioningPanel;
 
         //! Toggle dark and light themes
-        [SerializeField] internal bool IsWhiteTheme;    
+        [SerializeField] internal bool IsWhiteTheme;
 
+        //! Panel to show Failure
         [SerializeField] internal FailurePanel FailurePanel;
+        //! Panel to show Loading
         [SerializeField] internal LoadingPanel LoadingPanel;
+        //! Panel to show QrCode
         [SerializeField] internal QrCodePanel QrCodePanel;
+        //! Panel to show SigningTimer
         [SerializeField] internal SigningTimerPanel SigningTimerPanel;
+        //! Panel to show Success
         [SerializeField] internal SuccessPanel SuccessPanel;
+        //! Panel to show Timeout
         [SerializeField] internal TimeoutPanel TimeoutPanel;
 
+        //! stylesheet for displaying DarkTheme
         [SerializeField] internal StyleSheet DarkTheme;
+        //! stylesheet for displaying WhiteTheme
         [SerializeField] internal StyleSheet WhiteTheme;
 
-
+        /// <summary>
+        /// Transport constructor
+        /// </summary>
+        /// <param name="options"></param>
         public UnityUiToolkitTransport(TransportOptions options) : base(options)
         {
             SuccessPanel = FindObjectOfType<SuccessPanel>();
@@ -44,7 +55,6 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             LoadingPanel = FindObjectOfType<LoadingPanel>();
             TimeoutPanel = FindObjectOfType<TimeoutPanel>();
             SigningTimerPanel = FindObjectOfType<SigningTimerPanel>();
-            
         }
 
         //! check which theme to use (light and dark)
@@ -54,21 +64,17 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             {
                 _activeScreen.Root.styleSheets.Clear();
 
-                if (IsWhiteTheme)
-                {
-                    _activeScreen.Root.styleSheets.Remove(DarkTheme);
-                    _activeScreen.Root.styleSheets.Add(WhiteTheme);
-                }
-                else
-                {
-                    _activeScreen.Root.styleSheets.Remove(WhiteTheme);
-                    _activeScreen.Root.styleSheets.Add(DarkTheme);
-                }
+                if (IsWhiteTheme) _activeScreen.Root.styleSheets.Add(WhiteTheme);
+                else _activeScreen.Root.styleSheets.Add(DarkTheme);
             }
             else Debug.Log("screen is null");
         }
 
-        //! switch from one panel to a new one
+        /// <summary>
+        /// Switch from one panel to a new one
+        /// </summary>
+        /// <param name="to"></param>
+        /// <returns></returns>
         internal static IEnumerator<float> TransitionPanels(ScreenBase to)
         {
             if (_activeScreen == to)
@@ -104,40 +110,48 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit
             Application.OpenURL(DownloadAnchorUrl);
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361
-        // and https://github.com/greymass/anchor-link-console-transport/blob/master/src/index.ts#L10
+        /// <summary>
+        /// Method is invoked when a request is made and user signing on the wallet is required
+        /// <para>Refer to https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L361.</para> 
+        /// </summary>
         public override void ShowLoading()
         {
-            Debug.Log("ShowLoading");
-
             StartCoroutine(TransitionPanels(LoadingPanel));
             CheckTheme();
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680
+        /// <summary>
+        /// Method is invoked when a succesful signing request is completed
+        /// <para>Refer to https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L680.</para> 
+        /// </summary>
+        /// <param name="request">/></param>
+        /// <param name="result"></param>
         public override void OnSuccess(SigningRequest request, TransactResult result)
         {
-            Debug.Log("OnSuccess");
-
             StartCoroutine(TransitionPanels(SuccessPanel));
             CheckTheme();
             SuccessPanel.Rebind(request);
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698
+        /// <summary>
+        /// Method is invoked when a signing request fails or is cancelled
+        /// <para>Refer to https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L698.</para> 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="exception"></param>
         public override void OnFailure(SigningRequest request, Exception exception)
         {
-            Debug.Log("OnFailure");
-
             StartCoroutine(TransitionPanels(FailurePanel));
             CheckTheme();
         }
 
-        // see https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264
+        /// <summary>
+        /// Method is invoked when a request to sign or login is made and the QR code and link are generated and displayed
+        /// <para>Refer to https://github.com/greymass/anchor-link-browser-transport/blob/master/src/index.ts#L264.</para> 
+        /// </summary>
+        /// <param name="request"></param>
         public override void DisplayRequest(SigningRequest request)
         {
-            Debug.Log("DisplayRequest");
-
             var esrLinkUri = request.Encode(false, true);
 
             if (request.IsIdentity())

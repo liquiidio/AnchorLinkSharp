@@ -17,7 +17,7 @@ jobs:
         submodules: recursive
     - name: Determine Commit Hash
       run: |
-        echo "HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "HASH=$(git log -1)" >> $GITHUB_ENV
         echo ${{ env.HASH }}
     - name: split upm branch
       run: |

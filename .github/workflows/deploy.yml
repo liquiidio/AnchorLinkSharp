@@ -23,8 +23,11 @@ jobs:
         git config --global user.name 'github-bot'
         git config --global user.email 'github-bot@users.noreply.github.com'
         git checkout -b upm                                            # checkout the branch
-        git subtree add --prefix=temp/anchorlinktransportsharp anchorlinktransportsharp unity_develop
-        git subtree add --prefix=temp/eosiosigningrequestsharp eosiosigningrequestsharp unity_develop
+        mkdir temp
+        mkdir temp/anchorlinktransportsharp
+        mkdir temp/eosiosigningrequestsharp
+        cp -r anchorlinktransportsharp/. temp/anchorlinktransportsharp
+        cp -r eosiosigningrequestsharp/. temp/eosiosigningrequestsharp
         git rm .gitmodules
         git rm -rf anchorlinktransportsharp
         git rm -rf eosiosigningrequestsharp

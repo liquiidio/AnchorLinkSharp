@@ -15,6 +15,8 @@ jobs:
         fetch-depth: 0
         token: ${{ secrets.FG_L_PAT2 }}
         submodules: recursive
+    - name: Determine Commit Hash
+      run: echo "HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
     - name: split upm branch
       run: |
         git branch -d upm &> /dev/null || echo upm branch not found # recreate the upm branch each time

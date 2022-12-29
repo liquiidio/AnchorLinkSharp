@@ -25,7 +25,6 @@ jobs:
         git checkout -b upm                                            # checkout the branch
         git submodule deinit anchorlinktransportsharp
         git submodule deinit eosiosigningrequestsharp
-        git rm .gitmodules
         git rm -r .github
         git add .
         git commit -am "removed submodules and merged them to upm"

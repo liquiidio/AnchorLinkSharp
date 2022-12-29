@@ -26,8 +26,6 @@ jobs:
         git submodule deinit anchorlinktransportsharp
         git submodule deinit eosiosigningrequestsharp
         git rm .gitmodules
-        git rm --cached anchorlinktransportsharp
-        git rm --cached eosiosigningrequestsharp
         git rm -r .github
         git add .
         git commit -am "removed submodules and merged them to upm"

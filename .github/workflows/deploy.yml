@@ -26,11 +26,9 @@ jobs:
         git submodule deinit anchorlinktransportsharp
         git submodule deinit eosiosigningrequestsharp
         git rm .gitmodules
-        git add .
         git rm -r .github
-        git commit -am "removed submodules and merged them to upm"
         git add .
-        git commit -m "rearraged the files to their correct folder"
+        git commit -am "removed submodules and merged them to upm"
         git push -u origin upm --force                              # commit the branch
 
   release:

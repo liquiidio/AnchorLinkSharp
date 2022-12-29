@@ -18,7 +18,7 @@ jobs:
     - name: Determine Commit Hash
       run: |
         echo "HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        echo $HASH
+        echo ${{ env.HASH }}
     - name: split upm branch
       run: |
         git branch -d upm &> /dev/null || echo upm branch not found # recreate the upm branch each time

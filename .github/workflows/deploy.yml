@@ -28,6 +28,7 @@ jobs:
         mkdir temp/eosiosigningrequestsharp
         cp -r anchorlinktransportsharp/. temp/anchorlinktransportsharp
         cp -r eosiosigningrequestsharp/. temp/eosiosigningrequestsharp
+        git submodule deinit --recursive
         git rm .gitmodules
         git rm -rf anchorlinktransportsharp
         git rm -rf eosiosigningrequestsharp

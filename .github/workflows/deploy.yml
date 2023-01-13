@@ -20,9 +20,9 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore ./AnchorLinkSharp
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ./AnchorLinkSharp --configuration Release --no-restore
       - name: Test
         run: dotnet test --verbosity normal --logger trx --results-directory "TestResults"
       - name: Upload dotnet test results
@@ -98,7 +98,7 @@ jobs:
 
   release:
     name: Create GitHub release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: split-upm
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     steps:

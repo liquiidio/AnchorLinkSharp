@@ -20,9 +20,9 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
-        run: dotnet restore ./AnchorLinkSharp/Anchor.sln
+        run: dotnet restore ./AnchorLinkSharp/AnchorLinkTransportSharp.csproj
       - name: Build
-        run: dotnet build ./AnchorLinkSharp/Anchor.sln --configuration Release --no-restore
+        run: dotnet build ./AnchorLinkSharp/AnchorLinkTransportSharp.csproj --configuration Release --no-restore
       - name: Test
         run: dotnet test --verbosity normal --logger trx --results-directory "TestResults"
       - name: Upload dotnet test results

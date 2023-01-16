@@ -3,8 +3,64 @@ name: Deploy
 on: [push]
 
 jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        dotnet-version: ['3.0', '3.1.x', '5.0.x', '6.0.x', '7.0.x']
+    name: Build and test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.FG_L_PAT2 }}
+          submodules: recursive
+      - name: Setup .NET SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: TestResults
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
+  pack-nuget:
+    needs: build
+    runs-on: ubuntu-20.04
+    name: Dotnet Pack
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 3.1.x
+      - name: Determine version
+        run: echo "VERSION=$(git describe --tags --dirty)" >> $GITHUB_ENV
+      - name: Pack
+        run: dotnet pack --output ./artifacts --configuration Release -p:Version=1.0.0
+      - name: Upload package
+        uses: actions/upload-artifact@v1
+        with:
+          name: artifacts
+          path: ./artifacts
+  
   pack-unitypackage:
     runs-on: ubuntu-20.04
+    needs: pack-nuget
     name: Unity Package Pack
     if: github.event_name == 'push'
     steps:
@@ -50,8 +106,8 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1.12.0
         with:
-          tag: 1.0.0
-          name: Release 1.0.0
+          tag: 1.0.1
+          name: Release 1.0.1
           body: ${{ env.VERSION }}
           makeLatest: true
       - name: Download unity package
@@ -67,6 +123,42 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_name: a/io.liquiid.anchorlinksharp.unitypackage # path + filename
   
+  github-publish:
+    runs-on: ubuntu-20.04
+    needs: release
+    name: Publish to GitHub
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 3.1.x
+      - name: Download package
+        uses: actions/download-artifact@v1
+        with:
+          name: artifacts
+          path: ./artifacts
+      - name: Push package to GitHub
+        run: dotnet nuget push ./artifacts**.nupkg --api-key ${{secrets.GITHUB_TOKEN}} --source "https://nuget.pkg.github.com/liquiidio/index.json"
+
+  nuget-publish:
+    runs-on: ubuntu-20.04
+    needs: release
+    name: Publish to Nuget
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 3.1.x
+      - name: Download package
+        uses: actions/download-artifact@v1
+        with:
+          name: artifacts
+          path: ./artifacts
+      - name: Push package to Nuget
+        run: dotnet nuget push ./artifacts**.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json"
+        
   split-upm:
     needs: release
     name: Split UPM branch

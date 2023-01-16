@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SubModules", "SubModules", "{6159454C-905A-4116-A711-DA3D6AB66AF5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkSharp", "AnchorLinkSharp\AnchorLinkSharp.csproj", "{16FB5C6F-5CFD-4B5F-9171-1D5510CFB858}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkSharp.UnitTests", "AnchorLinkSharp.UnitTests\AnchorLinkSharp.UnitTests.csproj", "{EFAFF027-E1E3-44D3-8C8A-EC28287BCCE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkTransportSharp", "AnchorLinkTransportSharp-Private\AnchorLinkTransportSharp.csproj", "{04D37BD1-4844-4CCC-842E-E9B59623B047}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosioSigningRequestSharp", "EosioSigningRequestSharp-Private\EosioSigningRequestSharp.csproj", "{41CF8F78-376E-4D79-A8D0-378AC869CEB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosSharp.Core", "EosSharp-Private\EosSharp\EosSharp.Core\EosSharp.Core.csproj", "{F5B8EF91-2EAC-4E54-8F91-19167495DA4C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosSharp", "EosSharp-Private\EosSharp\EosSharp\EosSharp.csproj", "{E3C8A728-9854-42DE-A839-56F1FEF4B2D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16FB5C6F-5CFD-4B5F-9171-1D5510CFB858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16FB5C6F-5CFD-4B5F-9171-1D5510CFB858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16FB5C6F-5CFD-4B5F-9171-1D5510CFB858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16FB5C6F-5CFD-4B5F-9171-1D5510CFB858}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFAFF027-E1E3-44D3-8C8A-EC28287BCCE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFAFF027-E1E3-44D3-8C8A-EC28287BCCE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFAFF027-E1E3-44D3-8C8A-EC28287BCCE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFAFF027-E1E3-44D3-8C8A-EC28287BCCE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D37BD1-4844-4CCC-842E-E9B59623B047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D37BD1-4844-4CCC-842E-E9B59623B047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D37BD1-4844-4CCC-842E-E9B59623B047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D37BD1-4844-4CCC-842E-E9B59623B047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41CF8F78-376E-4D79-A8D0-378AC869CEB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41CF8F78-376E-4D79-A8D0-378AC869CEB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41CF8F78-376E-4D79-A8D0-378AC869CEB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41CF8F78-376E-4D79-A8D0-378AC869CEB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5B8EF91-2EAC-4E54-8F91-19167495DA4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5B8EF91-2EAC-4E54-8F91-19167495DA4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5B8EF91-2EAC-4E54-8F91-19167495DA4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5B8EF91-2EAC-4E54-8F91-19167495DA4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3C8A728-9854-42DE-A839-56F1FEF4B2D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3C8A728-9854-42DE-A839-56F1FEF4B2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3C8A728-9854-42DE-A839-56F1FEF4B2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3C8A728-9854-42DE-A839-56F1FEF4B2D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{04D37BD1-4844-4CCC-842E-E9B59623B047} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
+		{41CF8F78-376E-4D79-A8D0-378AC869CEB5} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
+		{F5B8EF91-2EAC-4E54-8F91-19167495DA4C} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
+		{E3C8A728-9854-42DE-A839-56F1FEF4B2D8} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08CF69FC-6EAF-4630-95BE-193D45195152}
+	EndGlobalSection
+EndGlobal

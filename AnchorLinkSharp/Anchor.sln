@@ -1,21 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32929.386
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkSharp", "AnchorLinkSharp.csproj", "{1742A5EA-221C-4710-8A75-F07297B3E1C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkSharp.UnitTests", "..\AnchorLinkSharp.UnitTests\AnchorLinkSharp.UnitTests.csproj", "{88AE5D15-D237-455F-A5FE-54ADE8E974CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkTransportSharp", "..\..\anchorlinktransport-sharp\AnchorLinkTransportSharp.csproj", "{BCB0B4A9-419D-4F2E-81D6-4A20EA20D6C6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SubModules", "SubModules", "{6159454C-905A-4116-A711-DA3D6AB66AF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosioSigningRequest", "..\..\EosioSigningRequestSharp\EosioSigningRequest.csproj", "{BBF57464-9670-4AC1-B574-5B312B4E1685}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkTransportSharp", "..\AnchorLinkTransportSharp-Private\AnchorLinkTransportSharp.csproj", "{283760F3-FBDD-44BE-811D-9B0A54B00B06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorLinkTestApp", "..\..\AnchorLinkTestApp\AnchorLinkTestApp.csproj", "{3E7DD973-46CF-4DFD-A668-169DC9B8612E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosioSigningRequestSharp", "..\EosioSigningRequestSharp-Private\EosioSigningRequestSharp.csproj", "{57C0DBD9-2D01-4DE1-9E48-01A70D449966}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosSharp", "..\..\eos-sharp\EosSharp\EosSharp\EosSharp.csproj", "{0BEDC363-0983-47E3-B46E-25B7120FF955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosSharp.Core", "..\EosSharp-Private\EosSharp\EosSharp.Core\EosSharp.Core.csproj", "{8930849E-D054-41E4-93FE-810B7615E79B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosSharp.Core", "..\..\eos-sharp\EosSharp\EosSharp.Core\EosSharp.Core.csproj", "{C802BD68-BC51-4CF6-919C-6E38ECEAA92F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EosSharp", "..\EosSharp-Private\EosSharp\EosSharp\EosSharp.csproj", "{05524070-31EF-44B8-A060-6700750150CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,29 +31,31 @@ Global
 		{88AE5D15-D237-455F-A5FE-54ADE8E974CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88AE5D15-D237-455F-A5FE-54ADE8E974CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88AE5D15-D237-455F-A5FE-54ADE8E974CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BCB0B4A9-419D-4F2E-81D6-4A20EA20D6C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BCB0B4A9-419D-4F2E-81D6-4A20EA20D6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BCB0B4A9-419D-4F2E-81D6-4A20EA20D6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BCB0B4A9-419D-4F2E-81D6-4A20EA20D6C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBF57464-9670-4AC1-B574-5B312B4E1685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBF57464-9670-4AC1-B574-5B312B4E1685}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBF57464-9670-4AC1-B574-5B312B4E1685}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBF57464-9670-4AC1-B574-5B312B4E1685}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E7DD973-46CF-4DFD-A668-169DC9B8612E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E7DD973-46CF-4DFD-A668-169DC9B8612E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E7DD973-46CF-4DFD-A668-169DC9B8612E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E7DD973-46CF-4DFD-A668-169DC9B8612E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BEDC363-0983-47E3-B46E-25B7120FF955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BEDC363-0983-47E3-B46E-25B7120FF955}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BEDC363-0983-47E3-B46E-25B7120FF955}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BEDC363-0983-47E3-B46E-25B7120FF955}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C802BD68-BC51-4CF6-919C-6E38ECEAA92F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C802BD68-BC51-4CF6-919C-6E38ECEAA92F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C802BD68-BC51-4CF6-919C-6E38ECEAA92F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C802BD68-BC51-4CF6-919C-6E38ECEAA92F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{283760F3-FBDD-44BE-811D-9B0A54B00B06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{283760F3-FBDD-44BE-811D-9B0A54B00B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{283760F3-FBDD-44BE-811D-9B0A54B00B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{283760F3-FBDD-44BE-811D-9B0A54B00B06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57C0DBD9-2D01-4DE1-9E48-01A70D449966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57C0DBD9-2D01-4DE1-9E48-01A70D449966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57C0DBD9-2D01-4DE1-9E48-01A70D449966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57C0DBD9-2D01-4DE1-9E48-01A70D449966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8930849E-D054-41E4-93FE-810B7615E79B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8930849E-D054-41E4-93FE-810B7615E79B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8930849E-D054-41E4-93FE-810B7615E79B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8930849E-D054-41E4-93FE-810B7615E79B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05524070-31EF-44B8-A060-6700750150CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05524070-31EF-44B8-A060-6700750150CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05524070-31EF-44B8-A060-6700750150CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05524070-31EF-44B8-A060-6700750150CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{283760F3-FBDD-44BE-811D-9B0A54B00B06} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
+		{57C0DBD9-2D01-4DE1-9E48-01A70D449966} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
+		{8930849E-D054-41E4-93FE-810B7615E79B} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
+		{05524070-31EF-44B8-A060-6700750150CB} = {6159454C-905A-4116-A711-DA3D6AB66AF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {08CF69FC-6EAF-4630-95BE-193D45195152}

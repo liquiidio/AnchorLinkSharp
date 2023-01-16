@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\anchorlinktransportsharp\AnchorLinkTransportSharp.csproj" />
+    <ProjectReference Include="..\AnchorLinkTransportSharp-Private\AnchorLinkTransportSharp.csproj" />
   </ItemGroup>
 
 </Project>

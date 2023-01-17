@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --no-restore
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:

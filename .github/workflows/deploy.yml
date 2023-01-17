@@ -1,6 +1,9 @@
 name: Deploy
 
-on: [push]
+on:
+  push:
+    tags: 
+      - "[0-9]+.[0-9]+.[0-9]+*"
 
 jobs:
   build:
@@ -53,7 +56,7 @@ jobs:
       - name: Determine version
         run: echo "VERSION=$(git describe --tags --dirty)" >> $GITHUB_ENV
       - name: Pack
-        run: dotnet pack ./AnchorLinkSharp/AnchorLinkSharp.csproj --output ./artifacts --configuration Release -p:Version=1.0.3
+        run: dotnet pack ./AnchorLinkSharp/AnchorLinkSharp.csproj --output ./artifacts --configuration Release -p:Version=$VERSION
       - name: Upload package
         uses: actions/upload-artifact@v1
         with:
@@ -108,8 +111,8 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1.12.0
         with:
-          tag: 1.0.3
-          name: Release 1.0.3
+          tag: ${{ env.VERSION }}
+          name: Release ${{ env.VERSION }}
           body: ${{ env.VERSION }}
           makeLatest: true
       - name: Download unity package

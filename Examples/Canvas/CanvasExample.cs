@@ -12,6 +12,7 @@ using EosSharp.Core.Api.v1;
 using Newtonsoft.Json.Bson;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace AnchorLinkTransportSharp.Examples.Canvas
@@ -48,6 +49,8 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
         /// the session instance, either restored using link.restoreSession() or created with link.login()
         /// </summary>
         private LinkSession _session;
+
+        [SerializeField] private EventSystem _canvasEventSystem;
 
         private void Start()
         {
@@ -245,6 +248,14 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
             yield return new WaitForSeconds(SecondsToWait);
 
             Transport.DisableTargetPanel(fromPanel, toPanel);
+        }
+
+        /// <summary>Called when ctrl + v is pressed in browser (webgl)</summary>
+        /// <param name="pastedText">The pasted text.</param>
+        public void OnBrowserClipboardPaste(string pastedText)
+        {
+            if (_canvasEventSystem.currentSelectedGameObject?.GetComponent<TMP_InputField>() != null)
+                _canvasEventSystem.currentSelectedGameObject.GetComponent<TMP_InputField>().text = pastedText;
         }
     }
 }

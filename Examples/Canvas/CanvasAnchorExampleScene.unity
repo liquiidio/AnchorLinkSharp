@@ -5468,6 +5468,7 @@ MonoBehaviour:
   RestoreSessionButton: {fileID: 1958976025}
   TransferButton: {fileID: 775124967}
   LogoutButton: {fileID: 330073307}
+  _canvasEventSystem: {fileID: 456306282}
 --- !u!224 &1972503258
 RectTransform:
   m_ObjectHideFlags: 0

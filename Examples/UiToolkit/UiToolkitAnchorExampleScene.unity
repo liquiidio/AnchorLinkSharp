@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 291586822}
   - component: {fileID: 291586823}
   m_Layer: 5
-  m_Name: MainView
+  m_Name: AnchorExamplePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UiToolkitExample: {fileID: 724035594}
-  LoginView: {fileID: 1813730791}
+  AnchorLoginPanel: {fileID: 1813730791}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +568,7 @@ GameObject:
   - component: {fileID: 1813730790}
   - component: {fileID: 1813730791}
   m_Layer: 5
-  m_Name: LogInView
+  m_Name: AnchorLoginPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UiToolkitExample: {fileID: 724035594}
-  MainView: {fileID: 291586823}
+  AnchorExamplePanel: {fileID: 291586823}
 --- !u!1001 &7828644622880011731
 PrefabInstance:
   m_ObjectHideFlags: 0

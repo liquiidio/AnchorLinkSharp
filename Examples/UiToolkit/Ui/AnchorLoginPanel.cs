@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
 {
-    public class LoginView : ScreenBase
+    public class AnchorLoginPanel : ScreenBase
     {
         /**
          * Child-Controls
@@ -18,7 +18,7 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
          * Fields, Properties
          */
         [SerializeField]internal UiToolkitExample UiToolkitExample;
-        [SerializeField]internal MainView MainView;
+        [SerializeField]internal AnchorExamplePanel AnchorExamplePanel;
 
 
         void Start()
@@ -42,8 +42,8 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
                 {
                     Hide();
                     await UiToolkitExample.StartSession(); 
-                    MainView.Show();
-                    MainView.Rebind();
+                    AnchorExamplePanel.Show();
+                    AnchorExamplePanel.Rebind();
                 }
                 catch (Exception e)
                 {

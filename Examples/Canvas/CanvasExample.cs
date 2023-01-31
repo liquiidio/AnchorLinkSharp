@@ -249,7 +249,7 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
 
             Transport.DisableTargetPanel(fromPanel, toPanel);
         }
-
+        
         /// <summary>Called when ctrl + v is pressed in browser (webgl)</summary>
         /// <param name="pastedText">The pasted text.</param>
         public void OnBrowserClipboardPaste(string pastedText)

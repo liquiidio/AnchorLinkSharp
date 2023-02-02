@@ -34,6 +34,15 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
         [SerializeField] private Button TransferButton;
         [SerializeField] private Button LogoutButton;
 
+
+        [Header("Input fields")]
+        [SerializeField] private TMP_InputField _fromAccountField;
+        [SerializeField] private TMP_InputField _toAccountField;
+        [SerializeField] private TMP_InputField _tokenAmountField;
+        [SerializeField] private TMP_InputField _memoField;
+
+
+
         private Coroutine waitCoroutine;
         /// <summary>
         /// app identifier, should be set to the eosio contract account if applicable
@@ -69,6 +78,8 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
                 Transport.SwitchToNewPanel(CustomTransferPanel);
             }
            );
+
+            RestoreSessionButton.interactable = TransferButton.interactable = LogoutButton.interactable = _session != null;
         }
 
         /// <summary>
@@ -138,6 +149,8 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
         private async Task Logout()
         {
             await _session.Remove();
+
+            RestoreSessionButton.interactable= TransferButton.interactable= LogoutButton.interactable= false;
         }
 
         /// <summary>
@@ -148,6 +161,10 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
             Debug.Log($"{_session.Auth.actor} logged-in");
 
             waitCoroutine = StartCoroutine(SwitchPanels(CustomActionsPanel, CustomTransferPanel, 1.5f));
+
+            _fromAccountField.text = _session.Auth.actor;
+
+            RestoreSessionButton.interactable= TransferButton.interactable= LogoutButton.interactable= _session != null;
         }
 
         /// <summary>
@@ -231,8 +248,10 @@ namespace AnchorLinkTransportSharp.Examples.Canvas
                 //var transactResult = await _session.Transact(new TransactArgs() { Action = action });
                 Debug.Log($"Transaction broadcast! {transactResult.Processed}");
 
-                waitCoroutine = StartCoroutine(SwitchPanels(Transport.currentPanel, CustomActionsPanel, 1.5f));
+                waitCoroutine = StartCoroutine(SwitchPanels(Transport.currentPanel, CustomTransferPanel, 1.5f));
 
+                _toAccountField.text = _memoField.text = "";
+                _tokenAmountField.text = "0.00000000";
             }
             catch (Exception e)
             {

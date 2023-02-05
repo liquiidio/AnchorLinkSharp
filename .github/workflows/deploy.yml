@@ -56,8 +56,8 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1.12.0
         with:
-          tag: 1.0.4
-          name: Release 1.0.4
+          tag: 1.0.5
+          name: Release 1.0.5
           body: ${{ env.VERSION }}
           makeLatest: true
       - name: Download unity package
@@ -107,11 +107,12 @@ jobs:
           cp -r temp/anchorlinktransportsharp/. anchorlinktransportsharp
           cp -r temp/eosiosigningrequestsharp/. eosiosigningrequestsharp
           git rm -rf temp
-          git mv anchorlinktransportsharp/Examples anchorlinktransportsharp/Samples~
-          git rm anchorlinktransportsharp/Examples.meta
           git rm -r .github
           git add .
           git commit -m "rearraged the files to their correct folder"
+          git mv anchorlinktransportsharp/Examples anchorlinktransportsharp/Samples~
+          git rm anchorlinktransportsharp/Examples.meta
+          git commit -am "renamed examples to samples~"
           git push -u origin upm --force                              # commit the branch
 
         

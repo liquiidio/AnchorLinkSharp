@@ -1,71 +1,10 @@
 name: Deploy
 
-on:
-  push:
-    tags: 
-      - "[0-9]+.[0-9]+.[0-9]+*"
+on: [push]
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        dotnet-version: ['3.0', '3.1.x', '5.0.x', '6.0.x', '7.0.x']
-    name: Build and test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: main
-          fetch-depth: 0
-          token: ${{ secrets.RESTORE_SUBMODULES }}
-          submodules: recursive
-      - name: Setup .NET SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Upload dotnet test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: TestResults
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
-
-  pack-nuget:
-    needs: build
-    runs-on: ubuntu-20.04
-    name: Dotnet Pack
-    if: github.event_name == 'push'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: main
-          fetch-depth: 0
-          token: ${{ secrets.RESTORE_SUBMODULES }}
-          submodules: recursive
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 3.1.x
-      - name: Determine version
-        run: echo "VERSION=$(git describe --tags --dirty)" >> $GITHUB_ENV
-      - name: Pack
-        run: dotnet pack ./AnchorLinkSharp/AnchorLinkSharp.csproj --output ./artifacts --configuration Release -p:Version=$VERSION
-      - name: Upload package
-        uses: actions/upload-artifact@v1
-        with:
-          name: artifacts
-          path: ./artifacts
-  
   pack-unitypackage:
     runs-on: ubuntu-20.04
-    needs: pack-nuget
     name: Unity Package Pack
     if: github.event_name == 'push'
     steps:
@@ -78,19 +17,25 @@ jobs:
           submodules: recursive
       - name: Find all meta files
         run: |
-          echo "AnchorLinkSharp.meta" > metaList
-          echo "anchorlinktransportsharp.meta" > metaList
-          echo "eosiosigningrequestsharp.meta" > metaList
-          echo "README.md.meta" > metaList
-          find AnchorLinkSharp/ -name \*.meta >> metaList
-          find anchorlinktransportsharp/ -name \*.meta >> metaList
-          find eosiosigningrequestsharp/ -name \*.meta >> metaList
+          mkdir Assets
+          mkdir $PKG_ROOT
+          git mv AnchorLinkSharp $PKG_ROOT
+          git mv AnchorLinkSharp.meta $PKG_ROOT
+          git mv anchorlinktransportsharp $PKG_ROOT
+          git mv anchorlinktransportsharp.meta $PKG_ROOT
+          git mv eosiosigningrequestsharp $PKG_ROOT
+          git mv eosiosigningrequestsharp.meta $PKG_ROOT
+          git mv README.md $PKG_ROOT
+          git mv README.md.meta $PKG_ROOT
+          find $PKG_ROOT/ -name \*.meta >> metaList
+        env:
+          PKG_ROOT: Assets/AnchorLinkSharp
       - name: Make directory for our unity package
         run: mkdir a
       - name: Create Unity Package
         uses: pCYSl5EDgo/create-unitypackage@master
         with:
-          package-path: 'a/io.liquiid.anchorlinksharp.unitypackage'
+          package-path: 'a/anchorlinksharp.unitypackage'
           include-files: metaList
       - name: Upload package
         uses: actions/upload-artifact@v1
@@ -111,8 +56,8 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1.12.0
         with:
-          tag: ${{ env.VERSION }}
-          name: Release ${{ env.VERSION }}
+          tag: 1.0.4
+          name: Release 1.0.4
           body: ${{ env.VERSION }}
           makeLatest: true
       - name: Download unity package
@@ -126,43 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_name: a/io.liquiid.anchorlinksharp.unitypackage # path + filename
-  
-  github-publish:
-    runs-on: ubuntu-20.04
-    needs: release
-    name: Publish to GitHub
-    if: github.event_name == 'push'
-    steps:
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 3.1.x
-      - name: Download package
-        uses: actions/download-artifact@v1
-        with:
-          name: artifacts
-          path: ./artifacts
-      - name: Push package to GitHub
-        run: dotnet nuget push ./artifacts**.nupkg --api-key ${{secrets.GITHUB_TOKEN}} --source "https://nuget.pkg.github.com/liquiidio/index.json"
-
-  nuget-publish:
-    runs-on: ubuntu-20.04
-    needs: release
-    name: Publish to Nuget
-    if: github.event_name == 'push'
-    steps:
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 3.1.x
-      - name: Download package
-        uses: actions/download-artifact@v1
-        with:
-          name: artifacts
-          path: ./artifacts
-      - name: Push package to Nuget
-        run: dotnet nuget push ./artifacts**.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json"
+          asset_name: a/anchorlinksharp.unitypackage # path + filename
 
   split-upm:
     needs: release
@@ -198,6 +107,9 @@ jobs:
           cp -r temp/anchorlinktransportsharp/. anchorlinktransportsharp
           cp -r temp/eosiosigningrequestsharp/. eosiosigningrequestsharp
           git rm -rf temp
+          git mv anchorlinktransportsharp/Examples anchorlinktransportsharp/Samples~
+          git rm anchorlinktransportsharp/Examples.meta
+          git rm -r .github
           git add .
           git commit -m "rearraged the files to their correct folder"
           git push -u origin upm --force                              # commit the branch

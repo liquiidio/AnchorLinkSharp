@@ -10,6 +10,18 @@
     "dependencies": {
       "com.unity.nuget.newtonsoft-json": "3.0.0"
    },
+   "samples": [
+     {
+       "displayName": "UiToolkit",
+       "description": "Usage example implemented using UiToolkit",
+       "path": "anchorlinktransportsharp/Samples~/UiToolkit"
+      },
+      {
+        "displayName": "Canvas",
+        "description": "Usage example implemented using Canvas",
+        "path": "anchorlinktransportsharp/Samples~/Canvas"
+      }
+   ],
     "author": {
       "name": "Corvin Meyer auf der Heide",
       "email": "corvin@liquiid.io",

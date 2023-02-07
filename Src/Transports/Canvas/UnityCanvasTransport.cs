@@ -475,7 +475,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         /// </summary>
         /// <param name="targetPanel">Panel to hide</param>
         /// <param name="fallbackPanel">A return panel to display if needed</param>
-        internal void DisableTargetPanel(GameObject targetPanel, GameObject fallbackPanel = null)
+        public void DisableTargetPanel(GameObject targetPanel, GameObject fallbackPanel = null)
         {
             targetPanel.SetActive(false);
 

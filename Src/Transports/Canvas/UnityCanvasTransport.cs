@@ -14,7 +14,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         //! Used to manage the countdown timer
         private Coroutine counterCoroutine = null;
         //! The panel that is active/is being displayed
-        internal GameObject currentPanel;
+        public GameObject currentPanel;
         //! Toggle this to use light or dark theme
         [SerializeField] internal bool useLightTheme = false;
 
@@ -462,7 +462,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         /// If there is any panel being displayed, hide it
         /// </summary>
         /// <param name="fallbackPanel">A return panel to display if needed</param>
-        internal void DisableCurrentPanel(GameObject fallbackPanel = null)
+        public void DisableCurrentPanel(GameObject fallbackPanel = null)
         {
             currentPanel?.SetActive(false);
             fallbackPanel?.SetActive(true);

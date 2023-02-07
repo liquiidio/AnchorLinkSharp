@@ -21,7 +21,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         #region Login-Panel
         [Header("Login Panel Panel Components")]
         //! The holding panel for the login details
-        [SerializeField] internal GameObject LoginPanel;
+        [SerializeField] public GameObject LoginPanel;
         //! Confirmation panel for when the link has been successfully copied
         [SerializeField] private GameObject HyperlinkCopiedNotificationPanel;
         //! Primary panel for the login prompt
@@ -50,7 +50,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         #region Sign and countdown timer
         [Header("Countdown timer")]
         //! Panel used to prompt for signing
-        [SerializeField] internal GameObject SignPanel;
+        [SerializeField] public GameObject SignPanel;
         //! Countdown information in the SignPanel prompt
         [SerializeField] private TextMeshProUGUI CountdownTextGUI;
         //! Property that updates the UI with the relevant time during countdown when assigned to
@@ -64,10 +64,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
 
         #region Other panels
         [Header("Other panels")]
-        [SerializeField] internal GameObject LoadingPanel;
-        [SerializeField] internal GameObject SuccessPanel;
-        [SerializeField] internal GameObject FailurePanel;
-        [SerializeField] internal GameObject TimeoutPanel;
+        [SerializeField] public GameObject LoadingPanel;
+        [SerializeField] public GameObject SuccessPanel;
+        [SerializeField] public GameObject FailurePanel;
+        [SerializeField] public GameObject TimeoutPanel;
         #endregion
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         /// Hide any displayed panel and switch to the new supplied one
         /// </summary>
         /// <param name="toPanel"></param>
-        internal void SwitchToNewPanel(GameObject toPanel)
+        public void SwitchToNewPanel(GameObject toPanel)
         {
             currentPanel?.SetActive(false);
             DisableAllPanels();
@@ -488,7 +488,7 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         /// <summary>
         /// Hide all panels that are declared
         /// </summary>
-        internal void DisableAllPanels()
+        public void DisableAllPanels()
         {
             LoginPanel.SetActive(false);
             SignPanel.SetActive(false);

@@ -7,10 +7,10 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
     public class ScreenBase : MonoBehaviour
     {
         //! element that is drawn
-        internal VisualElement Root;
+        public VisualElement Root;
 
         //! panel that grab a reference to the root
-        internal UIDocument Screen;
+        public UIDocument Screen;
 
         private void Awake()
         {

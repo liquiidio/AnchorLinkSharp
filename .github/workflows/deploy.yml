@@ -1,12 +1,6 @@
 name: Deploy
 
-on:
-  workflow_dispatch:
-    inputs:
-      package_version:
-        description: 'Package version'
-        required: true
-        default: '1.0.0'
+on: [push]
 
 jobs:
   pack-unitypackage:

@@ -1,12 +1,17 @@
 name: Deploy
 
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      package_version:
+        description: 'Package version'
+        required: true
+        default: '1.0.0'
 
 jobs:
   pack-unitypackage:
     runs-on: ubuntu-20.04
     name: Unity Package Pack
-    if: github.event_name == 'push'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -48,7 +53,6 @@ jobs:
   release:
     runs-on: ubuntu-20.04
     needs: pack-unitypackage
-    if: github.event_name == 'push'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -58,9 +62,9 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1.12.0
         with:
-          tag: 1.0.12
-          name: Release 1.0.12
-          body: ${{ env.VERSION }}
+          tag: ${{ github.event.inputs.package_version }}
+          name: Release ${{ github.event.inputs.package_version }}
+          body: ${{ github.event.inputs.package_version }}
           makeLatest: true
       - name: Download unity package
         uses: actions/download-artifact@v1
@@ -79,7 +83,6 @@ jobs:
     needs: release
     name: Split UPM branch
     runs-on: ubuntu-20.04
-    if: github.event_name == 'push'
     steps:
       - name: Checkout
         uses: actions/checkout@v3

@@ -69,14 +69,14 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
             });
 
             _qrCodeBox.RegisterCallback<ClickEvent>(evt =>
-            {
-                if ((int)_qrCodeBox.style.width.value.value == (int)_qrCurrentSize.x && (int)_qrCodeBox.style.height.value.value == (int)_qrCurrentSize.y)
+            { 
+                if (_qrCodeBox.transform.scale.Equals(_qrCurrentSize))
                     _qrCodeBox.transform.scale = new Vector3(2, 2);
                 else _qrCodeBox.transform.scale = new Vector3(1, 1);
             });
 
             _launchAnchorButton.clickable.clicked += () =>
-            {
+            { 
                 var esrLinkUri = _request.Encode(false, true);
                 Application.OpenURL(esrLinkUri);
             };
@@ -144,8 +144,8 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
         private IEnumerator SetText(float counterDuration = 0.5f)
         {
             _readyToCopy.Hide();
-            _alreadyCopied.Show();
             _linkedCopiedLabel.text = "Link copied - Paste in Anchor";
+            _alreadyCopied.Show();
 
             float _newCounter = 0;
             while (_newCounter < counterDuration * 2)
@@ -214,7 +214,6 @@ namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
                     color32Array[x] = baseColor;
 
                 else if (color32Array[x] == Color.black) color32Array[x] = pixelColor;
-
 
             return color32Array;
         }

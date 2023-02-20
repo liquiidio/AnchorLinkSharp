@@ -29,7 +29,7 @@
                                 </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:VisualElement name="qr-code-box" class="link-box" />
+                        <ui:VisualElement name="qr-code-box" class="link-box" style="scale: 1 1;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="anchor-link-footnote" style="width: 340px; height: 25px; -unity-text-align: upper-center; position: absolute; bottom: -38px; left: 0; flex-direction: row; justify-content: center;">

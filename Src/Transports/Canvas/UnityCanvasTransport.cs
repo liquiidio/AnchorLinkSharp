@@ -450,7 +450,9 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         /// <param name="toPanel"></param>
         public void SwitchToNewPanel(GameObject toPanel)
         {
-            currentPanel?.SetActive(false);
+            if (currentPanel)
+                currentPanel.SetActive(false);
+
             DisableAllPanels();
 
             currentPanel = toPanel;
@@ -464,8 +466,11 @@ namespace AnchorLinkTransportSharp.Src.Transports.Canvas
         /// <param name="fallbackPanel">A return panel to display if needed</param>
         public void DisableCurrentPanel(GameObject fallbackPanel = null)
         {
-            currentPanel?.SetActive(false);
-            fallbackPanel?.SetActive(true);
+           if (currentPanel) 
+                currentPanel.SetActive(false);
+            
+           if (fallbackPanel)
+            fallbackPanel.SetActive(true);
 
             currentPanel = fallbackPanel;
         }

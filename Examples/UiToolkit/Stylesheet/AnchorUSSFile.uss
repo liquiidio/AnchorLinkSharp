@@ -77,5 +77,17 @@ VisualElement {
 }
 
 .anchor-link-label-click:hover {
-    color: rgba(255, 252, 252, 255);
+    color: rgb(255, 252, 252);
+}
+
+.click-button {
+    width: 100%;
+    height: 16%;
+}
+
+.click-button:hover {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(11, 51, 178);
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
 }

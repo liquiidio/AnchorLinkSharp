@@ -303,16 +303,16 @@ namespace AnchorLinkTransportSharp.Examples.UiToolkit.Ui
                 {
                     account = "eosio",
                     name = "voteproducer",
-                    authorization = new List<PermissionLevel>
-                    {
-                        new PermissionLevel()
-                        {
-                            actor =
-                                "............1", // ............1 will be resolved to the signing accounts permission
-                            permission =
-                                "............2" // ............2 will be resolved to the signing accounts authority
-                        }
-                    },
+                    authorization = new List<PermissionLevel> { UiToolkitExample.LinkSession.Auth },
+                    //{
+                    //    new PermissionLevel()
+                    //    {
+                    //        actor =
+                    //            "............1", // ............1 will be resolved to the signing accounts permission
+                    //        permission =
+                    //            "............2" // ............2 will be resolved to the signing accounts authority
+                    //    }
+                    //},
                     data = new Dictionary<string, object>
                     {
                         { "voter", "............1" },

@@ -89,7 +89,7 @@ jobs:
         with:
           ref: unity_develop
           fetch-depth: 0
-          token: ${{ secrets.FG_L_PAT2 }}
+          token: ${{ secrets.FG_L_PAT_3 }}
           submodules: recursive
       - name: split upm branch
         run: |

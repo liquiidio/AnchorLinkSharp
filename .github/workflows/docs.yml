@@ -17,14 +17,14 @@ jobs:
        steps:
             - uses: actions/checkout@v3
               with:
-                token: ${{ secrets.FG_L_PAT2 }}
+                token: ${{ secrets.FG_L_PAT_3 }}
                 submodules: recursive
             
             - name: Checkout Gitbook Repo
               uses: actions/checkout@v3
               with:
                 repository: liquiidio/UnityPluginSuiteGitbook
-                token: ${{ secrets.FG_L_PAT }}
+                token: ${{ secrets.FG_L_PAT_3 }}
                 ref: anchorlinksharp_auto
                 path: .github/workflows/documentation/gitbook
                     

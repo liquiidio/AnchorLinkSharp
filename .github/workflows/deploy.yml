@@ -18,7 +18,7 @@ jobs:
         with:
           ref: unity_develop
           fetch-depth: 0
-          token: ${{ secrets.FG_L_PAT2 }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           submodules: recursive
       - name: Find all meta files
         run: |

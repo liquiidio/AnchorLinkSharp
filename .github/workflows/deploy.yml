@@ -105,7 +105,7 @@ jobs:
           git rm -rf anchorlinktransportsharp
           git rm -rf eosiosigningrequestsharp
           git add .
-          git rm -r .github
+          git rm -r .github || true
           git commit -am "removed submodules and merged them to upm"
           mkdir anchorlinktransportsharp
           mkdir eosiosigningrequestsharp

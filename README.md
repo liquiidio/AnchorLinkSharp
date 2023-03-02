@@ -4,7 +4,9 @@
 </div>
 
 ---
-
+<div align="center">
+[![Deploy](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml)
+</div>
 # Anchor Link Sharp
 
 A native integration compatible with Unity3D and C# allowing users and developers to connect and communicate with Anchor Wallet and ESR-based applications. The Anchor & ESR Integration consists of multiple libraries for the ESR-Protocol, the Anchor-integration, Transports etc. which will be included via Submodules while being packaged and published as a single Package.

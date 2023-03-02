@@ -6,6 +6,7 @@
 ---
 <div align="center">
 	
+[![Build documents](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/docs.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/docs.yml)	
 [![Deploy](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml)
 	
 </div>

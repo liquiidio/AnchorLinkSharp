@@ -5,7 +5,9 @@
 
 ---
 <div align="center">
+	
 [![Deploy](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml)
+	
 </div>
 # Anchor Link Sharp
 

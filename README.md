@@ -82,10 +82,7 @@ Then in your Unity project:
 ---
 
 ### 3. Install manually.
-Download this [project here](https://github.com/liquiidio/AnchorLinkSharp/releases/latest).
-
-* [zip](https://github.com/liquiidio/AnchorLinkSharp/archive/refs/tags/1.0.13.zip)  
-* [tar.gz](https://github.com/liquiidio/AnchorLinkSharp/archive/refs/tags/1.0.13.tar.gz)  
+Download [the latest Release](https://github.com/liquiidio/AnchorLinkSharp/releases/latest).
 
 Then in your Unity project, copy the sources from `AnchorLinkSharp` into your Unity `Assets` directory.
  

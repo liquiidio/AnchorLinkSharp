@@ -6,8 +6,8 @@
 ---
 <div align="center">
 	
-[![Build documents](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/docs.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/docs.yml)	
-[![Deploy](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp-Private/actions/workflows/deploy.yml)
+[![Build documents](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/docs.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/docs.yml)	
+[![Deploy](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/deploy.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/deploy.yml)
 	
 </div>
 
@@ -38,7 +38,7 @@ If you havn't already installed it please follow the instructions in the section
 This package can be included into your project by either:
 
  1. Installing the package via Unity's Package Manager (UPM) in the editor (recommended).
- 2. Importing the .unitypackage which you can download [here](https://github.com/liquiidio/AnchorLinkSharp-Private/releases/latest/download/anchorlinksharp.unitypackage).
+ 2. Importing the .unitypackage which you can download [here](https://github.com/liquiidio/AnchorLinkSharp/releases/latest/download/anchorlinksharp.unitypackage).
  3. Manually add the files in this repo.
  4. Installing it via NuGet. (for Standard .NET users)
  
@@ -56,13 +56,13 @@ In your Unity project:
 
     ![image](https://user-images.githubusercontent.com/74650011/208429298-76fe1101-95f3-4ab0-bbd5-f0a32a1cc652.png)
 
- 3. Enter URL:  `https://github.com/liquiidio/AnchorLinkSharp-Private.git#upm`
+ 3. Enter URL:  `https://github.com/liquiidio/AnchorLinkSharp.git#upm`
    
 ---
 
 ### 2. Importing the Unity Package.
 
-Download the [UnityPackage here](https://github.com/liquiidio/AnchorLinkSharp-Private/releases/latest/download/anchorlinksharp.unitypackage). 
+Download the [UnityPackage here](https://github.com/liquiidio/AnchorLinkSharp/releases/latest/download/anchorlinksharp.unitypackage). 
 
 Then in your Unity project:
 
@@ -82,10 +82,10 @@ Then in your Unity project:
 ---
 
 ### 3. Install manually.
-Download this [project here](https://github.com/liquiidio/AnchorLinkSharp-Private/releases/latest).
+Download this [project here](https://github.com/liquiidio/AnchorLinkSharp/releases/latest).
 
-* [zip](https://github.com/liquiidio/AnchorLinkSharp-Private/archive/refs/tags/1.0.13.zip)  
-* [tar.gz](https://github.com/liquiidio/AnchorLinkSharp-Private/archive/refs/tags/1.0.13.tar.gz)  
+* [zip](https://github.com/liquiidio/AnchorLinkSharp/archive/refs/tags/1.0.13.zip)  
+* [tar.gz](https://github.com/liquiidio/AnchorLinkSharp/archive/refs/tags/1.0.13.tar.gz)  
 
 Then in your Unity project, copy the sources from `AnchorLinkSharp` into your Unity `Assets` directory.
  

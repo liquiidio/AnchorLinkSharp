@@ -22,6 +22,7 @@ jobs:
           submodules: recursive
       - name: Find all meta files
         run: |
+          ls -l
           mkdir Assets
           mkdir $PKG_ROOT
           git mv AnchorLinkSharp $PKG_ROOT

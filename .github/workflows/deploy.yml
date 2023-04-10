@@ -26,10 +26,10 @@ jobs:
           mkdir $PKG_ROOT
           git mv AnchorLinkSharp $PKG_ROOT
           git mv AnchorLinkSharp.meta $PKG_ROOT
-          git mv anchorlinktransportsharp $PKG_ROOT
-          git mv anchorlinktransportsharp.meta $PKG_ROOT
-          git mv eosiosigningrequestsharp $PKG_ROOT
-          git mv eosiosigningrequestsharp.meta $PKG_ROOT
+          git mv AnchorLinkTransportSharp $PKG_ROOT
+          git mv AnchorLinkTransportSharp.meta $PKG_ROOT
+          git mv EosioSigningRequestSharp $PKG_ROOT
+          git mv EosioSigningRequestSharp.meta $PKG_ROOT
           git mv README.md $PKG_ROOT
           git mv README.md.meta $PKG_ROOT
           git mv AnchorLinkSharp.asmdef $PKG_ROOT
@@ -99,24 +99,24 @@ jobs:
           git config --global user.name 'github-bot'
           git config --global user.email 'github-bot@users.noreply.github.com'
           git checkout -b upm                                            # checkout the branch
-          git subtree add --prefix=temp/anchorlinktransportsharp anchorlinktransportsharp $(git rev-parse HEAD:anchorlinktransportsharp)
-          git subtree add --prefix=temp/eosiosigningrequestsharp eosiosigningrequestsharp $(git rev-parse HEAD:eosiosigningrequestsharp)
+          git subtree add --prefix=temp/AnchorLinkTransportSharp AnchorLinkTransportSharp $(git rev-parse HEAD:AnchorLinkTransportSharp)
+          git subtree add --prefix=temp/EosioSigningRequestSharp EosioSigningRequestSharp $(git rev-parse HEAD:EosioSigningRequestSharp)
           git rm .gitmodules
-          git rm -rf anchorlinktransportsharp
-          git rm -rf eosiosigningrequestsharp
+          git rm -rf AnchorLinkTransportSharp
+          git rm -rf EosioSigningRequestSharp
           git add .
           git rm -r .github || true
           git commit -am "removed submodules and merged them to upm"
-          mkdir anchorlinktransportsharp
-          mkdir eosiosigningrequestsharp
-          cp -r temp/anchorlinktransportsharp/. anchorlinktransportsharp
-          cp -r temp/eosiosigningrequestsharp/. eosiosigningrequestsharp
+          mkdir AnchorLinkTransportSharp
+          mkdir EosioSigningRequestSharp
+          cp -r temp/AnchorLinkTransportSharp/. AnchorLinkTransportSharp
+          cp -r temp/EosioSigningRequestSharp/. EosioSigningRequestSharp
           git rm -rf temp
           git rm -r .github || true
           git add .
           git commit -m "rearraged the files to their correct folder"
-          git mv anchorlinktransportsharp/Examples anchorlinktransportsharp/Samples~
-          git rm anchorlinktransportsharp/Examples.meta
+          git mv AnchorLinkTransportSharp/Examples AnchorLinkTransportSharp/Samples~
+          git rm AnchorLinkTransportSharp/Examples.meta
           git commit -am "renamed examples to samples~"
           git push -u origin upm --force                              # commit the branch
 

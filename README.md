@@ -4,12 +4,6 @@
 </div>
 
 ---
-<div align="center">
-	
-[![Build documents](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/docs.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/docs.yml)	
-[![Deploy](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/deploy.yml/badge.svg)](https://github.com/liquiidio/AnchorLinkSharp/actions/workflows/deploy.yml)
-	
-</div>
 
 # Anchor Link Sharp
 

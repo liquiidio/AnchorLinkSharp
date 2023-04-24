@@ -111,7 +111,8 @@ jobs:
           mkdir AnchorLinkTransportSharp
           mkdir EosioSigningRequestSharp
           cp -r temp/AnchorLinkTransportSharp/. AnchorLinkTransportSharp
-          cp -r temp/EosioSigningRequestSharp/. EosioSigningRequestSharp          git rm -rf temp
+          cp -r temp/EosioSigningRequestSharp/. EosioSigningRequestSharp          
+          git rm -rf temp
           git rm -r .github || true
           git add .
           git commit -m "rearraged the files to their correct folder"

@@ -1,9 +1,0 @@
-[submodule "AnchorLinkTransportSharp"]
-	path = AnchorLinkTransportSharp
-	url = https://github.com/liquiidio/AnchorLinkTransportSharp
-[submodule "EosioSigningRequestSharp"]
-	path = EosioSigningRequestSharp
-	url = https://github.com/liquiidio/EosioSigningRequestSharp
-[submodule "EosSharp"]
-	path = EosSharp
-	url = https://github.com/liquiidio/EosSharp

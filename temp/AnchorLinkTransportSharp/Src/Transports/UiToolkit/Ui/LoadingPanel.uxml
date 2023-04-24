@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Packages/anchorlinksharp/anchorlinktransportsharp/Src/Transports/UiToolkit/Stylesheets/DarkAnchorLinkStyle.uss?fileID=7433441132597879392&amp;guid=90d8c5ad47eb87147941c55dff626289&amp;type=3#DarkAnchorLinkStyle" />
+    <ui:VisualElement name="screen" style="align-items: center; justify-content: center; height: 100%; width: 100%; flex-direction: row; display: flex; visibility: visible; margin-top: 30px;">
+        <ui:VisualElement name="loading-panel" class="inner-background-color" style="width: 340px; height: 239px; visibility: visible;">
+            <ui:Button display-tooltip-when-elided="true" name="close-view-button" class="anchor-close-button" style="background-image: url(&apos;project://database/Assets/Packages/anchorlinksharp/anchorlinktransportsharp/Assets/icons/cross.png?fileID=2800000&amp;guid=d3c2b951a8081b740ad33f7b599ed8f7&amp;type=3#cross&apos;);" />
+            <ui:VisualElement name="anchor-link-version" class="anchor-link-version-box">
+                <ui:Label text="3.3.0 (3.4.1)" display-tooltip-when-elided="true" name="version-label" class="version-label version-visibility" />
+            </ui:VisualElement>
+            <ui:VisualElement name="anchor-link-request" class="outer-background-color">
+                <ui:VisualElement name="loading-logo" style="background-image: url(&apos;project://database/Assets/Packages/anchorlinksharp/anchorlinktransportsharp/Assets/icons/loadingIcon.png?fileID=2800000&amp;guid=f88af5f9865151d459525a989d640ad6&amp;type=3#loadingIcon&apos;); width: 70px; height: 70px; margin-top: -56px; margin-right: auto; margin-left: auto; background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(156, 161, 173);" />
+                <ui:VisualElement name="anchor-link-info" style="align-items: center; justify-content: center;">
+                    <ui:Label text="Loading" display-tooltip-when-elided="true" name="anchor-link-title-label" class="anchor-link-title-label" />
+                    <ui:Label text="Dectecing if network resources are required." display-tooltip-when-elided="true" name="anchor-link-subtitle-label" class="anchor-link-subtitle-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

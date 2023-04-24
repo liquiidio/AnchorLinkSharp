@@ -1,0 +1,90 @@
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace AnchorLinkTransportSharp.Src.Transports.UiToolkit.Ui
+{
+    public class SigningTimerPanel : PanelBase
+    {
+        /**
+         * Child-Controls
+         */
+        private Label _signManualLabel;
+        private Label _singingTimerLabel;
+
+        /**
+         * Fields, Properties
+         */
+        [SerializeField] internal QrCodePanel QrCodePanel;
+        [SerializeField] internal TimeoutPanel TimeoutPanel;
+        private Coroutine _counterCoroutine;
+
+        // timer text
+        internal string CountdownText
+        {
+            get => _singingTimerLabel.text;
+
+            set => _singingTimerLabel.text = value;
+        }
+
+        private void Start()
+        {
+            _singingTimerLabel = Root.Q<Label>("anchor-link-title-label");
+            _signManualLabel = Root.Q<Label>("anchor-link-manual-label");
+
+            OnStart();
+            BindButtons();
+        }
+
+        #region Button Binding
+
+        /// <summary>
+        /// Assign UI toolkit interaction events
+        /// </summary>
+        private void BindButtons()
+        {
+            _signManualLabel.RegisterCallback<ClickEvent>(evt =>
+            {
+                QrCodePanel.Rebind(true);
+                StartCoroutine(UnityUiToolkitTransport.TransitionPanels(QrCodePanel));
+            });
+        }
+
+        #endregion
+
+        #region other
+
+        /// <summary>
+        /// Set the signing timer and begin counting down
+        /// </summary>
+        internal void StartCountdownTimer()
+        {
+            if (_counterCoroutine != null)
+                StopCoroutine(_counterCoroutine);
+
+            _singingTimerLabel.text = $"Sign - {TimeSpan.FromMinutes(2):mm\\:ss}";
+            _counterCoroutine = StartCoroutine(ScheduleTimer(2));
+        }
+
+        /// <summary>
+        /// Countdown coroutine that exits after timer reaches zero
+        /// </summary>
+        /// <param name="counterDuration"></param>
+        /// <returns></returns>
+        private IEnumerator ScheduleTimer(float counterDuration = 3.5f)
+        {
+            float _newCounter = 0;
+            while (_newCounter < counterDuration * 60)
+            {
+                _newCounter += Time.deltaTime;
+
+                CountdownText = $"Sign - {TimeSpan.FromSeconds(counterDuration * 60 - _newCounter):mm\\:ss}";
+                yield return null;
+            }
+
+            StartCoroutine(UnityUiToolkitTransport.TransitionPanels(TimeoutPanel));
+        }
+        #endregion
+    }
+}

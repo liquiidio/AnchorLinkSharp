@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Packages/anchorlinksharp/anchorlinktransportsharp/Src/Transports/UiToolkit/Stylesheets/DarkAnchorLinkStyle.uss?fileID=7433441132597879392&amp;guid=90d8c5ad47eb87147941c55dff626289&amp;type=3#DarkAnchorLinkStyle" />
+    <ui:VisualElement name="screen" style="align-items: center; justify-content: center; height: 100%; width: 100%; flex-direction: row; background-color: rgba(0, 0, 0, 0); -unity-font-style: bold; display: flex; visibility: visible; opacity: 1; margin-top: 30px;">
+        <ui:VisualElement name="qrcode-panel" class="inner-qr-panel-background">
+            <ui:Button display-tooltip-when-elided="true" name="close-view-button" class="anchor-close-button" style="background-image: url(&apos;project://database/Assets/Packages/anchorlinksharp/anchorlinktransportsharp/Assets/icons/cross.png?fileID=2800000&amp;guid=d3c2b951a8081b740ad33f7b599ed8f7&amp;type=3#cross&apos;);" />
+            <ui:Label text="3.3.0 (3.4.1)" display-tooltip-when-elided="true" name="version-label" class="anchor-link-version-box version-label version-visibility" />
+            <ui:VisualElement name="anchor-link-request" class="outer-qr-panel-background" style="width: 340px;">
+                <ui:VisualElement name="anchor-logo" class="anchor-logo" />
+                <ui:VisualElement name="anchor-link-info" style="align-items: center;">
+                    <ui:Label text="Login" display-tooltip-when-elided="true" name="anchor-link-title-label" class="anchor-link-title-label" />
+                    <ui:Label text="Scan the QR-code with Anchor on another device or use the button to open it here." display-tooltip-when-elided="true" name="anchor-link-subtitle-label" class="anchor-link-subtitle-label" style="font-size: 14px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="anchor-link-info" class="info-box" style="flex-direction: column-reverse;">
+                    <ui:VisualElement name="anchor-link-button" class="anchor-launch-button-box">
+                        <ui:Button text="Launch Anchor" display-tooltip-when-elided="true" name="launch-anchor-button" class="anchor-launch-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="anchor-link-qr-code" class="qr-code-box" style="flex-direction: column-reverse;">
+                        <ui:VisualElement name="anchor-link-copy" class="copy-request-link-box" style="flex-direction: column-reverse; display: flex;">
+                            <ui:VisualElement style="flex-direction: row; justify-content: center; align-items: center; width: auto;">
+                                <ui:VisualElement name="ready-to-copy" style="display: flex; visibility: visible; align-items: auto;">
+                                    <ui:Label text="Copy request link" display-tooltip-when-elided="true" name="anchor-link-copy-label" class="copy-link-label" style="align-items: stretch;">
+                                        <ui:VisualElement name="copy-image" class="copy-icon" />
+                                    </ui:Label>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="already-copied" style="display: none; visibility: visible; align-items: auto;">
+                                    <ui:Label text="Link copied - Paste in Anchor" display-tooltip-when-elided="true" name="anchor-linked-copied-label" class="copied-link-label">
+                                        <ui:VisualElement name="copied-image" class="copied-icon" />
+                                    </ui:Label>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="qr-code-box" class="link-box" style="scale: 1 1;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="anchor-link-footnote" style="width: 340px; height: 25px; -unity-text-align: upper-center; position: absolute; bottom: -38px; left: 0; flex-direction: row; justify-content: center;">
+                    <ui:Label text="Don&apos;t have Anchor yet? " display-tooltip-when-elided="true" name="question-label" style="color: rgb(255, 255, 255); -unity-font: url(&apos;project://database/Assets/Packages/anchorlinksharp/anchorlinktransportsharp/Examples/UiToolkit/Stylesheet/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1cd74a0089e942a4ba2129d8eb6be746&amp;type=3#NotInter-Regular&apos;);" />
+                    <ui:Label text="&lt;u&gt;Download now &lt;/u&gt;" display-tooltip-when-elided="true" name="download-now-link-label" style="color: rgb(255, 255, 255); -unity-font: url(&apos;project://database/Assets/Packages/anchorlinksharp/anchorlinktransportsharp/Examples/UiToolkit/Stylesheet/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1cd74a0089e942a4ba2129d8eb6be746&amp;type=3#NotInter-Regular&apos;); height: 25px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

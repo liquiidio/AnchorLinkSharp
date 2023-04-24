@@ -163,7 +163,7 @@ namespace AnchorLinkSharp
                         {"url", CreateCallbackUrl()},
                         {"background", true},
                     },
-                    Identity = args.Identity
+                    Identity = args.Identity,
                 },
                 _requestOptions
             );
